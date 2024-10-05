@@ -9,7 +9,7 @@ import { Home, LogIn } from "lucide-react";
 import GoogleLogo from "@/public/logos/google.svg"
 import Image from "next/image";
 
-const LoginPage = () => {
+const SignupPage = () => {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
@@ -68,17 +68,18 @@ const LoginPage = () => {
                     Home
                 </Button>
             </Link>
-            <Link href="/signup" className="absolute top-8 right-8">
+            <Link href="/login" className="absolute top-8 right-8">
                 <Button variant="ghost">
                     <LogIn className="h-4 w-4 mr-2" />
-                    Already have an account?
+                    Don't have an account?
                 </Button>
             </Link>
             <div className="max-w-md w-full bg-white p-8 rounded-lg">
-                <h2 className="text-2xl font-bold mb-2 text-center">Login</h2>
-                {/* subheading */}
+                <h2 className="text-2xl font-bold mb-2 text-center">
+                    Create an account
+                </h2>
                 <p className="text-sm text-black/50 mb-6 text-center">
-                    Login to your account to continue
+                    Signup to get access to our AI copywriting coach
                 </p>
                 {error && <p className="text-red-500 mb-4">{error}</p>}
                 {message && <p className="text-green-500 mb-4">{message}</p>}
@@ -127,4 +128,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default SignupPage;
