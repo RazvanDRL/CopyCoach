@@ -270,11 +270,3 @@ function LoadingSkeleton() {
         </div>
     );
 }
-
-// Mock function to simulate AI evaluation
-async function mockEvaluateResponse(response: string, task: string): Promise<number> {
-    // In a real scenario, you would send the response to your AI service
-    // and receive a grade back. This is just a placeholder.
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
-    return Math.floor(Math.random() * 11); // Random grade between 0 and 10
-}
