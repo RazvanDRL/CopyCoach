@@ -81,7 +81,7 @@ const Navbar = () => {
     await supabase.auth.signOut();
     localStorage.removeItem('user');
     localStorage.removeItem('credits');
-    router.push('/login');
+    router.replace('/login');
   }
 
   return (
@@ -136,7 +136,7 @@ const Navbar = () => {
             ) : (
               <Link href="/login">
                 <Button variant="outline" className="ml-4">
-                  Log In
+                  Login
                 </Button>
               </Link>
             )}
