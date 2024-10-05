@@ -33,6 +33,9 @@ const LoginPage = () => {
         setMessage(null);
         const { error } = await supabase.auth.signInWithOtp({
             email,
+            options: {
+                emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/dashboard` : 'https://copy-coach.com/dashboard',
+            },
         });
         if (error) {
             setError(error.message);
@@ -47,6 +50,9 @@ const LoginPage = () => {
         setError(null);
         const { error } = await supabase.auth.signInWithOAuth({
             provider,
+            options: {
+                redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/dashboard` : 'https://copy-coach.com/dashboard',
+            },
         });
         if (error) {
             setError(error.message);
