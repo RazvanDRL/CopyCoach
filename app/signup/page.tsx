@@ -71,7 +71,7 @@ const SignupPage = () => {
             <Link href="/login" className="absolute top-8 right-8">
                 <Button variant="ghost">
                     <LogIn className="h-4 w-4 mr-2" />
-                    Don't have an account?
+                    Don&apos;t have an account?
                 </Button>
             </Link>
             <div className="max-w-md w-full bg-white p-8 rounded-lg">
