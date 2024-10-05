@@ -115,6 +115,7 @@ const Navbar = () => {
                     <Button
                       variant="outline"
                       className="mr-4"
+                      onClick={() => alert('This feature is not available for beta testers.')}
                     >
                       <BadgePlus className="mr-2 h-4 w-4 text-blue-500" />
                       Add Credits
