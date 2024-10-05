@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 import PricingPage from './pricing/page';
-import { MoveDown, Pen, Book, Sparkles, ArrowRight } from 'lucide-react';
+import { Pen, Book, Sparkles, ArrowRight } from 'lucide-react';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 
 const LandingPage: React.FC = () => {
@@ -14,10 +14,10 @@ const LandingPage: React.FC = () => {
             <div className="flex flex-col items-center justify-center min-h-[80vh] px-4 py-12 space-y-8 relative overflow-hidden">
                 {/* Background symbols */}
                 <div className="absolute inset-0 z-0 opacity-25">
-                    <Pen className="absolute top-1/4 left-1/4 h-16 w-16 text-blue-500 transform -rotate-12" />
-                    <Book className="absolute top-1/3 right-1/4 h-20 w-20 text-purple-500 transform rotate-6" />
-                    <Sparkles className="absolute bottom-1/4 left-1/3 h-12 w-12 text-green-500" />
-                    <Pen className="absolute bottom-1/3 right-1/3 h-14 w-14 text-yellow-500 transform rotate-90" />
+                    <Pen className="absolute top-1/4 left-1/4 h-12 w-12 sm:h-16 sm:w-16 text-blue-500 transform -rotate-12" />
+                    <Book className="absolute top-1/3 right-1/4 h-12 w-12 sm:h-16 sm:w-16 text-purple-500 transform rotate-6" />
+                    <Sparkles className="absolute bottom-1/4 left-1/3 h-8 w-8 sm:h-12 sm:w-12 text-green-500" />
+                    <Pen className="absolute bottom-1/3 right-[20%] lg:right-1/3 h-10 w-10 sm:h-14 sm:w-14 text-yellow-500 transform rotate-90" />
                 </div>
 
                 <h1 className="bg-clip-text text-transparent text-center bg-gradient-to-b from-neutral-900 to-neutral-700 dark:from-neutral-600 dark:to-white text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-sans py-4 relative z-20 font-bold tracking-tight">
