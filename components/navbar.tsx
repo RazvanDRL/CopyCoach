@@ -83,7 +83,7 @@ const Navbar = () => {
     await supabase.auth.signOut();
     localStorage.removeItem('user');
     localStorage.removeItem('credits');
-    router.replace('/login');
+    router.replace('/');
   }
 
   return (
