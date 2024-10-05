@@ -30,6 +30,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta property="og:url" content="https://copy-coach.com" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="CopyCoach" />
+        <meta property="og:description" content="CopyCoach - Your AI Copywriting Coach" />
+        <meta property="og:image" content="https://copy-coach.com/opengraph-image.png" />
         <link rel="icon" type="image/png" href="/favicon-48x48.png" sizes="48x48" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="shortcut icon" href="/favicon.ico" />
