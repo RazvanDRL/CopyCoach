@@ -6,12 +6,13 @@ import { supabase } from '@/lib/supabaseClient';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Eye, BarChart2, Lightbulb } from 'lucide-react';
+import { ArrowLeft, Eye, BarChart2, Lightbulb, Loader2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import Navbar from '@/components/navbar';
 import ReactMarkdown from 'react-markdown';
 import Footer from '@/components/footer';
+import Loading from '@/components/loading';
 
 type Exercise = {
     id: string;
@@ -49,6 +50,7 @@ type AnalysisResult = {
 export default function Analyze({ params }: { params: { id: string } }) {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
+    const [loadingData, setLoadingData] = useState(true);
     const [response, setResponse] = useState('');
     const [exercise, setExercise] = useState<Exercise | null>(null);
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
@@ -58,8 +60,6 @@ export default function Analyze({ params }: { params: { id: string } }) {
         async function fetchResponseAndAnalyze() {
             setLoading(true);
             try {
-                console.log('Current timestamp:', new Date().getTime());
-
                 // Fetch history data
                 const { data: historyData, error: historyError } = await supabase
                     .from('history')
@@ -93,8 +93,8 @@ export default function Analyze({ params }: { params: { id: string } }) {
                     .eq('history_id', params.id)
                     .single();
 
+                setLoadingData(false);
                 if (existingAnalysis && existingAnalysis.result) {
-                    console.log('Analysis result fetched from database.');
                     const jsonResult = JSON.parse(existingAnalysis.result);
                     setAnalysisResult(jsonResult);
 
@@ -151,15 +151,33 @@ export default function Analyze({ params }: { params: { id: string } }) {
         fetchResponseAndAnalyze();
     }, [params.id]);
 
-    if (loading) {
+    if (loadingData) {
+        return <Loading />;
+    }
+
+    if (!loadingData && !analysisResult) {
+        return <GeneratingAnalysis />;
+    }
+
+    if (!loadingData && loading && analysisResult) {
         return <LoadingSkeleton />;
     }
 
     if (error) {
         return (
-            <div className="container mx-auto px-4 py-8 max-w-4xl">
+            <div className="h-screen flex flex-col items-center justify-center mx-auto px-4 py-8 max-w-4xl">
                 <h1 className="text-4xl font-bold mb-8 text-center text-red-500">Error</h1>
-                <p className="text-center">{error}</p>
+                <p className="text-center mb-8">{error}</p>
+                <div className="flex justify-center">
+                    <Button
+                        variant="outline"
+                        onClick={() => router.push('/dashboard')}
+                        className="flex items-center"
+                    >
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Back to Dashboard
+                    </Button>
+                </div>
             </div>
         );
     }
@@ -259,6 +277,18 @@ export default function Analyze({ params }: { params: { id: string } }) {
     );
 }
 
+function GeneratingAnalysis() {
+    return (
+        <div className="h-screen flex flex-col items-center justify-center mx-auto px-4 py-8 max-w-4xl">
+            <h1 className="text-4xl font-bold mb-8 text-center text-blue-500">Generating Analysis</h1>
+            <p className="text-center mb-4">Please wait while we generate the analysis. This process takes about 15 seconds.</p>
+            <div className="flex justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+            </div>
+        </div>
+    );
+}
+
 function LoadingSkeleton() {
     return (
         <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -269,7 +299,7 @@ function LoadingSkeleton() {
                     <Skeleton key={i} className="h-12 w-full" />
                 ))}
             </div>
-            <Card className="mt-8">
+            <Card className="mt-8 rounded-lg">
                 <CardHeader className="bg-gradient-to-r from-blue-500 to-purple-500">
                     <Skeleton className="h-8 w-1/3 bg-white/20" />
                 </CardHeader>
@@ -286,7 +316,7 @@ function LoadingSkeleton() {
                     </div>
                 </CardContent>
             </Card>
-            <Card className="mt-8">
+            <Card className="mt-8 rounded-lg">
                 <CardHeader className="bg-gradient-to-r from-green-500 to-teal-500">
                     <Skeleton className="h-8 w-1/2 bg-white/20" />
                 </CardHeader>

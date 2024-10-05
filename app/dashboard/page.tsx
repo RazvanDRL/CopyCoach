@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useState, useEffect } from "react"
-import { ArrowRight, Check, ChevronsUpDown, CircleAlert, Dices, Star } from "lucide-react"
+import { ArrowDown, ArrowRight, Check, ChevronsUpDown, CircleAlert, Dices, Star } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -132,7 +132,6 @@ export default function Dashboard() {
       .select("id, title, grade")
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
-      .limit(5);
 
     if (error) {
       console.error('Error fetching exercise history:', error);
@@ -247,27 +246,39 @@ export default function Dashboard() {
         <div className="mt-16 w-full max-w-4xl">
           <h2 className="text-2xl font-bold mb-4">Exercise History</h2>
           {exerciseHistory.length > 0 ? (
-            <div className="grid grid-cols-4 md:grid-cols-4 lg:grid-cols-4 gap-4">
-              {exerciseHistory.filter(exercise => exercise.grade).map((exercise) => (
-                <Link href={`/analyze/${exercise.id}`} key={exercise.id}>
-                  <Card className="transform hover:scale-105 transition-transform duration-300 shadow-lg rounded-xl overflow-hidden">
-                    <CardHeader className="bg-gray-100 text-gray-800 p-4">
-                      <CardTitle className="text-xl font-bold">{exercise.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="bg-white p-6 flex flex-col items-center">
-                      <div className="flex items-center space-x-2">
-                        <Star className="text-yellow-500 w-6 h-6" />
-                        <p className="text-xl font-semibold text-gray-800">Grade: {exercise.grade}</p>
-                      </div>
-                      <Button variant="ghost" className="mt-4">
-                        View Details
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
-            </div>
+            <>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-32">
+                {exerciseHistory.filter(exercise => exercise.grade).slice(0, 12).map((exercise) => (
+                  <Link href={`/analyze/${exercise.id}`} key={exercise.id}>
+                    <Card className="transform hover:scale-105 transition-transform duration-300 shadow-lg rounded-xl overflow-hidden">
+                      <CardHeader className="bg-gray-100 text-gray-800 p-4">
+                        <CardTitle className="text-xl font-bold">{exercise.title}</CardTitle>
+                      </CardHeader>
+                      <CardContent className="bg-white p-6 flex flex-col items-center">
+                        <div className="flex items-center space-x-2">
+                          <Star className="text-yellow-500 w-6 h-6" />
+                          <p className="text-xl font-semibold text-gray-800">Grade: {exercise.grade}</p>
+                        </div>
+                        <Button variant="ghost" className="mt-4">
+                          View Details
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ))}
+              </div>
+              <div>
+                {exerciseHistory.filter(exercise => exercise.grade).length > 12 && (
+                  <div className="mt-4 text-center">
+                    <Button variant="outline">
+                      View More
+                      <ArrowDown className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </>
           ) : (
             <Card>
               <CardContent className="text-center py-8">

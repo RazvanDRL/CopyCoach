@@ -33,7 +33,6 @@ export default function Chat({ params }: { params: { id: string } }) {
     const [exercise, setExercise] = useState<Exercise | null>(null);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
-    const [showModal, setShowModal] = useState(false);
 
     const editor = useEditor({
         extensions: [
