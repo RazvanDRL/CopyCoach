@@ -7,6 +7,7 @@ import { User } from '@supabase/supabase-js'
 import { supabase } from "@/lib/supabaseClient"
 import { useRouter, usePathname } from 'next/navigation'
 import Avvvatars from 'avvvatars-react'
+import CopyCoachLogo from '@/public/logo.svg'
 
 import {
   DropdownMenu,
@@ -16,6 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import Image from 'next/image'
 
 const Navbar = () => {
   const [user, setUser] = useState<User | null>(null)
@@ -90,7 +92,7 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="text-2xl font-bold text-blue-600">
-              CopyCoach
+              <Image src={CopyCoachLogo} alt="CopyCoach Logo" width={200} height={40} />
             </Link>
           </div>
           <div className="flex items-center z-50">
