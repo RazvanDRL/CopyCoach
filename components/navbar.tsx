@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
-import { LogOut, Sparkles, CreditCard, BadgePlus } from "lucide-react"
+import { LogOut, CreditCard, BadgePlus, Menu } from "lucide-react"
 import { useState, useEffect } from 'react'
 import { User } from '@supabase/supabase-js'
 import { supabase } from "@/lib/supabaseClient"
@@ -23,6 +23,7 @@ const Navbar = () => {
   const [user, setUser] = useState<User | null>(null)
   const [credits, setCredits] = useState<number | null>(null)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
 
@@ -95,7 +96,7 @@ const Navbar = () => {
               <Image src={CopyCoachLogo} alt="CopyCoach Logo" width={200} height={40} />
             </Link>
           </div>
-          <div className="flex items-center z-50">
+          <div className="hidden sm:flex items-center z-50">
             {user ? (
               <div className="relative flex items-center">
                 {pathname === '/' ? (
@@ -151,8 +152,75 @@ const Navbar = () => {
               </>
             )}
           </div>
+          <div className="sm:hidden flex items-center">
+            <Button variant="ghost" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              <Menu className="h-6 w-6" />
+            </Button>
+          </div>
         </div>
       </div>
+      {mobileMenuOpen && (
+        <div className="md:hidden">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            {user ? (
+              <>
+                {pathname === '/' && (
+                  <Button
+                    variant="outline"
+                    className="w-full text-left"
+                    onClick={() => {
+                      router.push('/dashboard');
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    Dashboard
+                  </Button>
+                )}
+                {pathname !== '/' && (
+                  <div className="flex items-center justify-between px-4 py-2">
+                    <div className="flex items-center">
+                      <CreditCard className="mr-2 h-4 w-4 text-blue-500" />
+                      <span className="text-sm font-medium">{credits !== null ? credits : '...'} credits</span>
+                    </div>
+                  </div>
+                )}
+                <Button
+                  variant="outline"
+                  className="w-full text-left"
+                  onClick={() => alert('This feature is not available for beta testers.')}
+                >
+                  <BadgePlus className="mr-2 h-4 w-4 text-blue-500" />
+                  Add Credits
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full text-left"
+                  onClick={() => {
+                    handleLogout();
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Log Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="outline" className="w-full text-left">
+                    Login
+                  </Button>
+                </Link>
+                <Link href="/signup" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="outline" className="w-full text-left">
+                    Signup
+                  </Button>
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   )
 }

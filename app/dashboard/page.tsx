@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useState, useEffect } from "react"
-import { ArrowDown, ArrowRight, Check, ChevronsUpDown, CircleAlert, Dices, Star } from "lucide-react"
+import { ArrowDown, ArrowRight, Check, ChevronsUpDown, Dices, Star } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -50,7 +50,7 @@ function Combobox({ placeholder, value, onChange, options, className, disabled }
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn("w-[200px] justify-between", className)}
+          className={cn("w-full sm:w-[200px] justify-between", className)}
           disabled={disabled}
         >
           {value
@@ -59,7 +59,7 @@ function Combobox({ placeholder, value, onChange, options, className, disabled }
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-full sm:w-[200px] p-0">
         <Command>
           <CommandInput placeholder="Search option..." />
           <CommandList>
@@ -205,37 +205,37 @@ export default function Dashboard() {
   return (
     <>
       <Navbar />
-      <main className="flex flex-col items-center min-h-screen py-2">
-        <h1 className="mt-48 text-4xl font-bold mb-3">👋 Welcome, {user.email?.split('@')[0]}</h1>
-        <p className="text-lg text-gray-600 mb-10">Customize your copywriting exercise or try a random one</p>
-        <div className="py-8 flex gap-8">
-          <div className="flex items-center">
+      <main className="flex flex-col items-center min-h-screen py-2 px-4 sm:px-6 lg:px-8">
+        <h1 className="mt-24 sm:mt-48 text-3xl sm:text-4xl font-bold mb-3 text-center">👋 Welcome, {user.email?.split('@')[0]}</h1>
+        <p className="text-base sm:text-lg text-gray-600 mb-10 text-center">Customize your copywriting exercise or try a random one</p>
+        <div className="py-8 items-center justify-center flex flex-col sm:flex-row gap-4 sm:gap-8 w-full max-w-xl">
+          <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto">
             <Combobox
               placeholder="Select niche"
               value={niche}
               onChange={setNiche}
               options={niches}
-              className={niche ? "border-green-500" : ""}
+              className={cn("w-full sm:w-[200px] mb-4 sm:mb-0", niche ? "border-green-500" : "")}
             />
-            <ArrowRight className="ml-8 h-4 w-4" />
+            <ArrowRight className="hidden sm:block ml-4 sm:ml-8 h-4 w-4" />
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center w-full sm:w-auto">
             <Combobox
               placeholder="Select task"
               value={task}
               onChange={setTask}
               options={availableTasks}
-              className={task ? "border-green-500" : ""}
+              className={cn("w-full sm:w-[200px]", task ? "border-green-500" : "")}
               disabled={!niche}
             />
           </div>
         </div>
-        <div className="flex gap-4 mt-8">
-          <Button variant="outline" onClick={randomSelect}>
+        <div className="flex flex-col items-center justify-center sm:flex-row gap-4 mt-8 w-full max-w-xl">
+          <Button variant="outline" onClick={randomSelect} className="w-full sm:w-auto">
             <Dices className="mr-2 h-4 w-4" />Random
           </Button>
           <Button
-            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition duration-200 hover:scale-105 flex items-center"
+            className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition duration-200 hover:scale-105 flex items-center justify-center"
             disabled={!niche || !task}
             onClick={handleSubmit}
           >
@@ -247,17 +247,17 @@ export default function Dashboard() {
           <h2 className="text-2xl font-bold mb-4">Exercise History</h2>
           {exerciseHistory.length > 0 ? (
             <>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-32">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-32">
                 {exerciseHistory.filter(exercise => exercise.grade).slice(0, 12).map((exercise) => (
                   <Link href={`/analyze/${exercise.id}`} key={exercise.id}>
                     <Card className="transform hover:scale-105 transition-transform duration-300 shadow-lg rounded-xl overflow-hidden">
                       <CardHeader className="bg-gray-100 text-gray-800 p-4">
-                        <CardTitle className="text-xl font-bold">{exercise.title}</CardTitle>
+                        <CardTitle className="text-lg sm:text-xl font-bold">{exercise.title}</CardTitle>
                       </CardHeader>
                       <CardContent className="bg-white p-6 flex flex-col items-center">
                         <div className="flex items-center space-x-2">
-                          <Star className="text-yellow-500 w-6 h-6" />
-                          <p className="text-xl font-semibold text-gray-800">Grade: {exercise.grade}</p>
+                          <Star className="text-yellow-500 w-5 h-5 sm:w-6 sm:h-6" />
+                          <p className="text-lg sm:text-xl font-semibold text-gray-800">Grade: {exercise.grade}</p>
                         </div>
                         <Button variant="ghost" className="mt-4">
                           View Details
@@ -282,7 +282,7 @@ export default function Dashboard() {
           ) : (
             <Card>
               <CardContent className="text-center py-8">
-                <p className="text-lg text-gray-600">You haven&apos;t completed any exercises yet. Start one now!</p>
+                <p className="text-base sm:text-lg text-gray-600">You haven&apos;t completed any exercises yet. Start one now!</p>
               </CardContent>
             </Card>
           )}
