@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useState, useEffect } from "react"
-import { ArrowDown, ArrowRight, Check, ChevronsUpDown, Dices, Star } from "lucide-react"
+import { ArrowDown, ArrowRight, Check, ChevronsUpDown, Dices, CircleHelp, Star } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -20,6 +20,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 import { niches, tasks } from "@/constants"
 import { useRouter } from "next/navigation"
@@ -207,19 +213,45 @@ export default function Dashboard() {
       <Navbar />
       <main className="flex flex-col items-center min-h-screen py-2 px-4 sm:px-6 lg:px-8">
         <h1 className="mt-24 sm:mt-48 text-3xl sm:text-4xl font-bold mb-3 text-center">👋 Welcome, {user.email?.split('@')[0]}</h1>
-        <p className="text-base sm:text-lg text-gray-600 mb-10 text-center">Customize your copywriting exercise or try a random one</p>
+        <p className="text-base sm:text-lg text-gray-600 mb-10 text-center">
+          Customize your copywriting exercise or try a random one
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <CircleHelp className="ml-2 h-4 w-4 text-blue-800/90" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="max-w-sm text-le">
+                  You'll receive a practice client with details about their business and task. Complete the exercise to get evaluated and personalized tips for improvement!
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </p>
         <div className="py-8 items-center justify-center flex flex-col sm:flex-row gap-4 sm:gap-8 w-full max-w-xl">
-          <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto">
+          <div className="flex flex-row items-center w-full sm:w-auto">
             <Combobox
               placeholder="Select niche"
               value={niche}
               onChange={setNiche}
               options={niches}
-              className={cn("w-full sm:w-[200px] mb-4 sm:mb-0", niche ? "border-green-500" : "")}
+              className={cn("w-full sm:w-[200px]", niche ? "border-green-500" : "")}
             />
+            <TooltipProvider>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger>
+                  <CircleHelp className="ml-2 h-4 w-4 opacity-50 hover:opacity-100" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-xs">
+                    The niche determines the industry your practice-client operates in.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <ArrowRight className="hidden sm:block ml-4 sm:ml-8 h-4 w-4" />
           </div>
-          <div className="flex items-center w-full sm:w-auto">
+          <div className="flex flex-row items-center w-full sm:w-auto mt-4 sm:mt-0">
             <Combobox
               placeholder="Select task"
               value={task}
@@ -228,6 +260,18 @@ export default function Dashboard() {
               className={cn("w-full sm:w-[200px]", task ? "border-green-500" : "")}
               disabled={!niche}
             />
+            <TooltipProvider>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger>
+                  <CircleHelp className="ml-2 h-4 w-4 opacity-50 hover:opacity-100" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-xs">
+                    The task determines the specific type of copywriting exercise you will complete.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
         <div className="flex flex-col items-center justify-center sm:flex-row gap-4 mt-8 w-full max-w-xl">

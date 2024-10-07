@@ -11,7 +11,7 @@ const LandingPage: React.FC = () => {
     return (
         <>
             <Navbar />
-            <div className="flex flex-col items-center justify-center min-h-[80vh] px-4 py-12 space-y-8 relative overflow-hidden">
+            <div className="flex flex-col items-center justify-center min-h-[80svh] px-4 py-12 space-y-8 relative overflow-hidden">
                 {/* Background symbols */}
                 <div className="absolute inset-0 z-0 opacity-25">
                     <Pen className="absolute top-1/4 left-1/4 h-12 w-12 sm:h-16 sm:w-16 text-blue-500 transform -rotate-12" />
@@ -49,10 +49,10 @@ const LandingPage: React.FC = () => {
                             </svg>
                         </div>
                         <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-neutral-800 dark:text-neutral-200">
-                            Real practice scenarios
+                            Realistic exercises
                         </h3>
                         <p className="text-base sm:text-lg text-neutral-600 dark:text-neutral-400">
-                            Choose your desired niche and get an exercise that fits your choices while simulating the real-life experience.
+                            Select your niche and complete exercises that mirror real-life copywriting tasks, preparing you for actual clients.
                         </p>
                     </div>
                     <div className="cursor-pointer bg-white dark:bg-neutral-800 p-6 sm:p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-purple-100 dark:border-purple-900 transform hover:-translate-y-1">
@@ -61,9 +61,11 @@ const LandingPage: React.FC = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                             </svg>
                         </div>
-                        <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-neutral-800 dark:text-neutral-200">Custom AI Feedback</h3>
+                        <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-neutral-800 dark:text-neutral-200">
+                            Custom AI Feedback
+                        </h3>
                         <p className="text-base sm:text-lg text-neutral-600 dark:text-neutral-400">
-                            Get instant, tailored feedback to boost your writing fast. Our AI makes you better, quicker.
+                            Get instant, personalized feedback to improve your skills quickly. Our AI helps you get better, faster.
                         </p>
                     </div>
                     <div className="cursor-pointer bg-white dark:bg-neutral-800 p-6 sm:p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-green-100 dark:border-green-900 transform hover:-translate-y-1">
@@ -73,17 +75,17 @@ const LandingPage: React.FC = () => {
                             </svg>
                         </div>
                         <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-neutral-800 dark:text-neutral-200">
-                            Rapid Improvement
+                            Get paid fast
                         </h3>
                         <p className="text-base sm:text-lg text-neutral-600 dark:text-neutral-400">
-                            Learn faster with regular practice and instant tips. Watch your skills skyrocket!
+                            Complete exercises, build your skills, and unlock access to businesses looking for top copywriters with our Private Business Community.
                         </p>
                     </div>
                 </div>
                 {/* CTA button */}
                 <div className="flex justify-center mt-12 sm:mt-16">
                     <Link href="/dashboard" className="flex items-center text-sm sm:text-base py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200">
-                        Choose Your Niche
+                        Start Improving Now
                         <ArrowRight className="h-4 w-4 ml-2" />
                     </Link>
                 </div>
@@ -97,33 +99,39 @@ const LandingPage: React.FC = () => {
                 <div className="max-w-3xl mx-auto">
                     <Accordion type="single" collapsible className="w-full">
                         <AccordionItem value="item-1">
-                            <AccordionTrigger>What is CopyCoach?</AccordionTrigger>
+                            <AccordionTrigger>What is an exercise?</AccordionTrigger>
                             <AccordionContent>
-                                CopyCoach is an AI-powered platform designed to help copywriters, marketers, and content creators improve their writing skills through real-time feedback and personalized coaching.
+                                An exercise is like pretending to work for a real business. You'll get a 'practice client' based on the niche and task you pick before you start.
                             </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="item-2">
-                            <AccordionTrigger>How does CopyCoach work?</AccordionTrigger>
+                        {/* <AccordionItem value="item-2">
+                            <AccordionTrigger>How do communities work?</AccordionTrigger>
                             <AccordionContent>
-                                CopyCoach analyzes your writing in real-time, providing instant feedback on style, tone, and effectiveness. It offers suggestions for improvement and tailored exercises to enhance your skills.
+                                After purchasing an exercise package, you'll get an invitation to join a community on your email. Each package provides different levels of access, along with unique benefits and perks to support your learning journey. Keep in mind, these are different from the Private Business Community.
                             </AccordionContent>
-                        </AccordionItem>
+                        </AccordionItem> */}
                         <AccordionItem value="item-3">
-                            <AccordionTrigger>Is CopyCoach suitable for beginners?</AccordionTrigger>
+                            <AccordionTrigger>How can I be sure that AI gives me the right feedback?</AccordionTrigger>
                             <AccordionContent>
-                                Absolutely! CopyCoach is designed for writers of all levels, from beginners to experienced professionals. The AI adapts its feedback and suggestions based on your skill level.
+                                We use the latest AI models and finely-tuned system prompts to provide feedback tailored to each exercise. Our AI is trained to give actionable, precise suggestions to help you improve with each exercise!
                             </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="item-4">
-                            <AccordionTrigger>Can I use CopyCoach for different types of copy?</AccordionTrigger>
+                            <AccordionTrigger>Can I use CopyCoach on mobile?</AccordionTrigger>
                             <AccordionContent>
-                                Yes, CopyCoach can assist with various types of copy, including ad copy, email marketing, social media posts, blog articles, and more. The AI is trained on a wide range of copywriting styles and formats.
+                                Yes, CopyCoach works seamlessly on mobile, so you can learn and practice copywriting on the go!
                             </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="item-5">
-                            <AccordionTrigger>Is my data secure with CopyCoach?</AccordionTrigger>
+                        {/* <AccordionItem value="item-5">
+                            <AccordionTrigger>Do you guarantee a paying client?</AccordionTrigger>
                             <AccordionContent>
-                                We take data security very seriously. All your writing and personal information are encrypted and stored securely. We never share your data with third parties without your explicit consent.
+                                We guarantee you'll land a paying client in under 90 days if you complete 100 exercises in your chosen niche, otherwise, you can get a full refund!
+                            </AccordionContent>
+                        </AccordionItem> */}
+                        <AccordionItem value="item-6">
+                            <AccordionTrigger>What's the Private Business Community?</AccordionTrigger>
+                            <AccordionContent>
+                                A group of businesses actively looking to work with top-notch copywriters. You'll receive a private email invitation to join if you complete 100 exercises in ONE specific niche.
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
