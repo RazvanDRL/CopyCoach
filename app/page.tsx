@@ -101,7 +101,7 @@ const LandingPage: React.FC = () => {
                         <AccordionItem value="item-1">
                             <AccordionTrigger>What is an exercise?</AccordionTrigger>
                             <AccordionContent>
-                                An exercise is like pretending to work for a real business. You'll get a 'practice client' based on the niche and task you pick before you start.
+                                An exercise is like pretending to work for a real business. You&apos;ll get a &apos;practice client&apos; based on the niche and task you pick before you start.
                             </AccordionContent>
                         </AccordionItem>
                         {/* <AccordionItem value="item-2">
@@ -129,9 +129,9 @@ const LandingPage: React.FC = () => {
                             </AccordionContent>
                         </AccordionItem> */}
                         <AccordionItem value="item-6">
-                            <AccordionTrigger>What's the Private Business Community?</AccordionTrigger>
+                            <AccordionTrigger>What&apos;s the Private Business Community?</AccordionTrigger>
                             <AccordionContent>
-                                A group of businesses actively looking to work with top-notch copywriters. You'll receive a private email invitation to join if you complete 100 exercises in ONE specific niche.
+                                A group of businesses actively looking to work with top-notch copywriters. You&apos;ll receive a private email invitation to join if you complete 100 exercises in ONE specific niche.
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
