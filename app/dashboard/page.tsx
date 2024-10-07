@@ -222,7 +222,7 @@ export default function Dashboard() {
               </TooltipTrigger>
               <TooltipContent>
                 <p className="max-w-sm text-le">
-                  You'll receive a practice client with details about their business and task. Complete the exercise to get evaluated and personalized tips for improvement!
+                  You&apos;ll receive a practice client with details about their business and task. Complete the exercise to get evaluated and personalized tips for improvement!
                 </p>
               </TooltipContent>
             </Tooltip>
