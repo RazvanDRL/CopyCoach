@@ -92,45 +92,33 @@ const LandingPage: React.FC = () => {
             </div>
 
             {/* FAQ */}
-            <div className="py-16 sm:py-24 px-4">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center text-neutral-800 dark:text-neutral-200 font-bold mb-12 sm:mb-16">
+            <div className="py-16 sm:py-24 px-4 sm:px-8">
+                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center text-neutral-800 dark:text-neutral-200 font-bold mb-8 sm:mb-12">
                     Frequently Asked Questions
                 </h2>
                 <div className="max-w-3xl mx-auto">
                     <Accordion type="single" collapsible className="w-full">
                         <AccordionItem value="item-1">
-                            <AccordionTrigger>What is an exercise?</AccordionTrigger>
-                            <AccordionContent>
+                            <AccordionTrigger className="text-sm sm:text-base">What is an exercise?</AccordionTrigger>
+                            <AccordionContent className="text-xs sm:text-sm">
                                 An exercise is like pretending to work for a real business. You&apos;ll get a &apos;practice client&apos; based on the niche and task you pick before you start.
                             </AccordionContent>
                         </AccordionItem>
-                        {/* <AccordionItem value="item-2">
-                            <AccordionTrigger>How do communities work?</AccordionTrigger>
-                            <AccordionContent>
-                                After purchasing an exercise package, you'll get an invitation to join a community on your email. Each package provides different levels of access, along with unique benefits and perks to support your learning journey. Keep in mind, these are different from the Private Business Community.
-                            </AccordionContent>
-                        </AccordionItem> */}
                         <AccordionItem value="item-3">
-                            <AccordionTrigger>How can I be sure that AI gives me the right feedback?</AccordionTrigger>
-                            <AccordionContent>
+                            <AccordionTrigger className="text-sm sm:text-base">How can I be sure that AI gives me the right feedback?</AccordionTrigger>
+                            <AccordionContent className="text-xs sm:text-sm">
                                 We use the latest AI models and finely-tuned system prompts to provide feedback tailored to each exercise. Our AI is trained to give actionable, precise suggestions to help you improve with each exercise!
                             </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="item-4">
-                            <AccordionTrigger>Can I use CopyCoach on mobile?</AccordionTrigger>
-                            <AccordionContent>
+                            <AccordionTrigger className="text-sm sm:text-base">Can I use CopyCoach on mobile?</AccordionTrigger>
+                            <AccordionContent className="text-xs sm:text-sm">
                                 Yes, CopyCoach works seamlessly on mobile, so you can learn and practice copywriting on the go!
                             </AccordionContent>
                         </AccordionItem>
-                        {/* <AccordionItem value="item-5">
-                            <AccordionTrigger>Do you guarantee a paying client?</AccordionTrigger>
-                            <AccordionContent>
-                                We guarantee you'll land a paying client in under 90 days if you complete 100 exercises in your chosen niche, otherwise, you can get a full refund!
-                            </AccordionContent>
-                        </AccordionItem> */}
                         <AccordionItem value="item-6">
-                            <AccordionTrigger>What&apos;s the Private Business Community?</AccordionTrigger>
-                            <AccordionContent>
+                            <AccordionTrigger className="text-sm sm:text-base">What&apos;s the Private Business Community?</AccordionTrigger>
+                            <AccordionContent className="text-xs sm:text-sm">
                                 A group of businesses actively looking to work with top-notch copywriters. You&apos;ll receive a private email invitation to join if you complete 100 exercises in ONE specific niche.
                             </AccordionContent>
                         </AccordionItem>
