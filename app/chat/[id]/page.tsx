@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, BookOpen, Target, Lightbulb, Pencil, Send, Bold as BoldIcon, Italic as ItalicIcon, Strikethrough, Link as LinkIcon } from 'lucide-react';
+import { ArrowLeft, BookOpen, Target, Lightbulb, Pencil, Send, Bold as BoldIcon, Italic as ItalicIcon, Strikethrough, Link as LinkIcon, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/navbar';
 import { useEditor, EditorContent } from '@tiptap/react'
@@ -26,6 +26,7 @@ type Exercise = {
     created_at: string;
     niche: string;
     task: string;
+    client_avatar: string;
 };
 
 export default function Chat({ params }: { params: { id: string } }) {
@@ -172,6 +173,16 @@ export default function Chat({ params }: { params: { id: string } }) {
                         bgColor="bg-purple-100"
                     />
                 </div>
+                {exercise.client_avatar && (
+                    <div className="mt-4">
+                        <ExerciseCard
+                            icon={<User className="h-5 w-5" />}
+                            title="Client Avatar"
+                            content={exercise.client_avatar}
+                            bgColor="bg-pink-100"
+                        />
+                    </div>
+                )}
 
                 <div className="mt-16">
                     <h2 className="text-lg font-bold mb-2">Your Response</h2>
@@ -249,23 +260,36 @@ function ExerciseCard({ icon, title, content, bgColor }: { icon: React.ReactNode
 }
 
 function LoadingSkeleton() {
+    const colors = ['bg-blue-100', 'bg-green-100', 'bg-yellow-100', 'bg-purple-100', 'bg-pink-100'];
     return (
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
-            <Skeleton className="h-10 w-32 mb-6" />
-            <Skeleton className="h-10 w-3/4 mx-auto mb-6" />
+        <div className="container mx-auto px-4 py-8 max-w-4xl mt-16">
+            <Skeleton className="h-10 w-32 mb-6 bg-gray-100" />
+            <Skeleton className="h-10 w-3/4 mx-auto mb-6 bg-gray-100" />
             <div className="grid gap-6 md:grid-cols-2">
                 {[...Array(4)].map((_, i) => (
                     <Card key={i}>
-                        <CardHeader>
-                            <Skeleton className="h-6 w-1/3" />
+                        <CardHeader className={`${colors[i]} rounded-t-lg mb-4 py-4`}>
+                            <Skeleton className="h-6 w-1/3 bg-gray-100" />
                         </CardHeader>
                         <CardContent>
-                            <Skeleton className="h-4 w-full mb-2" />
-                            <Skeleton className="h-4 w-2/3" />
+                            <Skeleton className="h-4 w-full mb-2 bg-gray-100" />
+                            <Skeleton className="h-4 w-2/3 bg-gray-100" />
                         </CardContent>
                     </Card>
                 ))}
             </div>
+            {/* @dev client avatar card */}
+            {/* <div className="mt-6">
+                <Card>
+                    <CardHeader className={`${colors[4]} rounded-t-lg mb-4 py-4`}>
+                        <Skeleton className="h-6 w-1/3 bg-gray-100" />
+                    </CardHeader>
+                    <CardContent>
+                        <Skeleton className="h-4 w-full mb-2 bg-gray-100" />
+                        <Skeleton className="h-4 w-2/3 bg-gray-100" />
+                    </CardContent>
+                </Card>
+            </div> */}
         </div>
     );
 }

@@ -34,7 +34,9 @@ const LoginPage = () => {
         const { error } = await supabase.auth.signInWithOtp({
             email,
             options: {
-                emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/dashboard` : 'https://copy-coach.com/dashboard',
+                emailRedirectTo: process.env.NODE_ENV === 'production'
+                    ? 'https://copy-coach.com/dashboard'
+                    : 'http://localhost:3000/dashboard',
             },
         });
         if (error) {
@@ -51,7 +53,9 @@ const LoginPage = () => {
         const { error } = await supabase.auth.signInWithOAuth({
             provider,
             options: {
-                redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/dashboard` : 'https://copy-coach.com/dashboard',
+                redirectTo: process.env.NODE_ENV === 'production'
+                    ? 'https://copy-coach.com/dashboard'
+                    : 'http://localhost:3000/dashboard',
             },
         });
         if (error) {
