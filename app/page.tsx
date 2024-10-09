@@ -7,6 +7,25 @@ import PricingPage from './pricing/page';
 import { Pen, Book, Sparkles, ArrowRight } from 'lucide-react';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 
+const faq = [
+    {
+        question: "What is an exercise?",
+        answer: "An exercise is like pretending to work for a real business. You'll get a 'practice client' based on the niche and task you pick before you start."
+    },
+    {
+        question: "How can I be sure that AI gives me the right feedback?",
+        answer: "We use the latest AI models and finely-tuned system prompts to provide feedback tailored to each exercise. Our AI is trained to give actionable, precise suggestions to help you improve with each exercise!"
+    },
+    {
+        question: "Can I use CopyCoach on mobile?",
+        answer: "Yes, CopyCoach works seamlessly on mobile, so you can learn and practice copywriting on the go!"
+    },
+    {
+        question: "What's the Private Business Community?",
+        answer: "A group of businesses actively looking to work with top-notch copywriters. You'll receive a private email invitation to join if you complete 100 exercises in ONE specific niche."
+    },
+]
+
 const LandingPage: React.FC = () => {
     return (
         <>
@@ -97,31 +116,15 @@ const LandingPage: React.FC = () => {
                     Frequently Asked Questions
                 </h2>
                 <div className="max-w-3xl mx-auto">
-                    <Accordion type="single" collapsible className="w-full">
-                        <AccordionItem value="item-1">
-                            <AccordionTrigger className="text-sm sm:text-base">What is an exercise?</AccordionTrigger>
-                            <AccordionContent className="text-xs sm:text-sm">
-                                An exercise is like pretending to work for a real business. You&apos;ll get a &apos;practice client&apos; based on the niche and task you pick before you start.
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="item-3">
-                            <AccordionTrigger className="text-sm sm:text-base">How can I be sure that AI gives me the right feedback?</AccordionTrigger>
-                            <AccordionContent className="text-xs sm:text-sm">
-                                We use the latest AI models and finely-tuned system prompts to provide feedback tailored to each exercise. Our AI is trained to give actionable, precise suggestions to help you improve with each exercise!
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="item-4">
-                            <AccordionTrigger className="text-sm sm:text-base">Can I use CopyCoach on mobile?</AccordionTrigger>
-                            <AccordionContent className="text-xs sm:text-sm">
-                                Yes, CopyCoach works seamlessly on mobile, so you can learn and practice copywriting on the go!
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="item-6">
-                            <AccordionTrigger className="text-sm sm:text-base">What&apos;s the Private Business Community?</AccordionTrigger>
-                            <AccordionContent className="text-xs sm:text-sm">
-                                A group of businesses actively looking to work with top-notch copywriters. You&apos;ll receive a private email invitation to join if you complete 100 exercises in ONE specific niche.
-                            </AccordionContent>
-                        </AccordionItem>
+                    <Accordion type='single' collapsible className="w-full">
+                        {faq.map((item, index) => (
+                            <AccordionItem key={index} value={`item-${index + 1}`}>
+                                <AccordionTrigger className="text-left">{item.question}</AccordionTrigger>
+                                <AccordionContent className="text-left">
+                                    {item.answer}
+                                </AccordionContent>
+                            </AccordionItem>
+                        ))}
                     </Accordion>
                 </div>
             </div>
