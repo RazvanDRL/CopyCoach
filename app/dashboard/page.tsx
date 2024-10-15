@@ -289,7 +289,7 @@ export default function Dashboard() {
         </div>
         <div className="mt-16 w-full max-w-4xl">
           <h2 className="text-2xl font-bold mb-4">Exercise History</h2>
-          {exerciseHistory.length > 0 ? (
+          {exerciseHistory.length > 0 && exerciseHistory.filter(exercise => exercise.grade).length > 0 ? (
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-32">
                 {exerciseHistory.filter(exercise => exercise.grade).slice(0, 12).map((exercise) => (
