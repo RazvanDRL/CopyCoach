@@ -171,7 +171,7 @@ Ensure your feedback is very detailed, incredibly constructive, and exactlytailo
         console.log('Current timestamp:', new Date().getTime());
 
         const completion = await openai.beta.chat.completions.parse({
-            model: "gpt-4",
+            model: "gpt-4o",
             messages: [
                 { role: "system", content: "You are a copywriting analysis AI. Your task is to evaluate copywriting and provide scores and improvement tips. You must provide a score for each category and provide detailed explanations in the tips and improvedVersion fields." },
                 { role: "user", content: prompt }
