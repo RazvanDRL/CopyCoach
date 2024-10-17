@@ -146,7 +146,7 @@ const LandingPage: React.FC = () => {
                             <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-[#FFBF00] text-[#FFBF00]" />
                         </div>
                         <p className="text-center text-xs sm:text-sm font-medium">
-                            Amazing. Best copywriting platform I've found. TRUSTMEBROLOGY
+                            {"Amazing. Best copywriting platform I've found. TRUSTMEBROLOGY"}
                         </p>
                         {/* image + name + followers count */}
                         <div className="flex items-center justify-center space-x-4">
@@ -211,7 +211,7 @@ const LandingPage: React.FC = () => {
                             <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-[#FFBF00] text-[#FFBF00]" />
                         </div>
                         <p className="text-center text-xs sm:text-sm font-medium text-neutral-700">
-                            Amazing. Best copywriting platform I've found. TRUSTMEBROLOGY
+                            {"Amazing. Best copywriting platform I've found. TRUSTMEBROLOGY"}
                         </p>
                         {/* image + name + followers count */}
                         <div className="flex items-center justify-center space-x-4 text-neutral-700/70">
