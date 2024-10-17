@@ -9,7 +9,7 @@ import { bricolage } from '@/fonts/font'
 export default function Footer() {
   return (
     <footer className="bg-background mt-12">
-      <div className="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <Link href="/" className={`${bricolage.className} text-2xl font-bold text-primary`}>

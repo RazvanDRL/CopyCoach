@@ -72,13 +72,13 @@ interface PricingProps {
 
 const Pricing: React.FC<PricingProps> = ({ className, user }) => {
     return (
-        <div className={`${className} py-16 px-4 sm:px-6 lg:px-8`}>
-            <div className="max-w-5xl mx-auto mt-16">
+        <div className={`${className}`}>
+            <div className="max-w-5xl mt-16">
                 <h1 className={cn("text-4xl sm:text-5xl font-extrabold mb-8 text-center", bricolage.className)}>
                     Unlock Your <span className="text-[#007FFF]">Copywriting Potential</span> Today
                 </h1>
                 <p className="text-xl text-muted-foreground text-center mb-12">
-                    1 exercise = 1 credit. <span className="decoration underline decoration-dashed underline-offset-4">Recharge only when you need</span>—no monthly fees, no strings attached.
+                    Recharge only when you need it.
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3">

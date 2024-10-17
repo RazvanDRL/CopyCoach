@@ -14,6 +14,7 @@ import { Pen, Book, Sparkles, Star, Frown, Smile, Mail, FileText, ArrowRight, Ge
 import localFont from 'next/font/local';
 import Image from 'next/image';
 import CeciuAvatar from '@/public/avatars/ceciu.jpg';
+import Pricing from '@/components/pricing';
 
 const BricolageGrotesque = localFont({
     src: './fonts/BricolageGrotesque.ttf',
@@ -110,7 +111,7 @@ const LandingPage: React.FC = () => {
     return (
         <>
             <Navbar />
-            <main className="bg-white max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <main className="bg-white max-w-5xl mx-auto">
                 {/* Section - landing */}
                 <section className="flex flex-col items-center justify-center min-h-[75vh] py-12 relative overflow-hidden">
                     {/* Background symbols */}
@@ -244,7 +245,7 @@ const LandingPage: React.FC = () => {
                     {/* menu with 4 options */}
                     <div className="mt-16 flex items-center justify-center gap-2 sm:gap-6 w-full">
                         <Button
-                            className='p-4 sm:p-8'
+                            className={`p-4 sm:p-8 rounded-xl ${selectedOption === 1 ? 'text-[#007FFF] bg-[#007FFF]/10 hover:text-[#007FFF] hover:bg-[#007FFF]/10' : 'hover:text-[#007FFF]/70 hover:bg-[#007FFF]/10'}`}
                             variant='ghost'
                             onClick={() => {
                                 setSelectedOption(1);
@@ -253,7 +254,7 @@ const LandingPage: React.FC = () => {
                             <Pen className="w-4 h-4 sm:w-6 sm:h-6" />
                         </Button>
                         <Button
-                            className='p-4 sm:p-8'
+                            className={`p-4 sm:p-8 ${selectedOption === 2 ? 'text-[#007FFF] bg-[#007FFF]/10 hover:text-[#007FFF] hover:bg-[#007FFF]/10' : 'hover:text-[#007FFF]/70 hover:bg-[#007FFF]/10'}`}
                             variant='ghost'
                             onClick={() => {
                                 setSelectedOption(2);
@@ -262,7 +263,7 @@ const LandingPage: React.FC = () => {
                             <Book className="w-4 h-4 sm:w-6 sm:h-6" />
                         </Button>
                         <Button
-                            className='p-4 sm:p-8'
+                            className={`p-4 sm:p-8 ${selectedOption === 3 ? 'text-[#007FFF] bg-[#007FFF]/10 hover:text-[#007FFF] hover:bg-[#007FFF]/10' : 'hover:text-[#007FFF]/70 hover:bg-[#007FFF]/10'}`}
                             variant='ghost'
                             onClick={() => {
                                 setSelectedOption(3);
@@ -271,7 +272,7 @@ const LandingPage: React.FC = () => {
                             <Mail className="w-4 h-4 sm:w-6 sm:h-6" />
                         </Button>
                         <Button
-                            className='p-4 sm:p-8'
+                            className={`p-4 sm:p-8 ${selectedOption === 4 ? 'text-[#007FFF] bg-[#007FFF]/10 hover:text-[#007FFF] hover:bg-[#007FFF]/10' : 'hover:text-[#007FFF]/70 hover:bg-[#007FFF]/10'}`}
                             variant='ghost'
                             onClick={() => {
                                 setSelectedOption(4);
@@ -309,8 +310,13 @@ const LandingPage: React.FC = () => {
                     </div>
                 </section>
 
-                {/* Section - FAQ */}
+                {/* Section - Pricing */}
                 <section className="flex flex-col items-center justify-center mt-24">
+                    <Pricing className="w-full px-0" />
+                </section>
+
+                {/* Section - FAQ */}
+                <section className="flex flex-col items-center justify-center mt-48">
                     <h2 className={`${BricolageGrotesque.className} text-center text-3xl sm:text-4xl md:text-5xl font-black`}>
                         Frequently Asked Questions
                     </h2>
