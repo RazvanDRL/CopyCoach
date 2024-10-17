@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useState, useEffect } from "react"
-import { ArrowDown, ArrowRight, Check, ChevronsUpDown, Dices, CircleHelp, Star } from "lucide-react"
+import { ArrowDown, ArrowRight, Check, ChevronsUpDown, Dices, CircleHelp, Star, History } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -36,7 +36,8 @@ import Link from "next/link"
 import { User } from '@supabase/supabase-js'
 import Loading from "@/components/loading"
 import Footer from "@/components/footer"
-
+import { bricolage } from "@/fonts/font"
+import { sleep } from "openai/core.mjs"
 interface ComboboxProps {
   placeholder: string
   value: string
@@ -97,7 +98,6 @@ function Combobox({ placeholder, value, onChange, options, className, disabled }
   )
 }
 
-// Add this interface near the top of the file
 interface ExerciseHistoryItem {
   id: string;
   title: string;
@@ -111,6 +111,7 @@ export default function Dashboard() {
   const [exerciseHistory, setExerciseHistory] = useState<ExerciseHistoryItem[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [availableTasks, setAvailableTasks] = useState<typeof tasks>([]);
+  const [showAllExercises, setShowAllExercises] = useState(false);
 
   useEffect(() => {
     fetchUser().then(user => {
@@ -152,7 +153,13 @@ export default function Dashboard() {
     const randomTask = randomNiche.tasks[Math.floor(Math.random() * randomNiche.tasks.length)];
 
     setNiche(randomNiche.value);
-    setTask(randomTask);
+
+    const selectedTask = tasks.find(t => t.value === randomTask);
+    if (selectedTask) {
+      setTask(selectedTask.value);
+    } else {
+      setTask(tasks.find(t => randomNiche.tasks.includes(t.value))?.value || "");
+    }
   };
 
   useEffect(() => {
@@ -212,13 +219,23 @@ export default function Dashboard() {
     <>
       <Navbar />
       <main className="flex flex-col items-center min-h-screen py-2 px-4 sm:px-6 lg:px-8">
-        <h1 className="mt-24 sm:mt-48 text-3xl sm:text-4xl font-bold mb-3 text-center">👋 Welcome, {user.email?.split('@')[0]}</h1>
+        <h1 className={`${bricolage.className} mt-24 sm:mt-48 text-3xl sm:text-4xl font-bold mb-3 text-center`}>👋 Welcome, {user.email?.split('@')[0]}</h1>
         <p className="text-base sm:text-lg text-gray-600 mb-10 text-center">
           Customize your copywriting exercise or try a random one
           <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <CircleHelp className="ml-2 h-4 w-4 text-blue-800/90" />
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger onClick={async (event) => {
+                event.preventDefault(); // Prevent default behavior
+                const target = event.currentTarget;
+                await sleep(0);
+                target.blur();
+                target.focus();
+              }}
+                className="focus:outline-none" // Remove default focus styles
+              >
+                <span>
+                  <CircleHelp className="text-[#0d0e0f] ml-2 h-4 w-4 opacity-50 hover:opacity-100 cursor-help" />
+                </span>
               </TooltipTrigger>
               <TooltipContent>
                 <p className="max-w-sm text-le">
@@ -239,8 +256,18 @@ export default function Dashboard() {
             />
             <TooltipProvider>
               <Tooltip delayDuration={0}>
-                <TooltipTrigger>
-                  <CircleHelp className="ml-2 h-4 w-4 opacity-50 hover:opacity-100" />
+                <TooltipTrigger onClick={async (event) => {
+                  event.preventDefault(); // Prevent default behavior
+                  const target = event.currentTarget;
+                  await sleep(0);
+                  target.blur();
+                  target.focus();
+                }}
+                  className="focus:outline-none" // Remove default focus styles
+                >
+                  <span>
+                    <CircleHelp className="ml-2 h-4 w-4 opacity-50 hover:opacity-100 cursor-help" />
+                  </span>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="max-w-xs">
@@ -257,13 +284,23 @@ export default function Dashboard() {
               value={task}
               onChange={setTask}
               options={availableTasks}
-              className={cn("w-full sm:w-[200px]", task ? "border-green-500" : "")}
+              className={cn("w-full sm:w-[200px]", task ? "border-green-500" : "animate-pulse")}
               disabled={!niche}
             />
             <TooltipProvider>
               <Tooltip delayDuration={0}>
-                <TooltipTrigger>
-                  <CircleHelp className="ml-2 h-4 w-4 opacity-50 hover:opacity-100" />
+                <TooltipTrigger onClick={async (event) => {
+                  event.preventDefault(); // Prevent default behavior
+                  const target = event.currentTarget;
+                  await sleep(0);
+                  target.blur();
+                  target.focus();
+                }}
+                  className="focus:outline-none" // Remove default focus styles
+                >
+                  <span>
+                    <CircleHelp className="ml-2 h-4 w-4 opacity-50 hover:opacity-100 cursor-help" />
+                  </span>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="max-w-xs">
@@ -275,11 +312,15 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="flex flex-col items-center justify-center sm:flex-row gap-4 mt-8 w-full max-w-xl">
-          <Button variant="outline" onClick={randomSelect} className="w-full sm:w-auto">
+          <Button
+            variant="outline"
+            onClick={randomSelect}
+            className="w-full sm:w-auto active:scale-95 transition-transform duration-100"
+          >
             <Dices className="mr-2 h-4 w-4" />Random
           </Button>
           <Button
-            className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition duration-200 hover:scale-105 flex items-center justify-center"
+            className="w-full sm:w-auto bg-[#007FFF] hover:bg-[#007FFF] text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition duration-200 hover:scale-105 flex items-center justify-center"
             disabled={!niche || !task}
             onClick={handleSubmit}
           >
@@ -287,18 +328,21 @@ export default function Dashboard() {
             <span>Ready to Start!</span>
           </Button>
         </div>
-        <div className="mt-16 w-full max-w-4xl">
-          <h2 className="text-2xl font-bold mb-4">Exercise History</h2>
+        <div className="mt-16 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className={`${bricolage.className} text-3xl font-bold mb-4 text-left flex items-center`}>
+            <History className="mr-2 h-6 w-6" />
+            Exercise History
+          </h2>
           {exerciseHistory.length > 0 && exerciseHistory.filter(exercise => exercise.grade).length > 0 ? (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-32">
-                {exerciseHistory.filter(exercise => exercise.grade).slice(0, 12).map((exercise) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                {exerciseHistory.filter(exercise => exercise.grade).slice(0, showAllExercises ? exerciseHistory.length : 12).map((exercise) => (
                   <Link href={`/analyze/${exercise.id}`} key={exercise.id}>
-                    <Card className="transform hover:scale-105 transition-transform duration-300 shadow-lg rounded-xl overflow-hidden">
-                      <CardHeader className="bg-gray-100 text-gray-800 p-4">
-                        <CardTitle className="text-lg sm:text-xl font-bold">{exercise.title}</CardTitle>
+                    <Card className="transform hover:scale-105 transition-transform duration-300 shadow-lg rounded-xl overflow-hidden h-full flex flex-col">
+                      <CardHeader className="bg-gray-100 text-gray-800 p-4 flex-shrink-0">
+                        <CardTitle className="text-lg font-bold line-clamp-1">{exercise.title}</CardTitle>
                       </CardHeader>
-                      <CardContent className="bg-white p-6 flex flex-col items-center">
+                      <CardContent className="bg-white p-6 flex flex-col items-center justify-between flex-grow">
                         <div className="flex items-center space-x-2">
                           <Star className="text-yellow-500 w-5 h-5 sm:w-6 sm:h-6" />
                           <p className="text-lg sm:text-xl font-semibold text-gray-800">Grade: {exercise.grade}</p>
@@ -314,10 +358,15 @@ export default function Dashboard() {
               </div>
               <div>
                 {exerciseHistory.filter(exercise => exercise.grade).length > 12 && (
-                  <div className="mt-4 text-center">
-                    <Button variant="outline">
-                      View More
-                      <ArrowDown className="ml-2 h-4 w-4" />
+                  <div className="text-center mb-32">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setShowAllExercises(!showAllExercises);
+                      }}
+                    >
+                      {showAllExercises ? "View Less" : "View More"}
+                      <ArrowDown className={`ml-2 h-4 w-4 ${showAllExercises ? "rotate-180" : ""}`} />
                     </Button>
                   </div>
                 )}
@@ -331,7 +380,7 @@ export default function Dashboard() {
             </Card>
           )}
         </div>
-      </main>
+      </main >
       <Footer />
     </>
   )

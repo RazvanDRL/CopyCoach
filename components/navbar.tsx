@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
-import { LogOut, CreditCard, BadgePlus, Menu } from "lucide-react"
+import { LogOut, CreditCard, BadgePlus, Menu, NotebookPen } from "lucide-react"
 import { useState, useEffect } from 'react'
 import { User } from '@supabase/supabase-js'
 import { supabase } from "@/lib/supabaseClient"
@@ -18,6 +18,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Image from 'next/image'
+import localFont from 'next/font/local';
+
+const BricolageGrotesque = localFont({
+  src: "../app/fonts/BricolageGrotesque.ttf",
+  weight: "100 900",
+  variable: '--font-bricolage-grotesque',
+})
 
 const Navbar = () => {
   const [user, setUser] = useState<User | null>(null)
@@ -102,7 +109,7 @@ const Navbar = () => {
                 {pathname === '/' ? (
                   <Button
                     variant="outline"
-                    className="mr-4"
+                    className={`${BricolageGrotesque.className} mr-4`}
                     onClick={() => router.push('/dashboard')}
                   >
                     Dashboard
@@ -110,16 +117,16 @@ const Navbar = () => {
                 ) : (
                   <>
                     <div className="mr-4 flex items-center">
-                      <CreditCard className="mr-2 h-4 w-4 text-blue-500" />
-                      <span className="text-sm font-medium">{credits !== null ? credits : '...'} credits</span>
+                      <NotebookPen className="mr-2 h-4 w-4 text-[#007FFF]" />
+                      <span className="text-sm font-medium">{credits !== null ? credits : '...'} exercises</span>
                     </div>
                     <Button
                       variant="outline"
-                      className="mr-4"
+                      className={`${BricolageGrotesque.className} mr-4 border-[#007FFF]`}
                       onClick={() => alert('This feature is not available for beta testers.')}
                     >
-                      <BadgePlus className="mr-2 h-4 w-4 text-blue-500" />
-                      Add Credits
+                      <BadgePlus className="mr-2 h-4 w-4 text-[#007FFF]" />
+                      Add Exercises
                     </Button>
                   </>
                 )}
@@ -140,13 +147,13 @@ const Navbar = () => {
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="outline" className="ml-4">
+                  <Button variant="ghost" className={`${BricolageGrotesque.className}`}>
                     Login
                   </Button>
                 </Link>
                 <Link href="/signup">
-                  <Button variant="outline" className="ml-4">
-                    Signup
+                  <Button variant="default" className={`ml-4 bg-[#007FFF] font-semibold ${BricolageGrotesque.className} text-white`}>
+                    Start now
                   </Button>
                 </Link>
               </>
@@ -167,7 +174,7 @@ const Navbar = () => {
                 {pathname === '/' && (
                   <Button
                     variant="outline"
-                    className="w-full text-left"
+                    className={`${BricolageGrotesque.className} w-full text-left`}
                     onClick={() => {
                       router.push('/dashboard');
                       setMobileMenuOpen(false);
@@ -179,18 +186,18 @@ const Navbar = () => {
                 {pathname !== '/' && (
                   <div className="flex items-center justify-between px-4 py-2">
                     <div className="flex items-center">
-                      <CreditCard className="mr-2 h-4 w-4 text-blue-500" />
-                      <span className="text-sm font-medium">{credits !== null ? credits : '...'} credits</span>
+                      <CreditCard className="mr-2 h-4 w-4 text-[#007FFF]" />
+                      <span className="text-sm font-medium">{credits !== null ? credits : '...'} exercises</span>
                     </div>
                   </div>
                 )}
                 <Button
                   variant="outline"
-                  className="w-full text-left"
+                  className={`${BricolageGrotesque.className} w-full text-left border-[#007FFF]`}
                   onClick={() => alert('This feature is not available for beta testers.')}
                 >
-                  <BadgePlus className="mr-2 h-4 w-4 text-blue-500" />
-                  Add Credits
+                  <BadgePlus className="mr-2 h-4 w-4 text-[#007FFF]" />
+                  Add Exercises
                 </Button>
                 <Button
                   variant="outline"
@@ -207,13 +214,13 @@ const Navbar = () => {
             ) : (
               <>
                 <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="outline" className="w-full text-left">
+                  <Button variant="outline" className={`w-full text-center ${BricolageGrotesque.className}`}>
                     Login
                   </Button>
                 </Link>
                 <Link href="/signup" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="outline" className="w-full text-left">
-                    Signup
+                  <Button variant="default" className={`mt-2 w-full text-center bg-[#007FFF] ${BricolageGrotesque.className} text-white`}>
+                    Start now
                   </Button>
                 </Link>
               </>

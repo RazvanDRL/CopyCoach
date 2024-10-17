@@ -1,4 +1,4 @@
-export type Task = "blog_post" | "captions" | "email_marketing" | "flyer" | "social_media" | "story_scripts";
+export type Task = "blog_post" | "captions" | "email_marketing" | "flyer" | "social_media" | "story_scripts" | "product_description" | "story_scripts";
 
 export const niches = [
     {
@@ -14,7 +14,7 @@ export const niches = [
     {
         value: "influencers",
         label: "Influencers",
-        tasks: ["story_scrips", "blog_posts", "captions", "scripts", "story_scripts", "email_marketing", "social_media"] as Task[]
+        tasks: ["blog_posts", "captions", "scripts", "story_scripts", "email_marketing", "social_media"] as Task[]
     },
     {
         value: "local_shops",

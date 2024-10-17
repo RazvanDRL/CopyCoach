@@ -227,7 +227,7 @@ export default function Analyze({ params }: { params: { id: string } }) {
                 </div>
 
                 <Card className="mt-8 shadow-lg overflow-hidden">
-                    <CardHeader className="bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-t-lg">
+                    <CardHeader className="bg-gradient-to-r from-[#007FFF] to-purple-500 text-white rounded-t-lg">
                         <CardTitle className="flex items-center text-2xl">
                             <BarChart2 className="mr-2 h-6 w-6" /> Scores
                         </CardTitle>
@@ -280,10 +280,10 @@ export default function Analyze({ params }: { params: { id: string } }) {
 function GeneratingAnalysis() {
     return (
         <div className="h-screen flex flex-col items-center justify-center mx-auto px-4 py-8 max-w-4xl">
-            <h1 className="text-4xl font-bold mb-8 text-center text-blue-500">Generating Analysis</h1>
+            <h1 className="text-4xl font-bold mb-8 text-center text-[#007FFF]">Generating Analysis</h1>
             <p className="text-center mb-4">Please wait while we generate the analysis. This process takes about 15 seconds.</p>
             <div className="flex justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+                <Loader2 className="h-8 w-8 animate-spin text-[#007FFF]" />
             </div>
         </div>
     );
@@ -300,7 +300,7 @@ function LoadingSkeleton() {
                 ))}
             </div>
             <Card className="mt-8 rounded-lg">
-                <CardHeader className="bg-gradient-to-r from-blue-500 to-purple-500">
+                <CardHeader className="bg-gradient-to-r from-[#007FFF] to-purple-500">
                     <Skeleton className="h-8 w-1/3 bg-white/20" />
                 </CardHeader>
                 <CardContent>

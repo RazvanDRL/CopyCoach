@@ -9,6 +9,9 @@ import { Home, LogIn } from "lucide-react";
 import GoogleLogo from "@/public/logos/google.svg"
 import Image from "next/image";
 
+const BASE_URL = process.env.NODE_ENV ===
+    'production' ? 'https://copy-coach.com' : 'http://localhost:3000';
+
 const SignupPage = () => {
     const router = useRouter();
     const [email, setEmail] = useState("");
@@ -34,9 +37,7 @@ const SignupPage = () => {
         const { error } = await supabase.auth.signInWithOtp({
             email,
             options: {
-                emailRedirectTo: process.env.NODE_ENV === 'production'
-                    ? 'https://copy-coach.com/dashboard'
-                    : 'http://localhost:3000/dashboard',
+                emailRedirectTo: BASE_URL + '/dashboard',
             },
         });
         if (error) {
@@ -53,9 +54,7 @@ const SignupPage = () => {
         const { error } = await supabase.auth.signInWithOAuth({
             provider,
             options: {
-                redirectTo: process.env.NODE_ENV === 'production'
-                    ? 'https://copy-coach.com/dashboard'
-                    : 'http://localhost:3000/dashboard',
+                redirectTo: BASE_URL + '/dashboard',
             },
         });
         if (error) {

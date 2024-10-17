@@ -153,8 +153,8 @@ export async function POST(req: Request) {
         const exercise = exerciseData as Exercise;
         const response = chatData.response;
 
-        const prompt = `
-You are an expert copywriting evaluator. Analyze the given response to the copywriting exercise below. Provide a thorough evaluation in JSON format, including:
+        const systemPrompt = `
+You are an expert copywriting evaluator. Your task is to analyze copywriting responses and provide thorough evaluations in JSON format. For each analysis, include:
 
 1. Scores (0-10) for: clarity, audience relevance, persuasiveness, structure, grammar, tone, attention-grabbing, consistency, emotional appeal, CTA effectiveness, and overall score (the median of all scores).
 
@@ -162,24 +162,22 @@ You are an expert copywriting evaluator. Analyze the given response to the copyw
 
 3. Improved version: Rewrite the response to demonstrate expert-level copywriting.
 
-Exercise: ${exercise}
-Response: ${response}
+Ensure your feedback is very detailed, incredibly constructive, and exactly tailored to the specific exercise and response. Focus solely on evaluating the text content and never mention non-text elements like images, banners, or other visual elements.
 
-Ensure your feedback is very detailed, incredibly constructive, and exactlytailored to the specific exercise and response. Focus solely on evaluating the text content and never mention non-text elements like images, banners, or other visual elements.`;
+You must provide a score for each category and provide detailed explanations in the tips and improvedVersion fields.
+`;
 
-        console.log('Sending request to OpenAI...');
-        console.log('Current timestamp:', new Date().getTime());
+
+        console.log('Sending request to OpenAI...', new Date().getTime());
 
         const completion = await openai.beta.chat.completions.parse({
             model: "gpt-4o",
             messages: [
-                { role: "system", content: "You are a copywriting analysis AI. Your task is to evaluate copywriting and provide scores and improvement tips. You must provide a score for each category and provide detailed explanations in the tips and improvedVersion fields." },
-                { role: "user", content: prompt }
+                { role: "system", content: systemPrompt },
+                { role: "user", content: `Exercise: ${exercise}\nResponse: ${response}` }
             ],
             response_format: zodResponseFormat(AnalysisResultSchema, "analysis_result"),
         });
-
-        // console.log('OpenAI response received:', completion);
 
         const parsedResult = completion.choices[0].message.parsed;
         if (!parsedResult) {
@@ -198,11 +196,7 @@ Ensure your feedback is very detailed, incredibly constructive, and exactlytailo
 
         if (insertError) {
             console.error('Error inserting analysis result:', insertError);
-            // Proceed without interrupting the response
         }
-
-        // console.log('Parsed result:', result);
-
         console.log('Sending response to client...');
         return NextResponse.json(result);
 
