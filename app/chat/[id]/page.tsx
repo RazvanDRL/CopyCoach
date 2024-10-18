@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
+import { User as UserType } from "@supabase/supabase-js"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
@@ -14,7 +15,9 @@ import Italic from '@tiptap/extension-italic'
 import Bold from '@tiptap/extension-bold'
 import Strike from '@tiptap/extension-strike'
 import Link from '@tiptap/extension-link'
+import CharacterCount from '@tiptap/extension-character-count'
 import Placeholder from '@tiptap/extension-placeholder'
+import { toast, Toaster } from 'sonner';
 
 type Exercise = {
     id: string;
@@ -34,6 +37,7 @@ export default function Chat({ params }: { params: { id: string } }) {
     const [exercise, setExercise] = useState<Exercise | null>(null);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const [user, setUser] = useState<UserType | null>(null);
 
     const editor = useEditor({
         extensions: [
@@ -47,6 +51,9 @@ export default function Chat({ params }: { params: { id: string } }) {
             Placeholder.configure({
                 placeholder: 'Type your response here...',
             }),
+            CharacterCount.configure({
+                limit: 10000,
+            }),
         ],
         content: '',
         onUpdate: ({ editor }) => {
@@ -59,6 +66,19 @@ export default function Chat({ params }: { params: { id: string } }) {
             },
         },
     })
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            setUser(user);
+            if (!user) {
+                router.replace('/login');
+            }
+            return user;
+        };
+        fetchUser();
+    }, []);
+
 
     useEffect(() => {
         async function getTask() {
@@ -103,9 +123,40 @@ export default function Chat({ params }: { params: { id: string } }) {
 
     const handleSubmit = async () => {
         setSubmitting(true);
+        if (!user) {
+            toast.error('You must be logged in to submit a response.');
+            setSubmitting(false);
+            return;
+        }
         try {
             const response = editor?.getHTML() || '';
             const sanitizedResponse = DOMPurify.sanitize(response);
+
+            // Check if the response is empty or only contains whitespace
+            if (!sanitizedResponse.trim()) {
+                toast.warning('Please write a response before submitting.');
+                setSubmitting(false);
+                return;
+            }
+
+            // Check if the response is too short (e.g., less than 50 words)
+            if (editor?.storage.characterCount.words() < 50) {
+                toast.warning('Your response seems too short. Please provide a more detailed answer. (Minimum 50 words)');
+                setSubmitting(false);
+                return;
+            }
+
+            // Check if the user has copied text from exercise fields
+            const copiedText = [exercise?.description, exercise?.needs, exercise?.details, exercise?.notes].some(
+                field => field && sanitizedResponse.includes(field)
+            );
+
+            if (copiedText) {
+                toast.warning('Please write your own response without copying from the exercise description, task, details, or notes.');
+                setSubmitting(false);
+                return;
+            }
+
             const { data, error } = await supabase
                 .from('history')
                 .update({
@@ -114,14 +165,43 @@ export default function Chat({ params }: { params: { id: string } }) {
                 })
                 .eq('id', params.id);
 
+            const { data: profileData, error: profileError } = await supabase
+                .from('profiles')
+                .select('completed_exercises')
+                .eq('id', user.id)
+                .single();
+
+            if (profileError) {
+                console.error('Error fetching profile:', profileError);
+            } else {
+                const updatedExercises = profileData?.completed_exercises || [];
+                if (exercise?.id && !updatedExercises.includes(exercise.id)) {
+                    updatedExercises.push(exercise.id);
+
+                    const { data: updateData, error: updateError } = await supabase
+                        .from('profiles')
+                        .update({
+                            completed_exercises: updatedExercises
+                        })
+                        .eq('id', user.id);
+
+                    if (updateError) {
+                        console.error('Error updating profile:', updateError);
+                    }
+                }
+            }
+
             if (error) {
                 console.error('Error uploading response:', error);
+                toast.error('Failed to submit response. Please try again.');
             } else {
                 console.log('Response uploaded successfully:', data);
+                toast.success('Response submitted successfully!');
                 router.push(`/analyze/${params.id}`);
             }
         } catch (error) {
-            console.error('Error during analysis:', error);
+            console.error('Error during submission:', error);
+            toast.error('An unexpected error occurred. Please try again.');
         } finally {
             setSubmitting(false);
         }
@@ -138,6 +218,7 @@ export default function Chat({ params }: { params: { id: string } }) {
     return (
         <>
             <Navbar />
+            <Toaster richColors position="top-center" />
             <div className="mt-16 container mx-auto px-4 py-8 max-w-4xl">
                 <Button variant="outline" className="mb-6" onClick={() => {
                     router.push('/dashboard');
@@ -186,44 +267,49 @@ export default function Chat({ params }: { params: { id: string } }) {
 
                 <div className="mt-16">
                     <h2 className="text-lg font-bold mb-2">Your Response</h2>
-                    <div className="flex space-x-2 mb-2">
-                        <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => editor?.chain().focus().toggleBold().run()}
-                            className={editor?.isActive('bold') ? 'is-active' : ''}
-                        >
-                            <BoldIcon className="h-4 w-4" />
-                        </Button>
-                        <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => editor?.chain().focus().toggleItalic().run()}
-                            className={editor?.isActive('italic') ? 'is-active' : ''}
-                        >
-                            <ItalicIcon className="h-4 w-4" />
-                        </Button>
-                        <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => editor?.chain().focus().toggleStrike().run()}
-                            className={editor?.isActive('strike') ? 'is-active' : ''}
-                        >
-                            <Strikethrough className="h-4 w-4" />
-                        </Button>
-                        <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => {
-                                const url = window.prompt('Enter the URL')
-                                if (url) {
-                                    editor?.chain().focus().setLink({ href: url }).run()
-                                }
-                            }}
-                            className={editor?.isActive('link') ? 'is-active' : ''}
-                        >
-                            <LinkIcon className="h-4 w-4" />
-                        </Button>
+                    <div className="flex justify-between items-center mb-2">
+                        <div className="flex space-x-2">
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => editor?.chain().focus().toggleBold().run()}
+                                className={editor?.isActive('bold') ? 'is-active' : ''}
+                            >
+                                <BoldIcon className="h-4 w-4" />
+                            </Button>
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => editor?.chain().focus().toggleItalic().run()}
+                                className={editor?.isActive('italic') ? 'is-active' : ''}
+                            >
+                                <ItalicIcon className="h-4 w-4" />
+                            </Button>
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => editor?.chain().focus().toggleStrike().run()}
+                                className={editor?.isActive('strike') ? 'is-active' : ''}
+                            >
+                                <Strikethrough className="h-4 w-4" />
+                            </Button>
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => {
+                                    const url = window.prompt('Enter the URL')
+                                    if (url) {
+                                        editor?.chain().focus().setLink({ href: url }).run()
+                                    }
+                                }}
+                                className={editor?.isActive('link') ? 'is-active' : ''}
+                            >
+                                <LinkIcon className="h-4 w-4" />
+                            </Button>
+                        </div>
+                        <div className="text-sm text-gray-500">
+                            {editor?.storage.characterCount.words()} words
+                        </div>
                     </div>
                     <div className="relative border rounded-lg shadow-sm p-4">
                         <EditorContent editor={editor} className="w-full outline-none ring-0 border-0 pr-16 prose-sm" />

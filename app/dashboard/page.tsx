@@ -132,7 +132,6 @@ export default function Dashboard() {
 
   const fetchExerciseHistory = async (user: User) => {
     if (!user) return;
-    console.log(user.id)
 
     const { data, error } = await supabase
       .from('history')
@@ -339,13 +338,13 @@ export default function Dashboard() {
                 {exerciseHistory.filter(exercise => exercise.grade).slice(0, showAllExercises ? exerciseHistory.length : 12).map((exercise) => (
                   <Link href={`/analyze/${exercise.id}`} key={exercise.id}>
                     <Card className="transform hover:scale-105 transition-transform duration-300 shadow-lg rounded-xl overflow-hidden h-full flex flex-col">
-                      <CardHeader className="bg-gray-100 text-gray-800 p-4 flex-shrink-0">
+                      <CardHeader className="bg-[#007FFF]/10 text-gray-800 p-4 flex-shrink-0">
                         <CardTitle className="text-lg font-bold line-clamp-1">{exercise.title}</CardTitle>
                       </CardHeader>
                       <CardContent className="bg-white p-6 flex flex-col items-center justify-between flex-grow">
                         <div className="flex items-center space-x-2">
                           <Star className="text-yellow-500 w-5 h-5 sm:w-6 sm:h-6" />
-                          <p className="text-lg sm:text-xl font-semibold text-gray-800">Grade: {exercise.grade}</p>
+                          <p className="text-lg sm:text-xl font-semibold text-gray-800">{exercise.grade}/10</p>
                         </div>
                         <Button variant="ghost" className="mt-4">
                           View Details
