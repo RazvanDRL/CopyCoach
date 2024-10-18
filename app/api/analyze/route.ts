@@ -5,7 +5,7 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { z } from "zod";
 import { zodResponseFormat } from "openai/helpers/zod";
-
+import { levels } from "@/constants";
 type Exercise = {
     id: string;
     title: string;
@@ -47,6 +47,65 @@ const ratelimit = new Ratelimit({
     limiter: Ratelimit.slidingWindow(5, "60 s"),
     analytics: true,
 });
+
+async function addXP(userId: string, xp: number) {
+    if (!userId) {
+        console.error('User ID is required');
+        return;
+    }
+
+    if (!xp) {
+        console.error('XP is required');
+        return;
+    }
+
+    if (xp < 0) {
+        console.error('XP must be a positive number');
+        return;
+    }
+
+    if (xp > 10) {
+        console.error('XP must be less than 10');
+        return;
+    }
+
+    const { data: xpData, error: xpError } = await supabaseAdmin
+        .from('profiles')
+        .select('total_xp, level')
+        .eq('id', userId)
+        .single();
+
+    if (xpError) {
+        console.error('Error fetching XP:', xpError);
+        return;
+    }
+
+    if (xpData.level < 6) {
+        xp = 10;
+    }
+
+    const totalXp = xpData.total_xp + xp;
+    let newLevel = xpData.level;
+
+    // Check if user should level up
+    for (let i = 0; i < levels.length; i++) {
+        if (totalXp >= levels[i].xp) {
+            newLevel = levels[i].value;
+        } else {
+            break;
+        }
+    }
+
+    const { data, error } = await supabaseAdmin
+        .from('profiles')
+        .update({ total_xp: totalXp, level: newLevel })
+        .eq('id', userId);
+
+    if (error) {
+        console.error('Error updating XP and level:', error);
+        return;
+    }
+}
 
 export async function POST(req: Request) {
     try {
@@ -153,37 +212,59 @@ export async function POST(req: Request) {
         const exercise = exerciseData as Exercise;
         const response = chatData.response;
 
-        const systemPrompt = `
-You are an expert copywriting evaluator. Your task is to analyze copywriting responses and provide thorough evaluations in JSON format. For each analysis, include:
+        const userPrompt = (exercise: Exercise, response: string) => `
+You are an expert copywriting evaluator and coach. Your task is to evaluate the following copywriting response, providing clear, balanced feedback in JSON format. The evaluation must include:
 
-1. Scores (0-10) for: clarity, audience relevance, persuasiveness, structure, grammar, tone, attention-grabbing, consistency, emotional appeal, CTA effectiveness, and overall score (the median of all scores).
+1. **Scores (0-10)** for: clarity, audience relevance, persuasiveness, structure, grammar, tone, attention-grabbing, consistency, emotional appeal, CTA effectiveness, and overall score (calculated as the **accurate median** of the 10 scores).
 
-2. Improvement tips: Actionable, bulleted advice, with specific examples, for enhancing the copy.
+   - The median score should be the middle value when the scores are arranged in numerical order. If there are two middle numbers, the median is the average of those two numbers.
 
-3. Improved version: Rewrite the response to demonstrate expert-level copywriting.
+2. **Tips**:
+    - Include **positive feedback** for any category where the score is **8 or above**, and **explain why** the copy performed well in that category.
+    - For scores **below 8**, provide **constructive tips** on how to improve.
+    - **Congratulate** the user on areas where they scored well, and clearly explain the strengths of the copy.
+    - For categories that scored below 8, provide clear and actionable advice for improvement.
+    - **Structure the feedback clearly**: start with **Strengths** first, followed by **Improvement Tips**.
 
-Ensure your feedback is very detailed, incredibly constructive, and exactly tailored to the specific exercise and response. Focus solely on evaluating the text content and never mention non-text elements like images, banners, or other visual elements.
+    Tips format:
+    - **Strengths**: 
+      - <strong>Clarity (Score: 9)</strong>: Your copy is clear and easy to understand, which is essential for keeping your audience engaged. The simplicity of your language ensures the message is conveyed effectively.
+    - **Improvement Tips**:
+      - <strong>Persuasiveness (Score: 6)</strong>: While your points are strong, adding a more emotional appeal could make the copy more persuasive. Consider using phrases like “imagine how much time you could save” to create a connection with the reader.
 
-You must provide a score for each category and provide detailed explanations in the tips and improvedVersion fields.
+3. **Revised version**:
+    - Rewrite the response using your own expert-level copywriting skills.
+    - Ensure that the **revised version reflects the specific tips provided** in the expert feedback, especially addressing any areas of improvement.
+    - If the original copy had strong points, **preserve those strengths** in the revised version and emphasize the improvements.
+
+Exercise: ${exercise}
+Response: ${response}
 `;
+        const systemPrompt = `You are a highly skilled copywriting evaluator and coach. Always provide scores and feedback for copywriting exercises. When a score is 8 or higher, you must congratulate the user and provide specific reasons why the copy is strong in that category. For lower scores, provide detailed improvement suggestions. Ensure all feedback is constructive, balanced, and actionable.`;
 
 
         console.log('Sending request to OpenAI...', new Date().getTime());
 
         const completion = await openai.beta.chat.completions.parse({
-            model: "gpt-4o",
+            model: "gpt-4o-mini",
             messages: [
                 { role: "system", content: systemPrompt },
-                { role: "user", content: `Exercise: ${exercise}\nResponse: ${response}` }
+                { role: "user", content: userPrompt(exercise, response) }
             ],
             response_format: zodResponseFormat(AnalysisResultSchema, "analysis_result"),
         });
+        const input_token_price = 0.15 / 1_000_000;
+        const output_token_price = 0.60 / 1_000_000;
+        console.log('OpenAI response received', completion.usage);
+        console.log('OpenAI cost', `$${(completion.usage?.prompt_tokens! * input_token_price) + (completion.usage?.completion_tokens! * output_token_price).toFixed(6)}`);
+
 
         const parsedResult = completion.choices[0].message.parsed;
         if (!parsedResult) {
             throw new Error('Failed to parse OpenAI response');
         }
         const result: AnalysisResult = parsedResult;
+        await addXP(userId, result.scores.overallScore);
 
         const { error: insertError } = await supabaseAdmin
             .from('analysis_results')

@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
-import { LogOut, CreditCard, BadgePlus, Menu, NotebookPen } from "lucide-react"
+import { LogOut, CreditCard, BadgePlus, Menu, NotebookPen, Award } from "lucide-react"
 import { useState, useEffect } from 'react'
 import { User } from '@supabase/supabase-js'
 import { supabase } from "@/lib/supabaseClient"
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import Image from 'next/image'
 import localFont from 'next/font/local';
+import { levels } from '@/constants';
 
 const BricolageGrotesque = localFont({
   src: "../app/fonts/BricolageGrotesque.ttf",
@@ -29,6 +30,8 @@ const BricolageGrotesque = localFont({
 const Navbar = () => {
   const [user, setUser] = useState<User | null>(null)
   const [credits, setCredits] = useState<number | null>(null)
+  const [totalXp, setTotalXp] = useState<number | null>(null)
+  const [level, setLevel] = useState<number | null>(null)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const router = useRouter()
@@ -37,6 +40,8 @@ const Navbar = () => {
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     const storedCredits = localStorage.getItem('credits');
+    const storedXp = localStorage.getItem('totalXp');
+    const storedLevel = localStorage.getItem('level');
 
     if (storedUser) {
       setUser(JSON.parse(storedUser));
@@ -46,39 +51,55 @@ const Navbar = () => {
       setCredits(Number(storedCredits));
     }
 
-    const fetchUserAndCredits = async () => {
+    if (storedXp) {
+      setTotalXp(Number(storedXp));
+    }
+
+    if (storedLevel) {
+      setLevel(Number(storedLevel));
+    }
+
+    const fetchUserData = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
 
       if (user) {
         const { data, error } = await supabase
           .from('profiles')
-          .select('credits')
+          .select('credits,total_xp,level')
           .eq('id', user.id)
           .single();
 
         if (error) {
-          console.error('Error fetching user credits:', error);
+          console.error('Error fetching user data:', error);
         }
 
         if (data) {
           setCredits(data.credits);
+          setTotalXp(data.total_xp);
+          setLevel(data.level);
           localStorage.setItem('credits', data.credits.toString());
+          localStorage.setItem('totalXp', data.total_xp.toString());
+          localStorage.setItem('level', data.level.toString());
         }
       }
     }
 
-    fetchUserAndCredits();
+    fetchUserData();
 
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) {
         localStorage.setItem('user', JSON.stringify(session.user));
-        fetchUserAndCredits();
+        fetchUserData();
       } else {
         setCredits(null);
+        setTotalXp(null);
+        setLevel(null);
         localStorage.removeItem('user');
         localStorage.removeItem('credits');
+        localStorage.removeItem('totalXp');
+        localStorage.removeItem('level');
       }
     });
 
@@ -91,7 +112,18 @@ const Navbar = () => {
     await supabase.auth.signOut();
     localStorage.removeItem('user');
     localStorage.removeItem('credits');
+    localStorage.removeItem('totalXp');
+    localStorage.removeItem('level');
     router.replace('/');
+  }
+
+  const getLevelInfo = (level: number) => {
+    return levels.find(l => l.value === level) || levels[0];
+  }
+
+  const getXpForNextLevel = (level: number) => {
+    const nextLevel = levels.find(l => l.value === level + 1);
+    return nextLevel ? nextLevel.xp : levels[levels.length - 1].xp;
   }
 
   return (
@@ -120,6 +152,32 @@ const Navbar = () => {
                       <NotebookPen className="mr-2 h-4 w-4 text-[#007FFF]" />
                       <span className="text-sm font-medium">{credits !== null ? credits : '...'} exercises</span>
                     </div>
+                    {level !== null && totalXp !== null && (
+                      <div className="mr-4 flex items-center">
+                        <div className="relative w-32 h-4 bg-gray-200 rounded-full overflow-hidden">
+                          <div
+                            className="absolute top-0 left-0 h-full bg-blue-500"
+                            style={{ width: `${(totalXp / getXpForNextLevel(level)) * 100}%` }}
+                          ></div>
+                        </div>
+                        <span className="ml-2 text-sm font-medium">
+                          {totalXp}/{getXpForNextLevel(level)} XP
+                        </span>
+                      </div>
+                    )}
+                    {level !== null && (
+                      <div className="mr-4 flex items-center">
+                        <div
+                          className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
+                          style={{
+                            backgroundColor: getLevelInfo(level).background_color,
+                            color: getLevelInfo(level).text_color
+                          }}
+                        >
+                          {level}
+                        </div>
+                      </div>
+                    )}
                     <Button
                       variant="outline"
                       className={`${BricolageGrotesque.className} mr-4 border-[#007FFF]`}
@@ -184,12 +242,45 @@ const Navbar = () => {
                   </Button>
                 )}
                 {pathname !== '/' && (
-                  <div className="flex items-center justify-between px-4 py-2">
-                    <div className="flex items-center">
-                      <CreditCard className="mr-2 h-4 w-4 text-[#007FFF]" />
-                      <span className="text-sm font-medium">{credits !== null ? credits : '...'} exercises</span>
+                  <>
+                    <div className="flex items-center justify-between px-4 py-2">
+                      <div className="flex items-center">
+                        <CreditCard className="mr-2 h-4 w-4 text-[#007FFF]" />
+                        <span className="text-sm font-medium">{credits !== null ? credits : '...'} exercises</span>
+                      </div>
                     </div>
-                  </div>
+                    {level !== null && totalXp !== null && (
+                      <div className="flex items-center justify-between px-4 py-2">
+                        <div className="flex-1 mr-2">
+                          <div className="relative w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+                            <div
+                              className="absolute top-0 left-0 h-full bg-blue-500"
+                              style={{ width: `${(totalXp / getXpForNextLevel(level)) * 100}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                        <span className="text-sm font-medium">
+                          {totalXp}/{getXpForNextLevel(level)} XP
+                        </span>
+                      </div>
+                    )}
+                    {level !== null && (
+                      <div className="flex items-center justify-between px-4 py-2">
+                        <div className="flex items-center">
+                          <div
+                            className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold mr-2"
+                            style={{
+                              backgroundColor: getLevelInfo(level).background_color,
+                              color: getLevelInfo(level).text_color
+                            }}
+                          >
+                            {level}
+                          </div>
+                          <span className="text-sm font-medium">Level {level}</span>
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
                 <Button
                   variant="outline"

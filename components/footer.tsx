@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { bricolage } from '@/fonts/font'
+import Xlogo from '@/public/logos/x.svg'
 
 export default function Footer() {
   return (
@@ -18,9 +19,15 @@ export default function Footer() {
             <p className="text-sm text-muted-foreground">Empowering your writing with AI-driven insights.</p>
             <div className="flex space-x-4">
               <Button variant="outline" size="icon" asChild>
-                <Link href="https://www.instagram.com/arthurluca101/" target="_blank" rel="noopener noreferrer">
+                <Link href="https://instagram.com/arthurluca101/" target="_blank" rel="noopener noreferrer">
                   <Instagram className="h-4 w-4" />
                   <span className="sr-only">Instagram</span>
+                </Link>
+              </Button>
+              <Button variant="outline" size="icon" asChild>
+                <Link href="https://x.com/arthurluca101" target="_blank" rel="noopener noreferrer">
+                  <Image src={Xlogo} alt="X" className="h-4 w-4" />
+                  <span className="sr-only">X</span>
                 </Link>
               </Button>
               {/* Add more social media buttons here */}
@@ -65,6 +72,6 @@ export default function Footer() {
           </nav>
         </div>
       </div>
-    </footer >
+    </footer>
   )
 }

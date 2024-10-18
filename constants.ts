@@ -54,3 +54,102 @@ export const tasks: { value: Task; label: string }[] = [
         label: "Story Scripts",
     },
 ]
+
+export const levels = [
+    {
+        value: 0,
+        xp: 0,
+        background_color: "#000000",
+        text_color: "#FFFFFF",
+    },
+    {
+        value: 1,
+        xp: 10,
+        background_color: "#000000",
+        text_color: "#FFFFFF",
+    },
+    {
+        value: 2,
+        xp: 20,
+        background_color: "#000000",
+        text_color: "#FFFFFF",
+    },
+    {
+        value: 3,
+        xp: 30,
+        background_color: "#000000",
+        text_color: "#FFFFFF",
+    },
+    {
+        value: 4,
+        xp: 40,
+        background_color: "#000000",
+        text_color: "#FFFFFF",
+    },
+    {
+        value: 5,
+        xp: 50,
+        background_color: "#000000",
+        text_color: "#FFFFFF",
+    },
+    {
+        value: 6,
+        xp: 70,
+        background_color: "#000000",
+        text_color: "#FFFFFF",
+    },
+    {
+        value: 7,
+        xp: 90,
+        background_color: "#000000",
+        text_color: "#FFFFFF",
+    },
+    {
+        value: 8,
+        xp: 110,
+        background_color: "#000000",
+        text_color: "#FFFFFF",
+    },
+    {
+        value: 9,
+        xp: 130,
+        background_color: "#000000",
+        text_color: "#FFFFFF",
+    },
+    {
+        value: 10,
+        xp: 150,
+        background_color: "#000000",
+        text_color: "#FFFFFF",
+    },
+    {
+        value: 11,
+        xp: 180,
+        background_color: "#000000",
+        text_color: "#FFFFFF",
+    },
+    {
+        value: 12,
+        xp: 210,
+        background_color: "#000000",
+        text_color: "#FFFFFF",
+    },
+    {
+        value: 13,
+        xp: 240,
+        background_color: "#000000",
+        text_color: "#FFFFFF",
+    },
+    {
+        value: 14,
+        xp: 270,
+        background_color: "#000000",
+        text_color: "#FFFFFF",
+    },
+    {
+        value: 15,
+        xp: 300,
+        background_color: "#000000",
+        text_color: "#FFFFFF",
+    }
+]

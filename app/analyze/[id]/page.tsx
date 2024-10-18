@@ -6,26 +6,16 @@ import { supabase } from '@/lib/supabaseClient';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Eye, BarChart2, Lightbulb, Loader2 } from 'lucide-react';
+import { ArrowLeft, Eye, BarChart2, Lightbulb, Loader2, Crown } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import Navbar from '@/components/navbar';
 import ReactMarkdown from 'react-markdown';
 import Footer from '@/components/footer';
 import Loading from '@/components/loading';
+import { Cover } from '@/components/ui/cover';
+import { bricolage } from '@/fonts/font';
 
-type Exercise = {
-    id: string;
-    title: string;
-    description: string;
-    needs: string;
-    details: string;
-    notes: string;
-    created_at: string;
-    niche: string;
-    task: string;
-
-};
 
 type AnalysisResult = {
     scores: {
@@ -52,9 +42,46 @@ export default function Analyze({ params }: { params: { id: string } }) {
     const [loading, setLoading] = useState(true);
     const [loadingData, setLoadingData] = useState(true);
     const [response, setResponse] = useState('');
-    const [exercise, setExercise] = useState<Exercise | null>(null);
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
     const [error, setError] = useState<string | null>(null);
+
+    function htmlToStructuredText(html: string) {
+        // Replace empty paragraphs with <br> tags
+        html = html.replace(/<p>\s*<\/p>/g, '<br>');
+
+        // Move <br> tags outside of <p> tags
+        html = html.replace(/<p>(.*?)<br>(.*?)<\/p>/g, (match, p1, p2) => {
+            return `<p>${p1}</p><br><p>${p2}</p>`;
+        });
+
+        return html;
+    }
+
+    function getColor(value: number) {
+        if (value < 1) {
+            return 'bg-red-500';
+        } else if (value < 2) {
+            return 'bg-red-400';
+        } else if (value < 3) {
+            return 'bg-orange-500';
+        } else if (value < 4) {
+            return 'bg-orange-400';
+        } else if (value < 5) {
+            return 'bg-yellow-500';
+        } else if (value < 6) {
+            return 'bg-yellow-400';
+        } else if (value < 7) {
+            return 'bg-green-400';
+        } else if (value < 8) {
+            return 'bg-green-500';
+        } else if (value < 9) {
+            return 'bg-blue-400';
+        } else if (value < 10) {
+            return 'bg-blue-500';
+        } else {
+            return 'bg-[#FFD700]';
+        }
+    }
 
     useEffect(() => {
         async function fetchResponseAndAnalyze() {
@@ -84,8 +111,6 @@ export default function Analyze({ params }: { params: { id: string } }) {
                     throw new Error('Error fetching exercise: ' + exerciseError.message);
                 }
 
-                setExercise(exerciseData);
-
                 // Check if analysis result already exists
                 const { data: existingAnalysis, error: analysisError } = await supabase
                     .from('analysis_results')
@@ -112,7 +137,7 @@ export default function Analyze({ params }: { params: { id: string } }) {
                     const session = await supabase.auth.getSession();
                     const token = session.data.session?.access_token;
 
-                    const res = await fetch('/api/chat', {
+                    const res = await fetch('/api/analyze', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -150,6 +175,8 @@ export default function Analyze({ params }: { params: { id: string } }) {
 
         fetchResponseAndAnalyze();
     }, [params.id]);
+
+    console.log('Analysis result:', analysisResult);
 
     if (loadingData) {
         return <Loading />;
@@ -190,62 +217,63 @@ export default function Analyze({ params }: { params: { id: string } }) {
                     <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
                 </Button>
 
-                <h1 className="text-4xl font-bold mb-8 text-center text-gradient">Analysis Results</h1>
+                <h1 className={`${bricolage.className} text-4xl font-bold mb-8 text-center text-gradient`}>Analysis Results</h1>
 
-                <div className="grid gap-6 md:grid-cols-2">
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button variant="outline" className="w-full hover:bg-blue-50 transition-colors">
-                                <Eye className="mr-2 h-4 w-4" /> View Original Response
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
-                            <DialogHeader>
-                                <DialogTitle>Original Response</DialogTitle>
-                            </DialogHeader>
-                            <div className="prose prose-sm max-w-none">
-                                <div className="text-gray-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: response }} />
-                            </div>
-                        </DialogContent>
-                    </Dialog>
-
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button variant="outline" className="w-full hover:bg-green-50 transition-colors">
-                                <Eye className="mr-2 h-4 w-4" /> View Improved Version
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
-                            <DialogHeader>
-                                <DialogTitle>Improved Version</DialogTitle>
-                            </DialogHeader>
-                            <div className="prose prose-sm max-w-none">
-                                <div className="text-gray-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: analysisResult?.improvement?.improvedVersion || 'No improved version available' }} />
-                            </div>
-                        </DialogContent>
-                    </Dialog>
-                </div>
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button variant="outline" className="w-full hover:bg-blue-50 transition-colors mb-4">
+                            <Eye className="mr-2 h-4 w-4" /> View Response Comparison
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-full max-h-[100vh]">
+                        <DialogHeader>
+                            <DialogTitle>Response Comparison</DialogTitle>
+                        </DialogHeader>
+                        <div className="h-[60vh] overflow-auto">
+                            {response && analysisResult?.improvement?.improvedVersion && (
+                                <div className="flex">
+                                    <div className="w-1/2 pr-2">
+                                        <h3 className="text-lg font-semibold mb-2">Original Response</h3>
+                                        <div
+                                            className="whitespace-pre-wrap bg-gray-100 p-4 rounded"
+                                            dangerouslySetInnerHTML={{ __html: htmlToStructuredText(response) }}
+                                        />
+                                    </div>
+                                    <div className="w-1/2 pl-2">
+                                        <h3 className="text-lg font-semibold mb-2">Improved Version</h3>
+                                        <div
+                                            className="whitespace-pre-wrap bg-gray-100 p-4 rounded"
+                                            dangerouslySetInnerHTML={{ __html: htmlToStructuredText(analysisResult.improvement.improvedVersion) }}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </DialogContent>
+                </Dialog>
 
                 <Card className="mt-8 shadow-lg overflow-hidden">
-                    <CardHeader className="bg-gradient-to-r from-[#007FFF] to-purple-500 text-white rounded-t-lg">
+                    <CardHeader className="bg-gradient-to-r from-[#007FFF] to-blue-300 text-white rounded-t-lg">
                         <CardTitle className="flex items-center text-2xl">
-                            <BarChart2 className="mr-2 h-6 w-6" /> Scores
+                            <BarChart2 className="mr-2 h-6 w-6" />
+                            <span className={`${bricolage.className} text-2xl font-bold`}>Scores</span>
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="p-6">
                         <div className="mb-8 text-center">
-                            <span className="text-3xl font-bold text-gradient">Overall Score: {analysisResult?.scores?.overallScore ?? 'N/A'}/10</span>
+                            <span className={`${bricolage.className} text-3xl font-bold text-gradient`}>Overall Score: {analysisResult?.scores?.overallScore ?? 'N/A'}/10</span>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {Object.entries(analysisResult?.scores || {}).map(([key, value]) => {
                                 if (typeof value === 'number' && key !== 'overallScore') {
                                     return (
                                         <div key={key} className="flex flex-col">
-                                            <span className="text-sm font-medium text-gray-500 mb-1 capitalize">
+                                            <span className="text-sm font-medium opacity-80 mb-1 capitalize flex items-center">
+                                                {value === 10 && <Crown className="w-4 h-4 mr-1" />}
                                                 {key.replace(/([A-Z])/g, ' $1').trim()}
                                             </span>
-                                            <Progress value={value * 10} className={`h-2`} />
-                                            <span className="text-right text-sm font-bold mt-1">{value}/10</span>
+                                            <Progress value={value * 10} indicatorClassName={`${getColor(value)}`} className={`h-2`} />
+                                            <span className="text-right text-sm font-medium mt-1 opacity-80">{value}/10</span>
                                         </div>
                                     );
                                 }
@@ -256,9 +284,10 @@ export default function Analyze({ params }: { params: { id: string } }) {
                 </Card>
 
                 <Card className="mt-8 shadow-lg overflow-hidden">
-                    <CardHeader className="bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-t-lg">
+                    <CardHeader className="bg-gradient-to-r from-[#007FFF] to-blue-300 text-white rounded-t-lg">
                         <CardTitle className="flex items-center text-2xl">
-                            <Lightbulb className="mr-2 h-6 w-4" /> Tips for Improvement
+                            <Lightbulb className="mr-2 h-6 w-6" />
+                            <span className={`${bricolage.className} text-2xl font-bold`}>Improvement Tips</span>
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="p-6">
@@ -271,20 +300,98 @@ export default function Analyze({ params }: { params: { id: string } }) {
                         </div>
                     </CardContent>
                 </Card>
-            </main>
+            </main >
             <Footer />
         </>
     );
 }
 
 function GeneratingAnalysis() {
+    const [showStuckButton, setShowStuckButton] = useState(false);
+    const [startTime] = useState(Date.now());
+
+    useEffect(() => {
+        // Add the CSS for the animation to the document
+        const style = document.createElement('style');
+        style.textContent = `
+            .tetrominos {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-112px, -96px);
+            }
+
+            .tetromino {
+                width: 96px;
+                height: 112px;
+                position: absolute;
+                transition: all ease 0.3s;
+                background: url('data:image/svg+xml;utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 684"%3E%3Cpath fill="%23000" d="M305.7 0L0 170.9v342.3L305.7 684 612 513.2V170.9L305.7 0z"/%3E%3Cpath fill="%23fff" d="M305.7 80.1l-233.6 131 233.6 131 234.2-131-234.2-131"/%3E%3C/svg%3E') no-repeat top center;
+            }
+
+            .box1 { animation: tetromino1 1.5s ease-out infinite; }
+            .box2 { animation: tetromino2 1.5s ease-out infinite; }
+            .box3 { animation: tetromino3 1.5s ease-out infinite; z-index: 2; }
+            .box4 { animation: tetromino4 1.5s ease-out infinite; }
+
+            @keyframes tetromino1 {
+                0%, 40% { transform: translate(0, 0); }
+                50% { transform: translate(48px, -27px); }
+                60%, 100% { transform: translate(96px, 0); }
+            }
+
+            @keyframes tetromino2 {
+                0%, 20% { transform: translate(96px, 0px); }
+                40%, 100% { transform: translate(144px, 27px); }
+            }
+
+            @keyframes tetromino3 {
+                0% { transform: translate(144px, 27px); }
+                20%, 60% { transform: translate(96px, 54px); }
+                90%, 100% { transform: translate(48px, 27px); }
+            }
+
+            @keyframes tetromino4 {
+                0%, 60% { transform: translate(48px, 27px); }
+                90%, 100% { transform: translate(0, 0); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        const timer = setInterval(() => {
+            const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+            const remainingTime = Math.max(0, 60 - elapsedTime);
+
+            if (elapsedTime >= 60) {
+                setShowStuckButton(true);
+                clearInterval(timer);
+            }
+        }, 1000);
+
+        // Clean up function
+        return () => {
+            document.head.removeChild(style);
+            clearInterval(timer);
+        };
+    }, [startTime]);
+
     return (
         <div className="h-screen flex flex-col items-center justify-center mx-auto px-4 py-8 max-w-4xl">
-            <h1 className="text-4xl font-bold mb-8 text-center text-[#007FFF]">Generating Analysis</h1>
-            <p className="text-center mb-4">Please wait while we generate the analysis. This process takes about 15 seconds.</p>
-            <div className="flex justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-[#007FFF]" />
+            {showStuckButton && (
+                <div className="mt-8">
+                    <p className="text-center mb-4">Taking longer than expected...</p>
+                    <Button variant="outline" className="w-full mb-10">Are you stuck?</Button>
+                </div>
+            )}
+            <h1 className="text-4xl font-bold mb-8 text-center">It is going to be <Cover className="cursor-pointer">faaast</Cover></h1>
+            <p className="text-center opacity-60 mb-48">Don't worry, we're generating your feedback as fast as possible :)</p>
+            <div className="tetrominos mt-36">
+                <div className="tetromino box1"></div>
+                <div className="tetromino box2"></div>
+                <div className="tetromino box3"></div>
+                <div className="tetromino box4"></div>
             </div>
+
         </div>
     );
 }
