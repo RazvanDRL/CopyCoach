@@ -336,7 +336,7 @@ export default function Dashboard() {
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
                 {exerciseHistory.filter(exercise => exercise.grade).slice(0, showAllExercises ? exerciseHistory.length : 12).map((exercise) => (
-                  <Link href={`/analyze/${exercise.id}`} key={exercise.id}>
+                  <Link href={`/feedback/${exercise.id}`} key={exercise.id}>
                     <Card className="transform hover:scale-105 transition-transform duration-300 shadow-lg rounded-xl overflow-hidden h-full flex flex-col">
                       <CardHeader className="bg-[#007FFF]/10 text-gray-800 p-4 flex-shrink-0">
                         <CardTitle className="text-lg font-bold line-clamp-1">{exercise.title}</CardTitle>

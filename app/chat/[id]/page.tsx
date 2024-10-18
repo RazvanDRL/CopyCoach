@@ -197,7 +197,7 @@ export default function Chat({ params }: { params: { id: string } }) {
             } else {
                 console.log('Response uploaded successfully:', data);
                 toast.success('Response submitted successfully!');
-                router.push(`/analyze/${params.id}`);
+                router.push(`/feedback/${params.id}`);
             }
         } catch (error) {
             console.error('Error during submission:', error);
