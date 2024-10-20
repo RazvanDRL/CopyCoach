@@ -10,10 +10,10 @@ import { ArrowLeft, Eye, BarChart2, Lightbulb, Loader2, Crown } from 'lucide-rea
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import Navbar from '@/components/navbar';
-import ReactMarkdown from 'react-markdown';
 import Footer from '@/components/footer';
 import Loading from '@/components/loading';
 import { Cover } from '@/components/ui/cover';
+import DOMPurify from 'dompurify';
 import { bricolage } from '@/fonts/font';
 
 
@@ -221,8 +221,12 @@ export default function Analyze({ params }: { params: { id: string } }) {
 
                 <Dialog>
                     <DialogTrigger asChild>
-                        <Button variant="outline" className="w-full hover:bg-blue-50 transition-colors mb-4">
-                            <Eye className="mr-2 h-4 w-4" /> View Response Comparison
+                        <Button
+                            variant="outline"
+                            className="w-fit font-semibold shadow-sm"
+                        >
+                            <Eye className="mr-2 h-5 w-5" />
+                            Compare Original and Improved Responses
                         </Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-full max-h-[100vh]">
@@ -236,14 +240,14 @@ export default function Analyze({ params }: { params: { id: string } }) {
                                         <h3 className="text-lg font-semibold mb-2">Original Response</h3>
                                         <div
                                             className="whitespace-pre-wrap bg-gray-100 p-4 rounded"
-                                            dangerouslySetInnerHTML={{ __html: htmlToStructuredText(response) }}
+                                            dangerouslySetInnerHTML={{ __html: htmlToStructuredText(DOMPurify.sanitize(response)) }}
                                         />
                                     </div>
                                     <div className="w-1/2 pl-2">
                                         <h3 className="text-lg font-semibold mb-2">Improved Version</h3>
                                         <div
                                             className="whitespace-pre-wrap bg-gray-100 p-4 rounded"
-                                            dangerouslySetInnerHTML={{ __html: htmlToStructuredText(analysisResult.improvement.improvedVersion) }}
+                                            dangerouslySetInnerHTML={{ __html: htmlToStructuredText(DOMPurify.sanitize(analysisResult.improvement.improvedVersion)) }}
                                         />
                                     </div>
                                 </div>
@@ -261,7 +265,10 @@ export default function Analyze({ params }: { params: { id: string } }) {
                     </CardHeader>
                     <CardContent className="p-6">
                         <div className="mb-8 text-center">
-                            <span className={`${bricolage.className} text-3xl font-bold text-gradient`}>Overall Score: {analysisResult?.scores?.overallScore ?? 'N/A'}/10</span>
+                            <span className={`${bricolage.className} text-lg font-medium opacity-60`}>Overall Score</span>
+                            <div className={`${bricolage.className} text-4xl font-bold`}>
+                                {analysisResult?.scores?.overallScore ? `${analysisResult.scores.overallScore}/10 ` : 'N/A'}
+                            </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {Object.entries(analysisResult?.scores || {}).map(([key, value]) => {
@@ -293,13 +300,47 @@ export default function Analyze({ params }: { params: { id: string } }) {
                     <CardContent className="p-6">
                         <div className="prose prose-sm max-w-none">
                             {analysisResult?.improvement?.tips ? (
-                                <ReactMarkdown>{analysisResult.improvement.tips}</ReactMarkdown>
+                                <div dangerouslySetInnerHTML={{ __html: htmlToStructuredText(DOMPurify.sanitize(analysisResult.improvement.tips)) }} />
                             ) : (
                                 <p className="text-gray-600">No improvement tips available</p>
                             )}
                         </div>
                     </CardContent>
                 </Card>
+                {process.env.NODE_ENV === 'development' && analysisResult && (
+                    <Card className="mt-8 shadow-lg overflow-hidden">
+                        <CardHeader className="bg-gradient-to-r from-[#007FFF] to-blue-300 text-white rounded-t-lg">
+                            <CardTitle className="flex items-center text-2xl">
+                                <Eye className="mr-2 h-6 w-6" />
+                                <span className={`${bricolage.className} text-2xl font-bold`}>AI Response (Debug)</span>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="p-6">
+                            <h3 className="text-lg font-semibold mb-2 flex items-center justify-between">
+                                Response
+                            </h3>
+                            <pre className="bg-gray-100 p-4 rounded-md overflow-auto">
+                                {JSON.stringify(analysisResult, null, 4)}
+                            </pre>
+
+                            <h3 className="text-lg font-semibold mb-2 mt-8 flex items-center justify-between">
+                                Improvement Tips
+                            </h3>
+                            <div
+                                className="bg-gray-100 p-4 rounded-md whitespace-pre-wrap"
+                                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(analysisResult.improvement.tips) }}
+                            />
+
+                            <h3 className="text-lg font-semibold mb-2 mt-8 flex items-center justify-between">
+                                Improved Version
+                            </h3>
+                            <div
+                                className="bg-gray-100 p-4 rounded-md whitespace-pre-wrap"
+                                dangerouslySetInnerHTML={{ __html: htmlToStructuredText(DOMPurify.sanitize(analysisResult.improvement.improvedVersion)) }}
+                            />
+                        </CardContent>
+                    </Card>
+                )}
             </main >
             <Footer />
         </>
@@ -360,8 +401,6 @@ function GeneratingAnalysis() {
 
         const timer = setInterval(() => {
             const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-            const remainingTime = Math.max(0, 60 - elapsedTime);
-
             if (elapsedTime >= 60) {
                 setShowStuckButton(true);
                 clearInterval(timer);
@@ -384,7 +423,7 @@ function GeneratingAnalysis() {
                 </div>
             )}
             <h1 className="text-4xl font-bold mb-8 text-center">It is going to be <Cover className="cursor-pointer">faaast</Cover></h1>
-            <p className="text-center opacity-60 mb-48">Don't worry, we're generating your feedback as fast as possible :)</p>
+            <p className="text-center opacity-60 mb-48">Don&apos;t worry, we&apos;re generating your feedback as fast as possible :)</p>
             <div className="tetrominos mt-36">
                 <div className="tetromino box1"></div>
                 <div className="tetromino box2"></div>
@@ -401,14 +440,10 @@ function LoadingSkeleton() {
         <div className="container mx-auto px-4 py-8 max-w-4xl">
             <Skeleton className="h-10 w-32 mb-6" />
             <Skeleton className="h-12 w-3/4 mx-auto mb-8" />
-            <div className="grid gap-6 md:grid-cols-2">
-                {[...Array(2)].map((_, i) => (
-                    <Skeleton key={i} className="h-12 w-full" />
-                ))}
-            </div>
+            <Skeleton className="h-12 w-full" />
             <Card className="mt-8 rounded-lg">
-                <CardHeader className="bg-gradient-to-r from-[#007FFF] to-purple-500">
-                    <Skeleton className="h-8 w-1/3 bg-white/20" />
+                <CardHeader>
+                    <Skeleton className="h-8 w-1/3" />
                 </CardHeader>
                 <CardContent>
                     <Skeleton className="h-8 w-1/2 mx-auto mb-6" />
@@ -424,8 +459,8 @@ function LoadingSkeleton() {
                 </CardContent>
             </Card>
             <Card className="mt-8 rounded-lg">
-                <CardHeader className="bg-gradient-to-r from-green-500 to-teal-500">
-                    <Skeleton className="h-8 w-1/2 bg-white/20" />
+                <CardHeader>
+                    <Skeleton className="h-8 w-1/2" />
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4">

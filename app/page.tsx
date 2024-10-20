@@ -320,7 +320,7 @@ const LandingPage: React.FC = () => {
                     <h2 className={`${BricolageGrotesque.className} text-center text-3xl sm:text-4xl md:text-5xl font-black`}>
                         Frequently Asked Questions
                     </h2>
-                    <Accordion type="single" collapsible className="w-full max-w-3xl mx-auto mt-12" defaultValue="item-0">
+                    <Accordion type="single" collapsible className="w-full max-w-3xl mx-auto mt-12">
                         {faq.map((item, index) => (
                             <AccordionItem key={index} value={`item-${index}`} className="mb-4">
                                 <AccordionTrigger className="text-lg sm:text-xl font-semibold">{item.question}</AccordionTrigger>

@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import Image from 'next/image'
 import localFont from 'next/font/local';
-import { levels } from '@/constants';
+import Level from '@/components/level';
 
 const BricolageGrotesque = localFont({
   src: "../app/fonts/BricolageGrotesque.ttf",
@@ -117,15 +117,6 @@ const Navbar = () => {
     router.replace('/');
   }
 
-  const getLevelInfo = (level: number) => {
-    return levels.find(l => l.value === level) || levels[0];
-  }
-
-  const getXpForNextLevel = (level: number) => {
-    const nextLevel = levels.find(l => l.value === level + 1);
-    return nextLevel ? nextLevel.xp : levels[levels.length - 1].xp;
-  }
-
   return (
     <nav className="bg-white shadow-sm z-50 absolute top-0 left-0 right-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -148,38 +139,17 @@ const Navbar = () => {
                   </Button>
                 ) : (
                   <>
-                    <div className="mr-4 flex items-center">
+                    {/* <div className="mr-4 flex items-center">
                       <NotebookPen className="mr-2 h-4 w-4 text-[#007FFF]" />
                       <span className="text-sm font-medium">{credits !== null ? credits : '...'} exercises</span>
-                    </div>
+                    </div> */}
                     {level !== null && totalXp !== null && (
-                      <div className="mr-4 flex items-center">
-                        <div className="relative w-32 h-4 bg-gray-200 rounded-full overflow-hidden">
-                          <div
-                            className="absolute top-0 left-0 h-full bg-blue-500"
-                            style={{ width: `${(totalXp / getXpForNextLevel(level)) * 100}%` }}
-                          ></div>
-                        </div>
-                        <span className="ml-2 text-sm font-medium">
-                          {totalXp}/{getXpForNextLevel(level)} XP
-                        </span>
-                      </div>
-                    )}
-                    {level !== null && (
-                      <div className="mr-4 flex items-center">
-                        <div
-                          className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
-                          style={{
-                            backgroundColor: getLevelInfo(level).background_color,
-                            color: getLevelInfo(level).text_color
-                          }}
-                        >
-                          {level}
-                        </div>
+                      <div className="mr-4">
+                        <Level level={level} total_xp={totalXp} />
                       </div>
                     )}
                     <Button
-                      variant="outline"
+                      variant="ghost"
                       className={`${BricolageGrotesque.className} mr-4 border-[#007FFF]`}
                       onClick={() => alert('This feature is not available for beta testers.')}
                     >
@@ -224,6 +194,8 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      {/* MOBILE MENU */}
       {mobileMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
@@ -250,34 +222,8 @@ const Navbar = () => {
                       </div>
                     </div>
                     {level !== null && totalXp !== null && (
-                      <div className="flex items-center justify-between px-4 py-2">
-                        <div className="flex-1 mr-2">
-                          <div className="relative w-full h-4 bg-gray-200 rounded-full overflow-hidden">
-                            <div
-                              className="absolute top-0 left-0 h-full bg-blue-500"
-                              style={{ width: `${(totalXp / getXpForNextLevel(level)) * 100}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                        <span className="text-sm font-medium">
-                          {totalXp}/{getXpForNextLevel(level)} XP
-                        </span>
-                      </div>
-                    )}
-                    {level !== null && (
-                      <div className="flex items-center justify-between px-4 py-2">
-                        <div className="flex items-center">
-                          <div
-                            className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold mr-2"
-                            style={{
-                              backgroundColor: getLevelInfo(level).background_color,
-                              color: getLevelInfo(level).text_color
-                            }}
-                          >
-                            {level}
-                          </div>
-                          <span className="text-sm font-medium">Level {level}</span>
-                        </div>
+                      <div className="px-4 py-2">
+                        <Level level={level} total_xp={totalXp} showTooltip={false} />
                       </div>
                     )}
                   </>
