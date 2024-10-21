@@ -5,7 +5,7 @@ import { User as UserType } from "@supabase/supabase-js"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, BookOpen, Target, Lightbulb, Pencil, Send, Bold as BoldIcon, Italic as ItalicIcon, Strikethrough, Link as LinkIcon, User } from 'lucide-react';
+import { ArrowLeft, BookOpen, Target, Lightbulb, Pencil, Send, Bold as BoldIcon, Italic as ItalicIcon, Strikethrough, Link as LinkIcon, User, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/navbar';
 import { useEditor, EditorContent } from '@tiptap/react'
@@ -14,10 +14,12 @@ import DOMPurify from 'dompurify';
 import Italic from '@tiptap/extension-italic'
 import Bold from '@tiptap/extension-bold'
 import Strike from '@tiptap/extension-strike'
-import Link from '@tiptap/extension-link'
+import { Link as TiptapLink } from '@tiptap/extension-link'
 import CharacterCount from '@tiptap/extension-character-count'
 import Placeholder from '@tiptap/extension-placeholder'
 import { toast, Toaster } from 'sonner';
+import Footer from '@/components/footer';
+import Link from 'next/link';
 
 type Exercise = {
     id: string;
@@ -45,7 +47,7 @@ export default function Chat({ params }: { params: { id: string } }) {
             Italic,
             Bold,
             Strike,
-            Link.configure({
+            TiptapLink.configure({
                 openOnClick: false,
             }),
             Placeholder.configure({
@@ -219,12 +221,12 @@ export default function Chat({ params }: { params: { id: string } }) {
         <>
             <Navbar />
             <Toaster richColors position="top-center" />
-            <div className="mt-16 container mx-auto px-4 py-8 max-w-4xl">
-                <Button variant="outline" className="mb-6" onClick={() => {
-                    router.push('/dashboard');
-                }}>
-                    <ArrowLeft className="mr-2 h-4 w-4" /> Back to Exercises
-                </Button>
+            <div className="mt-16 container mx-auto px-8 lg:px-0 py-8 max-w-4xl">
+                <Link href="/dashboard">
+                    <Button variant="outline" className="mb-12">
+                        <ArrowLeft className="mr-2 h-4 w-4" /> Back to Exercises
+                    </Button>
+                </Link>
 
                 <h1 className="text-3xl font-bold mb-6 text-center">{exercise.title}</h1>
 
@@ -318,11 +320,19 @@ export default function Chat({ params }: { params: { id: string } }) {
                             disabled={submitting}
                             className="absolute right-3 bottom-2 rounded-lg"
                         >
-                            <Send className="h-4 w-4" />
+                            {submitting ? (
+                                <>
+                                    <Loader2 className="animate-spin h-4 w-4 mr-2" />
+                                    Sending
+                                </>
+                            ) : (
+                                <Send className="h-4 w-4" />
+                            )}
                         </Button>
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     );
 }
@@ -346,15 +356,14 @@ function ExerciseCard({ icon, title, content, bgColor }: { icon: React.ReactNode
 }
 
 function LoadingSkeleton() {
-    const colors = ['bg-blue-100', 'bg-green-100', 'bg-yellow-100', 'bg-purple-100', 'bg-pink-100'];
     return (
-        <div className="container mx-auto px-4 py-8 max-w-4xl mt-16">
-            <Skeleton className="h-10 w-32 mb-6 bg-gray-100" />
+        <div className="container mx-auto px-8 lg:px-0 py-8 max-w-4xl mt-16">
+            <Skeleton className="h-10 w-32 mb-12 bg-gray-100" />
             <Skeleton className="h-10 w-3/4 mx-auto mb-6 bg-gray-100" />
             <div className="grid gap-6 md:grid-cols-2">
                 {[...Array(4)].map((_, i) => (
                     <Card key={i}>
-                        <CardHeader className={`${colors[i]} rounded-t-lg mb-4 py-4`}>
+                        <CardHeader className="rounded-t-lg mb-4 py-4">
                             <Skeleton className="h-6 w-1/3 bg-gray-100" />
                         </CardHeader>
                         <CardContent>

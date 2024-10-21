@@ -217,7 +217,7 @@ export default function Dashboard() {
   return (
     <>
       <Navbar />
-      <main className="flex flex-col items-center min-h-screen py-2 px-4 sm:px-6 lg:px-8">
+      <main className="flex flex-col items-center min-h-screen px-8">
         <h1 className={`${bricolage.className} mt-24 sm:mt-48 text-3xl sm:text-4xl font-bold mb-3 text-center`}>👋 Welcome, {user.email?.split('@')[0]}</h1>
         <p className="text-base sm:text-lg text-gray-600 mb-10 text-center">
           Customize your copywriting exercise or try a random one
@@ -247,7 +247,7 @@ export default function Dashboard() {
         <div className="py-8 items-center justify-center flex flex-col sm:flex-row gap-4 sm:gap-8 w-full max-w-xl">
           <div className="flex flex-row items-center w-full sm:w-auto">
             <Combobox
-              placeholder="Select niche"
+              placeholder="1. Select a niche"
               value={niche}
               onChange={setNiche}
               options={niches}
@@ -279,7 +279,7 @@ export default function Dashboard() {
           </div>
           <div className="flex flex-row items-center w-full sm:w-auto mt-4 sm:mt-0">
             <Combobox
-              placeholder="Select task"
+              placeholder="2. Select a task"
               value={task}
               onChange={setTask}
               options={availableTasks}
@@ -310,13 +310,14 @@ export default function Dashboard() {
             </TooltipProvider>
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center sm:flex-row gap-4 mt-8 w-full max-w-xl">
+        <div className="flex items-center justify-center flex-row gap-4 mt-8 w-full max-w-xl">
           <Button
             variant="outline"
             onClick={randomSelect}
             className="w-full sm:w-auto active:scale-95 transition-transform duration-100"
           >
-            <Dices className="mr-2 h-4 w-4" />Random
+            <Dices className="mr-2 h-4 w-4" />
+            Random
           </Button>
           <Button
             className="w-full sm:w-auto bg-[#007FFF] hover:bg-[#007FFF] text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition duration-200 hover:scale-105 flex items-center justify-center"
@@ -327,8 +328,8 @@ export default function Dashboard() {
             <span>Ready to Start!</span>
           </Button>
         </div>
-        <div className="mt-16 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className={`${bricolage.className} text-3xl font-bold mb-4 text-left flex items-center`}>
+        <div className="mt-16 w-full max-w-5xl mx-auto">
+          <h2 className={`${bricolage.className} text-2xl md:text-3xl font-bold mb-4 text-left flex items-center`}>
             <History className="mr-2 h-6 w-6" />
             Exercise History
           </h2>
@@ -344,7 +345,7 @@ export default function Dashboard() {
                       <CardContent className="bg-white p-6 flex flex-col items-center justify-between flex-grow">
                         <div className="flex items-center space-x-2">
                           <Star className="text-yellow-500 w-5 h-5 sm:w-6 sm:h-6" />
-                          <p className="text-lg sm:text-xl font-semibold text-gray-800">{exercise.grade}/10</p>
+                          <p className={`${bricolage.className} text-xl font-semibold text-gray-800`}>{exercise.grade}/10</p>
                         </div>
                         <Button variant="ghost" className="mt-4">
                           View Details
@@ -357,7 +358,7 @@ export default function Dashboard() {
               </div>
               <div>
                 {exerciseHistory.filter(exercise => exercise.grade).length > 12 && (
-                  <div className="text-center mb-32">
+                  <div className="text-center mb-12 md:mb-32">
                     <Button
                       variant="outline"
                       onClick={() => {

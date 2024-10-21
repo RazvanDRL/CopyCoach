@@ -81,10 +81,10 @@ const Pricing: React.FC<PricingProps> = ({ className, user }) => {
                     Recharge only when you need it.
                 </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {plans.map((plan, index) => (
                         <Card key={index} className={cn(
-                            "flex flex-col px-6 rounded-xl",
+                            "flex flex-col px-6 rounded-xl mb-2",
                             plan.popular ? "border-[#007FFF] border-2 shadow-lg md:scale-105" : "",
                             "transition-all duration-200 hover:shadow-md"
                         )}>

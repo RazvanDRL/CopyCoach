@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
-import { LogOut, CreditCard, BadgePlus, Menu, NotebookPen, Award } from "lucide-react"
+import { LogOut, CreditCard, BadgePlus, Menu, NotebookPen, Award, ArrowRight } from "lucide-react"
 import { useState, useEffect } from 'react'
 import { User } from '@supabase/supabase-js'
 import { supabase } from "@/lib/supabaseClient"
@@ -119,11 +119,11 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white shadow-sm z-50 absolute top-0 left-0 right-0">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between h-16">
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="text-2xl font-bold text-blue-600">
-              <Image src={CopyCoachLogo} alt="CopyCoach Logo" width={200} height={40} />
+              <Image src={CopyCoachLogo} alt="CopyCoach Logo" width={200} height={40} className="h-[30px] md:h-[40px] w-auto" />
             </Link>
           </div>
           <div className="hidden sm:flex items-center z-50">
@@ -163,9 +163,14 @@ const Navbar = () => {
                     <Avvvatars value={user.email || ''} size={32} />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuLabel className="line-clamp-1">
+                      <div className="flex flex-col">
+                        <label className="text-xs opacity-50">Email</label>
+                        <span className="text-sm font-medium">{user.email}</span>
+                      </div>
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout}>
+                    <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
                       <LogOut className="mr-2 h-4 w-4" />
                       Log Out
                     </DropdownMenuItem>
@@ -249,18 +254,18 @@ const Navbar = () => {
                 </Button>
               </>
             ) : (
-              <>
-                <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+              <div className="flex space-x-2">
+                <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="flex-1">
                   <Button variant="outline" className={`w-full text-center ${BricolageGrotesque.className}`}>
                     Login
                   </Button>
                 </Link>
-                <Link href="/signup" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="default" className={`mt-2 w-full text-center bg-[#007FFF] ${BricolageGrotesque.className} text-white`}>
-                    Start now
+                <Link href="/signup" onClick={() => setMobileMenuOpen(false)} className="flex-1">
+                  <Button variant="default" className={`w-full text-center bg-[#007FFF] ${BricolageGrotesque.className} text-white`}>
+                    Start now <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
-              </>
+              </div>
             )}
           </div>
         </div>

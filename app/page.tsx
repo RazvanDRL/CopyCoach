@@ -113,52 +113,54 @@ const LandingPage: React.FC = () => {
             <Navbar />
             <main className="bg-white max-w-5xl mx-auto">
                 {/* Section - landing */}
-                <section className="flex flex-col items-center justify-center min-h-[75vh] py-12 relative overflow-hidden">
+                <section className="flex flex-col items-center justify-center min-h-[85dvh] relative overflow-hidden">
                     {/* Background symbols */}
                     <div className="absolute inset-0 z-0 opacity-25">
-                        <Pen className="absolute top-1/4 left-1/4 h-12 w-12 sm:h-16 sm:w-16 text-[#6CB4EE] transform -rotate-12" />
-                        <Book className="absolute top-1/3 right-1/4 h-12 w-12 sm:h-16 sm:w-16 text-[#6CB4EE] transform rotate-6" />
+                        <Pen className="absolute top-1/4 left-1/4 h-10 w-10 sm:h-16 sm:w-16 text-[#6CB4EE] transform -rotate-12" />
+                        <Book className="absolute top-1/3 right-1/4 h-10 w-10 sm:h-16 sm:w-16 text-[#6CB4EE] transform rotate-6" />
                         <Sparkles className="absolute bottom-1/4 left-1/3 h-8 w-8 sm:h-12 sm:w-12 text-[#6CB4EE]" />
                         <Pen className="absolute bottom-1/3 right-[20%] lg:right-1/3 h-10 w-10 sm:h-14 sm:w-14 text-[#6CB4EE] transform rotate-90" />
                     </div>
+                    <div className="mt-12 flex flex-col items-center justify-center gap-10 md:gap-12 z-50">
+                        <h1 className={`${BricolageGrotesque.className} bg-clip-text text-transparent text-center bg-gradient-to-b from-neutral-900 to-neutral-700 text-[3.2rem] sm:text-6xl md:text-7xl lg:text-8xl relative font-bold`}>
+                            Learn by <span className='underline decoration-dashed decoration-[#007FFF] underline-offset-8'>doing</span>
+                        </h1>
 
-                    <h1 className={`${BricolageGrotesque.className} scale-110 bg-clip-text text-transparent text-center bg-gradient-to-b from-neutral-900 to-neutral-700 dark:from-neutral-600 dark:to-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-sans py-4 relative z-20 font-bold tracking-tight`}>
-                        Learn by <span className='underline decoration-dashed decoration-[#007FFF] underline-offset-8'>doing</span>
-                    </h1>
+                        <h2 className="-mt-4 md:-mt-0 text-base sm:text-lg md:text-xl lg:text-2xl text-center text-black/50 font-semibold relative">
+                            Master copywriting by exercising with real-world scenarios.<br className="hidden sm:block" />
+                            Improve with custom AI feedback.
+                        </h2>
 
-                    <h2 className="mt-8 text-base sm:text-lg md:text-xl lg:text-2xl text-center text-neutral-700/70 dark:text-neutral-300 font-semibold relative">
-                        Master copywriting by exercising with real-world scenarios.<br className="hidden sm:block" />
-                        Improve with custom AI feedback.
-                    </h2>
-
-                    <Link href="/signup" className="my-16">
-                        <Button className={`${BricolageGrotesque.className} bg-[#007FFF] scale-125 sm:scale-150 hover:bg-[#007FFF] text-sm sm:text-base md:text-lg py-3 sm:py-4 md:py-6 px-4 sm:px-6 md:px-8 text-white font-bold rounded-lg shadow-lg transform hover:scale-110 sm:hover:scale-125 transition-all duration-200`}>
-                            Start now
-                        </Button>
-                    </Link>
-
-                    {/* Social proof - single person */}
-                    <div className="flex flex-col items-center justify-center space-y-6 relative">
-                        <div className="flex items-center justify-center space-x-0.5">
-                            <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-[#FFBF00] text-[#FFBF00]" />
-                            <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-[#FFBF00] text-[#FFBF00]" />
-                            <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-[#FFBF00] text-[#FFBF00]" />
-                            <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-[#FFBF00] text-[#FFBF00]" />
-                            <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-[#FFBF00] text-[#FFBF00]" />
-                        </div>
-                        <p className="text-center text-xs sm:text-sm font-medium">
-                            {"Amazing. Best copywriting platform I've found. TRUSTMEBROLOGY"}
-                        </p>
-                        {/* image + name + followers count */}
-                        <div className="flex items-center justify-center space-x-4">
-                            <Image src={CeciuAvatar} alt="ceciu" width={36} height={36} className="rounded-full sm:w-12 sm:h-12" />
-                            <div className="flex flex-col items-left space-y-1 z-50">
-                                <Link href="https://www.instagram.com/ceciu.gmi/" className="cursor-pointer hover:underline text-left text-xs sm:text-sm font-semibold">
-                                    Ceciu Sebasitan
-                                </Link>
-                                <p className="text-left text-xs sm:text-sm flex items-center">
-                                    654 followers
-                                </p>
+                        <Link href="/signup">
+                            <Button
+                                className={`${BricolageGrotesque.className} bg-[#007FFF] hover:bg-[#007FFF] hover:scale-105 transition-all duration-200 text-2xl md:text-3xl font-bold h-[4rem] md:h-[4.5rem] rounded-xl px-8 md:px-12`}
+                            >
+                                Start now
+                            </Button>
+                        </Link>
+                        {/* Social proof - single person */}
+                        <div className="flex flex-col items-center justify-center space-y-4 md:space-y-6">
+                            <div className="flex items-center justify-center space-x-0.5">
+                                <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-[#FFBF00] text-[#FFBF00]" />
+                                <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-[#FFBF00] text-[#FFBF00]" />
+                                <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-[#FFBF00] text-[#FFBF00]" />
+                                <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-[#FFBF00] text-[#FFBF00]" />
+                                <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-[#FFBF00] text-[#FFBF00]" />
+                            </div>
+                            <p className="text-center text-xs sm:text-sm font-medium">
+                                {"Amazing. Best copywriting platform I've found."}
+                            </p>
+                            {/* image + name + followers count */}
+                            <div className="flex items-center justify-center space-x-4">
+                                <Image src={CeciuAvatar} alt="ceciu" width={36} height={36} className="rounded-full sm:w-12 sm:h-12" />
+                                <div className="flex flex-col items-left space-y-1 z-50">
+                                    <Link href="https://www.instagram.com/ceciu.gmi/" className="cursor-pointer hover:underline text-left text-xs sm:text-sm font-semibold">
+                                        Ceciu Sebasitan
+                                    </Link>
+                                    <p className="text-left text-xs sm:text-sm flex items-center">
+                                        654 followers
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -166,15 +168,15 @@ const LandingPage: React.FC = () => {
                 {/* Video demo */}
                 <div className="w-full max-w-5xl mx-auto relative aspect-video">
                     <iframe
-                        className="absolute top-0 left-0 w-full h-full"
+                        className="absolute px-6 top-0 left-0 w-full h-full"
                         src="https://www.tella.tv/video/clyfhffbb023g09jnae7uhx4z/embed?b=0&amp;title=0&amp;a=1&amp;loop=0&amp;t=0&amp;muted=0&amp;wt=1"
                         allowFullScreen={true}
                     ></iframe>
                 </div>
 
                 {/* Section - Problem agitation without vs with */}
-                <section className="flex flex-col items-center justify-center mt-24">
-                    <h2 className={`${BricolageGrotesque.className} text-3xl sm:text-4xl md:text-5xl font-black text-center`}>
+                <section className="flex flex-col items-center justify-center mt-24 px-6">
+                    <h2 className={`${BricolageGrotesque.className} text-2xl sm:text-4xl md:text-5xl font-black text-center`}>
                         Brilliant SaaS idea is not enough.
                         <br />
                         You <span className='text-[#007FFF]'>need brilliant marketing</span> too.
@@ -212,7 +214,7 @@ const LandingPage: React.FC = () => {
                             <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-[#FFBF00] text-[#FFBF00]" />
                         </div>
                         <p className="text-center text-xs sm:text-sm font-medium text-neutral-700">
-                            {"Amazing. Best copywriting platform I've found. TRUSTMEBROLOGY"}
+                            {"Amazing. Best copywriting platform I've found."}
                         </p>
                         {/* image + name + followers count */}
                         <div className="flex items-center justify-center space-x-4 text-neutral-700/70">
@@ -312,26 +314,26 @@ const LandingPage: React.FC = () => {
 
                 {/* Section - Pricing */}
                 <section className="flex flex-col items-center justify-center mt-24">
-                    <Pricing className="w-full px-0" />
+                    <Pricing className="w-full px-8" />
                 </section>
 
                 {/* Section - FAQ */}
-                <section className="flex flex-col items-center justify-center mt-48">
+                <section className="px-8 flex flex-col items-center justify-center mt-48">
                     <h2 className={`${BricolageGrotesque.className} text-center text-3xl sm:text-4xl md:text-5xl font-black`}>
                         Frequently Asked Questions
                     </h2>
                     <Accordion type="single" collapsible className="w-full max-w-3xl mx-auto mt-12">
                         {faq.map((item, index) => (
                             <AccordionItem key={index} value={`item-${index}`} className="mb-4">
-                                <AccordionTrigger className="text-lg sm:text-xl font-semibold">{item.question}</AccordionTrigger>
-                                <AccordionContent className="text-base sm:text-lg">{item.answer}</AccordionContent>
+                                <AccordionTrigger className="text-base sm:text-lg text-left font-semibold">{item.question}</AccordionTrigger>
+                                <AccordionContent className="text-sm sm:text-base">{item.answer}</AccordionContent>
                             </AccordionItem>
                         ))}
                     </Accordion>
                 </section>
 
                 {/* Section - Ready CTA */}
-                <section className="flex w-full p-12 rounded-lg bg-[#007FFF] flex-col items-left justify-between mt-24 min-h-[250px]">
+                <section className="flex w-full p-12 md:rounded-lg bg-[#007FFF] flex-col items-left justify-between mt-24 min-h-[250px]">
                     <div className="flex flex-col items-left justify-between">
                         <h2 className={`${BricolageGrotesque.className} text-left text-3xl sm:text-4xl md:text-5xl font-black text-white max-w-[500px]`}>
                             <Gem className="w-4 h-4 sm:w-5 sm:h-5 md:w-8 md:h-8 mb-4" />
@@ -345,7 +347,7 @@ const LandingPage: React.FC = () => {
                         </Button>
                     </Link>
                 </section>
-            </main>
+            </main >
             <Footer />
         </>
     );

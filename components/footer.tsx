@@ -9,7 +9,7 @@ import Xlogo from '@/public/logos/x.svg'
 
 export default function Footer() {
   return (
-    <footer className="bg-background mt-12">
+    <footer className="bg-background mt-12 px-8">
       <div className="max-w-5xl mx-auto py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
@@ -56,7 +56,7 @@ export default function Footer() {
             <p className="text-sm text-muted-foreground">Subscribe to our newsletter for the latest updates.</p>
             <form className="flex space-x-2">
               <Input type="email" placeholder="Email" className="flex-grow" />
-              <Button type="submit">Subscribe</Button>
+              <Button type="submit" className="bg-[#007FFF] hover:bg-[#007FFF]/80 text-white">Subscribe</Button>
             </form>
           </div>
         </div>

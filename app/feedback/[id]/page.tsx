@@ -15,6 +15,7 @@ import Loading from '@/components/loading';
 import { Cover } from '@/components/ui/cover';
 import DOMPurify from 'dompurify';
 import { bricolage } from '@/fonts/font';
+import Link from 'next/link';
 
 
 type AnalysisResult = {
@@ -196,14 +197,15 @@ export default function Analyze({ params }: { params: { id: string } }) {
                 <h1 className="text-4xl font-bold mb-8 text-center text-red-500">Error</h1>
                 <p className="text-center mb-8">{error}</p>
                 <div className="flex justify-center">
-                    <Button
-                        variant="outline"
-                        onClick={() => router.push('/dashboard')}
-                        className="flex items-center"
-                    >
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        Back to Dashboard
-                    </Button>
+                    <Link href="/dashboard">
+                        <Button
+                            variant="outline"
+                            className="flex items-center"
+                        >
+                            <ArrowLeft className="mr-2 h-4 w-4" />
+                            Back to Exercises
+                        </Button>
+                    </Link>
                 </div>
             </div>
         );
@@ -235,18 +237,18 @@ export default function Analyze({ params }: { params: { id: string } }) {
                         </DialogHeader>
                         <div className="h-[60vh] overflow-auto">
                             {response && analysisResult?.improvement?.improvedVersion && (
-                                <div className="flex">
-                                    <div className="w-1/2 pr-2">
-                                        <h3 className="text-lg font-semibold mb-2">Original Response</h3>
+                                <div className="flex flex-col md:flex-row">
+                                    <div className="w-full md:w-1/2 pr-2">
+                                        <h3 className="text-base md:text-lg font-semibold mb-2">Original Response</h3>
                                         <div
-                                            className="whitespace-pre-wrap bg-gray-100 p-4 rounded"
+                                            className="text-sm md:text-base whitespace-pre-wrap bg-gray-100 p-4 rounded"
                                             dangerouslySetInnerHTML={{ __html: htmlToStructuredText(DOMPurify.sanitize(response)) }}
                                         />
                                     </div>
-                                    <div className="w-1/2 pl-2">
-                                        <h3 className="text-lg font-semibold mb-2">Improved Version</h3>
+                                    <div className="w-full md:w-1/2 mt-4 md:mt-0">
+                                        <h3 className="text-base md:text-lg font-semibold mb-2">Improved Version</h3>
                                         <div
-                                            className="whitespace-pre-wrap bg-gray-100 p-4 rounded"
+                                            className="text-sm md:text-base whitespace-pre-wrap bg-gray-100 p-4 rounded"
                                             dangerouslySetInnerHTML={{ __html: htmlToStructuredText(DOMPurify.sanitize(analysisResult.improvement.improvedVersion)) }}
                                         />
                                     </div>

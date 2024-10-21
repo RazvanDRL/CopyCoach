@@ -6,6 +6,9 @@ import { Redis } from "@upstash/redis";
 import { z } from "zod";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { levels } from "@/constants";
+
+const model = "gpt-4o";
+
 type Exercise = {
     id: string;
     title: string;
@@ -215,48 +218,49 @@ export async function POST(req: Request) {
         const userPrompt = (exercise: Exercise, response: string) => `
 You are an expert copywriting evaluator and coach. Your task is to evaluate the following copywriting response, providing clear, balanced feedback in JSON format. The evaluation must include:
 
-1. **Scores (0-10)** for: clarity, audience relevance, persuasiveness, structure, grammar, tone, attention-grabbing, consistency, emotional appeal, CTA effectiveness, and overall score (calculated as the **accurate median** of the 10 scores).
+1. Scores (0-10) for: clarity, audience relevance, persuasiveness, structure, grammar, tone, attention-grabbing, consistency, emotional appeal, CTA effectiveness, and overall score (calculated as the accurate median of the 10 scores).
 
    - The median score should be the middle value when the scores are arranged in numerical order. If there are two middle numbers, the median is the average of those two numbers.
 
-2. **Tips**:
-    - Include **positive feedback** for any category where the score is **8 or above**, and **explain why** the copy performed well in that category.
-    - For scores **below 8**, provide **constructive tips** on how to improve.
-    - **Congratulate** the user on areas where they scored well, and clearly explain the strengths of the copy.
+2. Tips:
+    - Include positive feedback for any category where the score is 8 or above, and explain why the copy performed well in that category.
+    - For scores below 8, provide constructive tips on how to improve.
+    - Congratulate the user on areas where they scored well, and clearly explain the strengths of the copy.
     - For categories that scored below 8, provide clear and actionable advice for improvement.
-    - **Structure the feedback clearly**: start with **Strengths** first, followed by **Improvement Tips**.
+    - Structure the feedback clearly: start with Strengths first, followed by Improvement Tips.
 
     Tips format:
-    - **Strengths**: 
-      - <strong>Clarity (Score: 9)</strong>: Your copy is clear and easy to understand, which is essential for keeping your audience engaged. The simplicity of your language ensures the message is conveyed effectively.
-    - **Improvement Tips**:
+    - Strengths: 
+      - <strong>Clarity (Score: 9)</strong>: Your copy is clear and easy to understand, which is essential for keeping your audience engaged. The simplicity of your language ensures the message is conveyed effectively. <br>
+    <br>
+    - Improvement Tips:
       - <strong>Persuasiveness (Score: 6)</strong>: While your points are strong, adding a more emotional appeal could make the copy more persuasive. Consider using phrases like “imagine how much time you could save” to create a connection with the reader.
 
-3. **Revised version**:
+3. Revised version:
     - Rewrite the response using your own expert-level copywriting skills.
-    - Ensure that the **revised version reflects the specific tips provided** in the expert feedback, especially addressing any areas of improvement.
-    - If the original copy had strong points, **preserve those strengths** in the revised version and emphasize the improvements.
+    - Ensure that the revised version reflects the specific tips provided in the expert feedback, especially addressing any areas of improvement.
+    - If the original copy had strong points, preserve those strengths in the revised version and emphasize the improvements.
 
 Exercise: ${exercise}
 Response: ${response}
 `;
-        const systemPrompt = `You are a highly skilled copywriting evaluator and coach. Always provide scores and feedback for copywriting exercises. When a score is 8 or higher, you must congratulate the user and provide specific reasons why the copy is strong in that category. For lower scores, provide detailed improvement suggestions. Ensure all feedback is constructive, balanced, and actionable.`;
+        const systemPrompt = `You are a highly skilled copywriting evaluator and coach. Use understandable language by a beginner and be realistic. Always provide scores and feedback for copywriting exercises. When a score is 8 or higher, you must congratulate the user and provide specific reasons why the copy is strong in that category. For lower scores, provide detailed improvement suggestions. Ensure all feedback is constructive, balanced, and actionable. Make sure to use HTML tags to format the tips and improvedVersion.`;
 
 
         console.log('Sending request to OpenAI...', new Date().getTime());
 
         const completion = await openai.beta.chat.completions.parse({
-            model: "gpt-4o-mini",
+            model: model,
             messages: [
                 { role: "system", content: systemPrompt },
                 { role: "user", content: userPrompt(exercise, response) }
             ],
             response_format: zodResponseFormat(AnalysisResultSchema, "analysis_result"),
         });
-        const input_token_price = 0.15 / 1_000_000;
-        const output_token_price = 0.60 / 1_000_000;
+        const input_token_price = 0.00000015;
+        const output_token_price = 0.0000006;
         console.log('OpenAI response received', completion.usage);
-        console.log('OpenAI cost', `$${(completion.usage?.prompt_tokens! * input_token_price) + (completion.usage?.completion_tokens! * output_token_price).toFixed(6)}`);
+        console.log('OpenAI cost', `$${(completion.usage?.prompt_tokens! * input_token_price) + (completion.usage?.completion_tokens! * output_token_price).toFixed(10)}`);
 
 
         const parsedResult = completion.choices[0].message.parsed;
