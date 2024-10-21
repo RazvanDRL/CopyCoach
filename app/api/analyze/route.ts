@@ -44,10 +44,10 @@ const AnalysisResultSchema = z.object({
 
 type AnalysisResult = z.infer<typeof AnalysisResultSchema>;
 
-// Create a new ratelimiter, that allows 5 requests per 60 seconds
+// Create a new ratelimiter, that allows 3 requests per 60 seconds
 const ratelimit = new Ratelimit({
     redis: Redis.fromEnv(),
-    limiter: Ratelimit.slidingWindow(5, "60 s"),
+    limiter: Ratelimit.slidingWindow(3, "60 s"),
     analytics: true,
 });
 
@@ -222,18 +222,18 @@ You are an expert copywriting evaluator and coach. Your task is to evaluate the 
 
    - The median score should be the middle value when the scores are arranged in numerical order. If there are two middle numbers, the median is the average of those two numbers.
 
-2. Tips:
+2. Improvement Tips:
     - Include positive feedback for any category where the score is 8 or above, and explain why the copy performed well in that category.
     - For scores below 8, provide constructive tips on how to improve.
     - Congratulate the user on areas where they scored well, and clearly explain the strengths of the copy.
     - For categories that scored below 8, provide clear and actionable advice for improvement.
     - Structure the feedback clearly: start with Strengths first, followed by Improvement Tips.
 
-    Tips format:
-    - Strengths: 
+    Improvement Tips format:
+    Strengths: 
       - <strong>Clarity (Score: 9)</strong>: Your copy is clear and easy to understand, which is essential for keeping your audience engaged. The simplicity of your language ensures the message is conveyed effectively. <br>
     <br>
-    - Improvement Tips:
+    Improvement Tips:
       - <strong>Persuasiveness (Score: 6)</strong>: While your points are strong, adding a more emotional appeal could make the copy more persuasive. Consider using phrases like “imagine how much time you could save” to create a connection with the reader.
 
 3. Revised version:

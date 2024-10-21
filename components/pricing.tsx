@@ -14,7 +14,7 @@ const plans = [
         title: "Newbie",
         emoji: "🌱",
         description: "Perfect for occasional exercising and learning",
-        price: 19,
+        price: 9,
         features: [
             "20 exercises",
             "Custom AI feedback",
@@ -29,9 +29,9 @@ const plans = [
         title: "Learner",
         emoji: "🚀",
         description: "For ambitious learners seeking the best value",
-        price: 49,
+        price: 29,
         features: [
-            "60 exercises",
+            "100 exercises",
             "Custom AI feedback",
             "Exclusive community access",
             "Advanced theory",
@@ -45,7 +45,7 @@ const plans = [
         title: "Master",
         emoji: "🏆",
         description: "Only for people who want to master copywriting",
-        price: 149,
+        price: 99,
         features: [
             "Unlimited exercises",
             "Custom AI feedback",
@@ -78,7 +78,7 @@ const Pricing: React.FC<PricingProps> = ({ className, user }) => {
                     Unlock Your <span className="text-[#007FFF]">Copywriting Potential</span> Today
                 </h1>
                 <p className="text-xl text-muted-foreground text-center mb-12">
-                    Recharge only when you need it.
+                    NO subscription. Recharge only when you need it.
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -118,7 +118,9 @@ const Pricing: React.FC<PricingProps> = ({ className, user }) => {
                                 <Button className={cn("w-full text-lg py-6 font-bold", bricolage.className, plan.popular ? "bg-[#007FFF] text-white" : "bg-white text-black")} variant={plan.popular ? "default" : "outline"} asChild>
                                     <Link href={`https://buy.stripe.com/${plan.paymentLink}?prefilled_email=${user?.email}&client_reference_id=${user?.id}`}>
                                         {plan.cta}
-                                        <ArrowRight className="ml-2 h-5 w-5" />
+                                        {plan.popular && (
+                                            <ArrowRight className="ml-2 h-5 w-5" />
+                                        )}
                                     </Link>
                                 </Button>
                             </CardFooter>

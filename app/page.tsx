@@ -15,6 +15,7 @@ import localFont from 'next/font/local';
 import Image from 'next/image';
 import CeciuAvatar from '@/public/avatars/ceciu.jpg';
 import Pricing from '@/components/pricing';
+import Head from 'next/head';
 
 const BricolageGrotesque = localFont({
     src: './fonts/BricolageGrotesque.ttf',
@@ -110,6 +111,10 @@ const LandingPage: React.FC = () => {
 
     return (
         <>
+            <Head>
+                <meta name="description" content="Learn copywriting by doing. Master copywriting by exercising with real-world scenarios. Improve with custom AI feedback." />
+                <link rel="canonical" href="https://copy-coach.com" />
+            </Head>
             <Navbar />
             <main className="bg-white max-w-5xl mx-auto">
                 {/* Section - landing */}
@@ -314,7 +319,7 @@ const LandingPage: React.FC = () => {
 
                 {/* Section - Pricing */}
                 <section className="flex flex-col items-center justify-center mt-24">
-                    <Pricing className="w-full px-8" />
+                    <Pricing className="w-full px-6 lg:px-0" />
                 </section>
 
                 {/* Section - FAQ */}
