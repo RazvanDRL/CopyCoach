@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import PlausibleProvider from 'next-plausible'
-import { GoogleAnalytics } from '@next/third-parties/google'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,7 +49,6 @@ export default function RootLayout({
         enabled={true}
       />
       <body className={inter.className}>
-        <GoogleAnalytics gaId="G-CF2MCNKG9Z" />
         {children}
       </body>
     </html>
