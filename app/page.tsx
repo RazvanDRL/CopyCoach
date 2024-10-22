@@ -10,7 +10,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Pen, Book, Sparkles, Star, Frown, Smile, Mail, FileText, ArrowRight, Gem } from 'lucide-react';
+import { Pen, Book, Sparkles, Star, Frown, Smile, Mail, FileText, ArrowRight, Gem, MessageSquare, LineChart } from 'lucide-react';
 import localFont from 'next/font/local';
 import Image from 'next/image';
 import CeciuAvatar from '@/public/avatars/ceciu.jpg';
@@ -25,55 +25,38 @@ const BricolageGrotesque = localFont({
 
 const examples = [
     {
-        title: "Marketing Foundation",
-        description: "Understand your ideal customer and how your product can win them. This is the core of your marketing strategy.",
+        title: "Get hands-on experience",
+        description: "All our exercises are realistic, meant to mirror real life copywriting tasks from various niches. Choose one that suits your needs.",
         benefits: [
-            "User Persona",
-            "Customer Journey Map",
-            "Positioning",
-            "Customer Transformation",
-            "Product Portfolio",
+            "Realistic copywriting tasks",
+            "Choose from various niches",
+            "Improve your skills in a practical way",
         ],
         image: CeciuAvatar,
     },
     {
-        title: "Social media",
-        description: "Write a social media post for a SaaS company",
+        title: "Improve with AI feedback",
+        description: "Get personalized, actionable feedback on your copy. Our AI analyzes your work for clarity, persuasiveness, tone, and more, offering specific suggestions for improvement and personalized tips.",
         benefits: [
-            "Increase brand awareness",
-            "Improve SEO",
-            "Generate leads",
-            "Build a community",
-            "Drive sales",
+            "Personalized feedback",
+            "Actionable suggestions",
+            "Relevant criteria",
+            "Revised version of your copy",
         ],
         image: CeciuAvatar,
     },
     {
-        title: "Email marketing",
-        description: "Write an email marketing campaign for a SaaS company",
+        title: "Level up and unlock new opportunities",
+        description: "Complete multiple exercises, level up your writing skills to get confident in your abilities and unlock exclusive rewards. Reach level <X> and get access to our SteveJobs Community.",
         benefits: [
-            "Increase brand awareness",
-            "Improve SEO",
-            "Generate leads",
-            "Build a community",
-            "Drive sales",
-        ],
-        image: CeciuAvatar,
-    },
-    {
-        title: "Flyer",
-        description: "Write a flyer for a SaaS company",
-        benefits: [
-            "Increase brand awareness",
-            "Improve SEO",
-            "Generate leads",
-            "Build a community",
-            "Drive sales",
-        ],
+            "Get confident in your writing skills",
+            "Track your progress",
+            "Unlock surprise benefits with each level",
+            "Access exclusive opportunities",
+        ],  
         image: CeciuAvatar,
     },
 ]
-
 
 const faq = [
     {
@@ -86,15 +69,15 @@ const faq = [
     },
     {
         question: "Can CopyCoach really help me land clients?",
-        answer: "Absolutely! Complete 100 exercises in a specific niche, and you'll gain access to our exclusive Private Business Community. This network connects you directly with businesses actively seeking skilled copywriters. It's not just practice – it's a pathway to paid opportunities."
+        answer: "Absolutely! Reach level <X> and get access to our SteveJobs Community. This network connects you directly with businesses actively seeking skilled copywriters."
     },
     {
-        question: "Is CopyCoach suitable for beginners?",
-        answer: "Yes! Whether you're just starting out or looking to refine your skills, CopyCoach adapts to your level. Our diverse range of exercises and personalized AI feedback ensure that you're always challenged and improving, no matter your experience."
+        question: "Is CopyCoach for me?",
+        answer: "CopyCoach is designed for copywriters of all levels, from beginners to professionals. Whether you're just starting out or looking to refine your skills, our exercises are tailored to meet your needs, ensuring you get the most out of your practice time."
     },
     {
-        question: "How often are new exercises added?",
-        answer: "We regularly update our exercise database to keep content fresh and relevant. You'll always have new challenges to tackle, ensuring your skills stay sharp and up-to-date with the latest copywriting trends and techniques."
+        question: "Do you have an affiliate program?",
+        answer: "Yes! We offer a generous 50% commission on all sales you refer to CopyCoach. Join our affiliate program to earn passive income while helping others improve their copywriting skills. It's a win-win!"
     },
     {
         question: "Can I use CopyCoach on my mobile device?",
@@ -102,7 +85,42 @@ const faq = [
     },
     {
         question: "What if I'm not satisfied with CopyCoach?",
-        answer: "We're confident in the value CopyCoach provides, which is why we offer a satisfaction guarantee. If you complete 100 exercises and don't secure a paying client within 90 days, we'll provide a full refund. Your success is our priority!"
+        answer: "We want you to be completely satisfied with CopyCoach. That's why we offer a 7-day money-back guarantee. If you're not happy with your experience within the first 7 days, we'll provide a full refund - no questions asked. Your satisfaction is our priority!"
+    }
+]
+
+const withoutCopyCoach = [{
+    title: "You without CopyCoach",
+    list: [
+        "Stuck in tutorial hell",
+        "Unable to see progress",
+        "Constantly doubting your skills",
+        "General advice",
+    ]
+}]
+
+const withCopyCoach = [{
+    title: "You with CopyCoach",
+    list: [
+        "Able to put skills to practice",
+        "See your progress",
+        "Confidence in your skills",
+        "Tips to improve exactly where you need it",
+    ]
+}]
+
+const howItWorks = [
+    {
+        title: "Exercise",
+        description: "Work on realistic copywriting exercises designed to improve your skills in a practical way.",
+    },
+    {
+        title: "Get Feedback",
+        description: "Receive detailed feedback on your copy, with specific suggestions for improvement and personalized tips.",
+    },
+    {
+        title: "Improve",
+        description: "Track your progress and continuously improve your copywriting skills with each exercise.",
     }
 ]
 
@@ -182,30 +200,28 @@ const LandingPage: React.FC = () => {
                 {/* Section - Problem agitation without vs with */}
                 <section className="flex flex-col items-center justify-center mt-24 px-6">
                     <h2 className={`${BricolageGrotesque.className} text-2xl sm:text-4xl md:text-5xl font-black text-center`}>
-                        Brilliant SaaS idea is not enough.
+                        Theory alone is not enough.
                         <br />
-                        You <span className='text-[#007FFF]'>need brilliant marketing</span> too.
+                        You need <span className='text-[#007FFF]'>real practice</span> too.
                     </h2>
                     {/* 2 cards side by side */}
                     <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-6 w-full">
                         <div className="flex flex-col items-left text-left justify-center p-6 sm:p-8 bg-red-50 rounded-xl w-full sm:w-1/2">
                             <Frown className="w-8 h-8 sm:w-10 sm:h-10 text-red-500" />
-                            <h3 className="mt-4 text-lg sm:text-xl font-bold text-red-500">SaaS without marketing strategy</h3>
+                            <h3 className="mt-4 text-lg sm:text-xl font-bold text-red-500">{withoutCopyCoach[0].title}</h3>
                             <ul className="mt-4 text-sm sm:text-base font-medium text-red-700 list-disc list-inside">
-                                <li>No idea who your ideal customer is</li>
-                                <li>Random marketing tactics</li>
-                                <li>Leaking marketing funnel</li>
-                                <li>Constant uncertainty about next steps</li>
+                                {withoutCopyCoach[0].list.map((item, index) => (
+                                    <li key={index}>{item}</li>
+                                ))}
                             </ul>
                         </div>
                         <div className="flex flex-col items-left text-left justify-center p-6 sm:p-8 bg-green-50 rounded-xl w-full sm:w-1/2">
                             <Smile className="w-8 h-8 sm:w-10 sm:h-10 text-green-500" />
-                            <h3 className="mt-4 text-lg sm:text-xl font-bold text-green-500">SaaS with marketing strategy</h3>
+                            <h3 className="mt-4 text-lg sm:text-xl font-bold text-green-500">{withCopyCoach[0].title}</h3>
                             <ul className="mt-4 text-sm sm:text-base font-medium text-green-700 list-disc list-inside">
-                                <li>Clear understanding of your ideal customer</li>
-                                <li>Effective marketing tactics</li>
-                                <li>Funnel that converts</li>
-                                <li>Predictable and scalable growth</li>
+                                {withCopyCoach[0].list.map((item, index) => (
+                                    <li key={index}>{item}</li>
+                                ))}
                             </ul>
                         </div>
                     </div>
@@ -242,7 +258,22 @@ const LandingPage: React.FC = () => {
                     </Link>
                 </section>
 
-                {/* Section - How it works / Features / Examples*/}
+                {/* Section - How it works */}
+                <section className="flex flex-col items-center justify-center mt-24">
+                    <h2 className={`${BricolageGrotesque.className} text-center text-3xl sm:text-4xl md:text-5xl font-black`}>
+                        How it works
+                    </h2>
+                    <div className="flex flex-col sm:flex-row gap-6 mt-8 w-full">
+                        {howItWorks.map((item, index) => (
+                            <div key={index} className="flex flex-col items-left text-left justify-center p-6 sm:p-8 bg-white rounded-xl w-full">
+                                <h3 className="text-lg sm:text-xl font-bold">{item.title}</h3>
+                                <p className="mt-2 text-sm sm:text-base text-neutral-700">{item.description}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* Section - Features */}
                 <section className="flex flex-col items-center justify-center mt-24">
                     <h2 className={`${BricolageGrotesque.className} text-center text-3xl sm:text-4xl md:text-5xl font-black`}>
                         Automate boring problems.
@@ -288,7 +319,7 @@ const LandingPage: React.FC = () => {
                             <FileText className="w-4 h-4 sm:w-6 sm:h-6" />
                         </Button>
                     </div>
-                    <div className="mt-16 flex items-start justify-between w-screen bg-[#007FFF] p-6 sm:p-12">
+                    <div className="mt-16 flex items-start justify-between w-[99.1vw] bg-[#007FFF] p-6 sm:p-12">
                         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row">
                             <div className="flex-1 pr-0 sm:pr-8 max-w-full sm:max-w-sm mb-8 sm:mb-0">
                                 <h1 className="text-xl sm:text-2xl font-bold text-white">{examples[selectedOption - 1].title}</h1>

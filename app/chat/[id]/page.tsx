@@ -20,6 +20,7 @@ import Placeholder from '@tiptap/extension-placeholder'
 import { toast, Toaster } from 'sonner';
 import Footer from '@/components/footer';
 import Link from 'next/link';
+import { useParams } from 'next/navigation'
 
 type Exercise = {
     id: string;
@@ -34,8 +35,9 @@ type Exercise = {
     client_avatar: string;
 };
 
-export default function Chat({ params }: { params: { id: string } }) {
+export default function Chat() {
     const router = useRouter();
+    const params = useParams<{ id: string }>();
     const [exercise, setExercise] = useState<Exercise | null>(null);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,8 +38,9 @@ type AnalysisResult = {
     };
 };
 
-export default function Analyze({ params }: { params: { id: string } }) {
+export default function Analyze() {
     const router = useRouter();
+    const params = useParams<{ id: string }>();
     const [loading, setLoading] = useState(true);
     const [loadingData, setLoadingData] = useState(true);
     const [response, setResponse] = useState('');
@@ -421,7 +422,9 @@ function GeneratingAnalysis() {
             {showStuckButton && (
                 <div className="mt-8">
                     <p className="text-center mb-4">Taking longer than expected...</p>
-                    <Button variant="outline" className="w-full mb-10">Are you stuck?</Button>
+                    <Link href="/dashboard">
+                        <Button variant="outline" className="w-full mb-10">Are you stuck?</Button>
+                    </Link>
                 </div>
             )}
             <h1 className="text-4xl font-bold mb-8 text-center">It is going to be <Cover className="cursor-pointer">faaast</Cover></h1>
