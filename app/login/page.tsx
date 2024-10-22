@@ -90,12 +90,12 @@ const LoginPage = () => {
                 <Link href="/signup" className="absolute top-8 right-8">
                     <Button variant="ghost">
                         <LogIn className="h-4 w-4 mr-2" />
-                        Already have an account?
+                        Don&apos;t have an account?
                     </Button>
                 </Link>
                 <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                        <Image src="/logo.svg" alt="LongtoShort Logo" className="mx-auto mb-24" width={200} height={200} />
+                        <Image priority quality={10} src="/logo.svg" alt="LongtoShort Logo" className="mx-auto mb-12" width={200} height={40} />
                         <h2 className={`text-center text-2xl font-bold tracking-tight text-gray-900 mb-4 ${bricolage.className}`}>Sign in</h2>
                         <p className="text-center text-sm text-gray-500">Sign in with one of the following providers</p>
                         <div className='flex flex-col gap-2 mt-6'>
