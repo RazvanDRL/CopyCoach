@@ -11,54 +11,53 @@ import { bricolage } from '@/fonts/font';
 
 const plans = [
     {
-        title: "Newbie",
+        title: "Try Free",
         emoji: "🌱",
-        description: "Perfect for occasional exercising and learning",
-        price: 9,
+        description: "Convince yourself",
+        price: 0,
         features: [
-            "20 exercises",
-            "Custom AI feedback",
-            "Community access",
-            "Basic theory"
+            "1 exercise with feedback",
+            "✕ Community access",
+            "✕ Progress tracking",
+            "✕ Full-access to the app",
         ],
-        cta: "Get Started",
-        paymentLink: "4gw14k4gw",
+        cta: "Start Free",
+        paymentLink: "free",
         popular: false
     },
     {
-        title: "Learner",
+        title: "Essential",
         emoji: "🚀",
-        description: "For ambitious learners seeking the best value",
-        price: 29,
+        description: "All you need to get started",
+        price: 19,
         features: [
-            "100 exercises",
-            "Custom AI feedback",
-            "Exclusive community access",
-            "Advanced theory",
-            "Weekly theory deep-dives"
+            "35 exercises",
+            "Personalized AI feedback",
+            "Community access",
+            "Progress tracking",
+            "Full-access to the app",
         ],
-        cta: "Level Up Now",
+        cta: "Get Started",
         paymentLink: "5kOaEa4gw",
         popular: true
     },
     {
-        title: "Master",
+        title: "Unlimited",
         emoji: "🏆",
-        description: "Only for people who want to master copywriting",
-        price: 99,
+        description: "Perfect for committed learners",
+        price: 49,
         features: [
-            "Unlimited exercises",
-            "Custom AI feedback",
-            "Exclusive group access",
-            "Advanced theory",
-            "Weekly theory deep-dives",
-            "1:1 expert mentoring call"
+            <span key="unlimited" className="bg-[#007FFF]/10 px-1 rounded">Unlimited exercises</span>,
+            "Personalized AI feedback",
+            "Community access",
+            "Progress tracking",
+            "Full-access to the app",
         ],
-        cta: "Go Pro",
+        cta: "Go Unlimited",
         paymentLink: "6oC14k4gw",
         popular: false
     }
-];
+]
 
 type User = {
     id: string;
@@ -75,10 +74,10 @@ const Pricing: React.FC<PricingProps> = ({ className, user }) => {
         <div className={`${className}`}>
             <div className="max-w-5xl mt-16">
                 <h1 className={cn("text-4xl sm:text-5xl font-extrabold mb-8 text-center", bricolage.className)}>
-                    Unlock Your <span className="text-[#007FFF]">Copywriting Potential</span> Today
+                    Learn copywriting by <span className="text-[#007FFF]">actually writing</span>
                 </h1>
                 <p className="text-xl text-muted-foreground text-center mb-12">
-                    NO subscription. Recharge only when you need it.
+                    Start learning today. Choose the perfect plan for you.
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -108,15 +107,25 @@ const Pricing: React.FC<PricingProps> = ({ className, user }) => {
                                 <ul className="space-y-3">
                                     {plan.features.map((feature, idx) => (
                                         <li key={idx} className="flex items-center">
-                                            <Check className="mr-2 h-5 w-5 text-[#007FFF]" />
-                                            <span>{feature}</span>
+                                            {typeof feature === 'string' && feature.startsWith("✕") ? (
+                                                <>
+                                                    <span className="mr-2 text-red-500 font-bold">✕</span>
+                                                    <span className="text-gray-500">{feature.substring(2)}</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Check className="mr-2 h-5 w-5 text-[#007FFF]" />
+                                                    {typeof feature === 'string' ? feature : feature}
+                                                </>
+                                            )}
                                         </li>
                                     ))}
                                 </ul>
                             </CardContent>
                             <CardFooter>
                                 <Button className={cn("w-full text-lg py-6 font-bold", bricolage.className, plan.popular ? "bg-[#007FFF] text-white" : "bg-white text-black")} variant={plan.popular ? "default" : "outline"} asChild>
-                                    <Link href={`https://buy.stripe.com/${plan.paymentLink}?prefilled_email=${user?.email}&client_reference_id=${user?.id}`}>
+                                    {/* <Link href={`https://buy.stripe.com/${plan.paymentLink}?prefilled_email=${user?.email}&client_reference_id=${user?.id} `}> */}
+                                    <Link href="/signup">
                                         {plan.cta}
                                         {plan.popular && (
                                             <ArrowRight className="ml-2 h-5 w-5" />

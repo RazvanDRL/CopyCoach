@@ -15,6 +15,7 @@ import localFont from 'next/font/local';
 import Image from 'next/image';
 import Pricing from '@/components/pricing';
 import Head from 'next/head';
+import VarameaAvatar from '@/public/avatars/varamea.jpg';
 import CeciuAvatar from '@/public/avatars/ceciu.jpg';
 
 const BricolageGrotesque = localFont({
@@ -26,18 +27,18 @@ const BricolageGrotesque = localFont({
 const examples = [
     {
         title: "Practice with real-world scenarios",
-        description: "Transform theory into skill through hands-on practice. You'll get a fictive client alongside a brief of their business, experiencing what it's like to write for real businesses, and learning exactly what works, building valuable experience with every exercise!",
+        description: "You'll get a fictive client alongside a brief of their business, experiencing what it's like to write for real businesses, and learning exactly what works!",
         video: "/steps/step1.mp4",
     },
 
     {
         title: "Get feedback that matters",
-        description: "No more guessing if your copy is good enough. Our AI analyzes your work and provides specific, actionable feedback. With each exercise, you'll receive a professionally revised version of your work, showing you exactly how, why and what to improve.",
+        description: "With each exercise, you'll receive a score, tips on where you can improve, and a revised version of your work, showing you exactly what, why and how to improve.",
         video: "/steps/step2.mp4",
     },
     {
         title: "Watch your skills grow",
-        description: "Complete exercises, level up, and build confidence in your writing abilities! Each level unlocks new benefits, making your learning journey exciting at every step. Plus, you're never alone - you will be part of a community of dedicated writers helping each other achieve their goals!",
+        description: "Complete exercises, level up, and build confidence in your writing abilities! Plus, you're never alone - you will be part of a community of dedicated writers helping each other!",
         video: "/steps/step3.mp4",
     },
 ]
@@ -61,7 +62,7 @@ const faq = [
     },
     {
         question: "Can CopyCoach really help me land clients?",
-        answer: "Absolutely! Reach level <X> and get access to our SteveJobs Community. This network connects you directly with businesses actively seeking skilled copywriters."
+        answer: "Absolutely! Reach level 30 and get access to our Jobs Community. This network connects you directly with businesses actively seeking skilled copywriters."
     },
     {
         question: "Do you have an affiliate program?",
@@ -117,12 +118,12 @@ const LandingPage: React.FC = () => {
                         <Sparkles className="absolute bottom-1/4 left-1/3 h-8 w-8 sm:h-12 sm:w-12 text-[#6CB4EE]" />
                         <Pen className="absolute bottom-1/3 right-[20%] lg:right-1/3 h-10 w-10 sm:h-14 sm:w-14 text-[#6CB4EE] transform rotate-90" />
                     </div> */}
-                    <div className="mt-12 flex flex-col items-center justify-center gap-10 md:gap-12 z-50">
+                    <div className="mt-24 flex flex-col items-center justify-center gap-10 md:gap-12 z-50">
                         <h1 className={`${BricolageGrotesque.className} bg-clip-text text-transparent text-center bg-gradient-to-b from-neutral-900 to-neutral-700 text-[3.2rem] sm:text-6xl md:text-7xl lg:text-8xl relative font-bold`}>
                             Learn by <span className='underline decoration-dashed decoration-[#007FFF] underline-offset-8'>doing</span>
                         </h1>
 
-                        <h2 className="-mt-4 md:-mt-0 text-base sm:text-lg md:text-xl lg:text-2xl text-center text-black/50 font-semibold relative">
+                        <h2 className="-mt-4 md:-mt-0 px-4 md:px-0 text-base sm:text-lg md:text-xl lg:text-2xl text-center text-black/50 font-semibold relative">
                             Practice with real-world scenarios.<br className="hidden sm:block" />
                             Get personalized AI feedback to improve faster.
                         </h2>
@@ -142,13 +143,13 @@ const LandingPage: React.FC = () => {
                                 ))}
                             </div>
                             <p className="text-center text-xs sm:text-sm font-medium text-black/70">
-                                {"Amazing. Best copywriting platform I've found."}
+                                {"Best way to learn copywriting right now."}
                             </p>
                             {/* image + name + followers count */}
                             <div className="flex items-center justify-center space-x-4 text-black/50">
-                                <Image src={CeciuAvatar} alt="ceciu" width={140} height={140} className="w-12 h-12 rounded-full aspect-square object-cover" />
+                                <Image src={VarameaAvatar} alt="varamea" width={140} height={140} quality={10} className="w-12 h-12 rounded-full aspect-square object-cover" />
                                 <div className="flex flex-col items-left space-y-1 z-50">
-                                    <Link href="https://www.instagram.com/ceciu.gmi/" className="cursor-pointer hover:underline text-left text-xs sm:text-sm font-semibold ">
+                                    <Link href="https://www.instagram.com/bianca_tirsin/" className="cursor-pointer hover:underline text-left text-xs sm:text-sm font-semibold ">
                                         Tirsin Bianca
                                     </Link>
                                     <p className="text-left text-xs sm:text-sm flex items-center">
@@ -199,24 +200,24 @@ const LandingPage: React.FC = () => {
                     {/* social proof - single person */}
                     <div className="mt-16 flex flex-col items-center justify-center space-y-4 relative">
                         <div className="flex items-center justify-center gap-[0.5px]">
-                            <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-[#FFBF00] text-[#FFBF00]" />
-                            <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-[#FFBF00] text-[#FFBF00]" />
-                            <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-[#FFBF00] text-[#FFBF00]" />
-                            <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-[#FFBF00] text-[#FFBF00]" />
-                            <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-[#FFBF00] text-[#FFBF00]" />
+                            {[...Array(5)].map((_, index) => (
+                                <Star key={index} className="w-4 h-4 sm:w-5 sm:h-5 fill-[#FFBF00] text-[#FFBF00]" />
+                            ))}
                         </div>
                         <p className="text-center text-xs sm:text-sm font-medium text-neutral-700">
-                            {"Amazing. Best copywriting platform I've found."}
+                            With CopyCoach you can easily learn how to
+                            <br />
+                            write copy that provides value & connects with the audience
                         </p>
                         {/* image + name + followers count */}
                         <div className="flex items-center justify-center space-x-4 text-neutral-700/70">
                             <Image src={CeciuAvatar} alt="ceciu" width={36} height={36} className="rounded-full sm:w-12 sm:h-12" />
                             <div className="flex flex-col items-left space-y-1 z-50">
                                 <Link href="https://www.instagram.com/ceciu.gmi/" className="cursor-pointer hover:underline text-left text-xs sm:text-sm font-semibold">
-                                    Tirsin Bianca
+                                    Ceciu Sebastian
                                 </Link>
                                 <p className="text-left text-xs sm:text-sm flex items-center">
-                                    654 followers
+                                    648 followers
                                 </p>
                             </div>
                         </div>
@@ -305,10 +306,12 @@ const LandingPage: React.FC = () => {
                             <video
                                 src={examples[selectedOption - 1].video}
                                 autoPlay
+                                controls={false}
                                 muted
                                 width={500}
                                 height={500}
                                 loop
+                                playsInline
                                 className="rounded-lg w-full h-full object-cover opacity-100"
                             />
                         </div>
@@ -339,9 +342,11 @@ const LandingPage: React.FC = () => {
                 <section className="flex w-full p-12 md:rounded-lg bg-[#007FFF] flex-col items-left justify-between mt-24 min-h-[250px]">
                     <div className="flex flex-col items-left justify-between">
                         <h2 className={`${BricolageGrotesque.className} text-left text-3xl sm:text-4xl md:text-5xl font-black text-white max-w-[500px]`}>
-                            <Gem className="w-4 h-4 sm:w-5 sm:h-5 md:w-8 md:h-8 mb-4" />
-                            Your first step to mastery
-                            <br />
+                            Your first step to
+                            <div className="flex items-center">
+                                mastery
+                                <Gem className="ml-2 w-5 h-5 md:w-8 md:h-8" />
+                            </div>
                             is one exercise away.
                         </h2>
                     </div>
@@ -351,7 +356,7 @@ const LandingPage: React.FC = () => {
                             <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 ml-3" />
                         </Button>
                     </Link>
-                </section>
+                </section >
             </main >
             <Footer />
         </>
