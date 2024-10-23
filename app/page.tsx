@@ -330,7 +330,12 @@ const LandingPage: React.FC = () => {
                                 height={500}
                                 loop
                                 playsInline
+                                preload="auto"
                                 className="rounded-lg w-full h-full object-cover opacity-100"
+                                onLoadedData={(e) => {
+                                    const video = e.target as HTMLVideoElement;
+                                    video.play().catch(err => console.log("Video autoplay failed:", err));
+                                }}
                             />
                         </div>
                     </div>
