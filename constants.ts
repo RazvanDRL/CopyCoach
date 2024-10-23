@@ -1,4 +1,4 @@
-export type Task = "blog_post" | "captions" | "email_marketing" | "flyer" | "social_media" | "story_scripts";
+export type Task = "blog_post" | "captions" | "email_marketing" | "flyer" | "social_media" | "story_scripts" | "product_description";
 
 export const niches = [
     {
@@ -14,7 +14,7 @@ export const niches = [
     {
         value: "influencers",
         label: "Influencers",
-        tasks: ["story_scrips", "blog_posts", "captions", "scripts", "story_scripts", "email_marketing", "social_media"] as Task[]
+        tasks: ["blog_posts", "captions", "scripts", "story_scripts", "email_marketing", "social_media"] as Task[]
     },
     {
         value: "local_shops",
@@ -53,4 +53,91 @@ export const tasks: { value: Task; label: string }[] = [
         value: "story_scripts",
         label: "Story Scripts",
     },
+]
+
+export const levels = [
+    {
+        value: 0,
+        xp: 0,
+    },
+    {
+        value: 1,
+        xp: 10,
+    },
+    {
+        value: 2,
+        xp: 20,
+    },
+    {
+        value: 3,
+        xp: 30,
+    },
+    {
+        value: 4,
+        xp: 40,
+    },
+    {
+        value: 5,
+        xp: 50,
+    },
+    {
+        value: 6,
+        xp: 70,
+    },
+    {
+        value: 7,
+        xp: 90,
+    },
+    {
+        value: 8,
+        xp: 110,
+    },
+    {
+        value: 9,
+        xp: 130,
+    },
+    {
+        value: 10,
+        xp: 150,
+    },
+    {
+        value: 11,
+        xp: 180,
+    },
+    {
+        value: 12,
+        xp: 210,
+    },
+    {
+        value: 13,
+        xp: 240,
+    },
+    {
+        value: 14,
+        xp: 270,
+    },
+    {
+        value: 15,
+        xp: 300,
+    },
+    {
+        value: 16,
+        xp: 340,
+    },
+    {
+        value: 17,
+        xp: 380,
+    },
+    {
+        value: 18,
+        xp: 420,
+    },
+    {
+        value: 19,
+        xp: 460,
+    },
+    {
+        value: 20,
+        xp: 500,
+    }
 ]

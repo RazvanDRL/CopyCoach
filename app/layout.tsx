@@ -48,7 +48,9 @@ export default function RootLayout({
         selfHosted={true}
         enabled={true}
       />
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+      </body>
     </html>
   );
 }
