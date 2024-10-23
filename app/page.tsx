@@ -25,43 +25,35 @@ const BricolageGrotesque = localFont({
 
 const examples = [
     {
-        title: "Get hands-on experience",
-        description: "All our exercises are realistic, meant to mirror real life copywriting tasks from various niches. Choose one that suits your needs.",
-        benefits: [
-            "Realistic copywriting tasks",
-            "Choose from various niches",
-            "Improve your skills in a practical way",
-        ],
+        title: "Practice with real-world scenarios",
+        description: "Transform theory into skill through hands-on practice. You'll get a fictive client alongside a brief of their business, experiencing what it's like to write for real businesses, and learning exactly what works, building valuable experience with every exercise!",
+        image: CeciuAvatar,
+    },
+
+    {
+        title: "Get feedback that matters",
+        description: "No more guessing if your copy is good enough. Our AI analyzes your work and provides specific, actionable feedback. With each exercise, you'll receive a professionally revised version of your work, showing you exactly how, why and what to improve.",
         image: CeciuAvatar,
     },
     {
-        title: "Improve with AI feedback",
-        description: "Get personalized, actionable feedback on your copy. Our AI analyzes your work for clarity, persuasiveness, tone, and more, offering specific suggestions for improvement and personalized tips.",
-        benefits: [
-            "Personalized feedback",
-            "Actionable suggestions",
-            "Relevant criteria",
-            "Revised version of your copy",
-        ],
-        image: CeciuAvatar,
-    },
-    {
-        title: "Level up and unlock new opportunities",
-        description: "Complete multiple exercises, level up your writing skills to get confident in your abilities and unlock exclusive rewards. Reach level <X> and get access to our SteveJobs Community.",
-        benefits: [
-            "Get confident in your writing skills",
-            "Track your progress",
-            "Unlock surprise benefits with each level",
-            "Access exclusive opportunities",
-        ],
+        title: "Watch your skills grow",
+        description: "Complete exercises, level up, and build confidence in your writing abilities! Each level unlocks new benefits, making your learning journey exciting at every step. Plus, you're never alone - you will be part of a community of dedicated writers helping each other achieve their goals!",
         image: CeciuAvatar,
     },
 ]
 
 const faq = [
     {
-        question: "What makes CopyCoach's exercises unique?",
-        answer: "Our exercises are designed to simulate real-world copywriting scenarios. You'll work on tasks for 'practice clients' in various niches, preparing you for actual client work. This hands-on approach ensures you're developing practical skills that translate directly to your copywriting career."
+        question: "Is CopyCoach right for me?",
+        answer: "If you're interested in copywriting but tired of just watching tutorials, CopyCoach is perfect for you. Whether you're just starting out or looking to sharpen your skills, our practical exercises help you learn by doing - the most effective way to improve your writing."
+    },
+    {
+        question: "How does the practice system work?",
+        answer: "Each exercise is based on real-world scenarios. You'll get a brief (just like from a real client), write your copy, and receive instant AI feedback on your work. Plus, you'll see how a pro would approach the same task - helping you learn faster and more effectively."
+    },
+    {
+        question: "What makes CopyCoach different?",
+        answer: "Unlike traditional courses or tutorials, CopyCoach focuses on practical experience. You'll write real copy, get specific feedback, and improve with every exercise. It's like having a personal writing coach available 24/7."
     },
     {
         question: "How does the AI feedback work?",
@@ -70,10 +62,6 @@ const faq = [
     {
         question: "Can CopyCoach really help me land clients?",
         answer: "Absolutely! Reach level <X> and get access to our SteveJobs Community. This network connects you directly with businesses actively seeking skilled copywriters."
-    },
-    {
-        question: "Is CopyCoach for me?",
-        answer: "CopyCoach is designed for copywriters of all levels, from beginners to professionals. Whether you're just starting out or looking to refine your skills, our exercises are tailored to meet your needs, ensuring you get the most out of your practice time."
     },
     {
         question: "Do you have an affiliate program?",
@@ -92,37 +80,22 @@ const faq = [
 const withoutCopyCoach = [{
     title: "You without CopyCoach",
     list: [
-        "Stuck in tutorial hell",
-        "Unable to see progress",
-        "Constantly doubting your skills",
-        "General advice",
+        "Stuck on tutorials instead of actually writing",
+        "Doubting your skills",
+        "Never knowing if you're improving",
+        "Getting generic, one-size-fits-all advice",
     ]
 }]
 
 const withCopyCoach = [{
     title: "You with CopyCoach",
     list: [
-        "Able to put skills to practice",
-        "See your progress",
-        "Confidence in your skills",
-        "Tips to improve exactly where you need it",
+        "Able to put your skills into practice",
+        "Building confidence with every exercise",
+        "Tracking your growth in one place",
+        "Getting personalized feedback that matters",
     ]
 }]
-
-const howItWorks = [
-    {
-        title: "Practice Your Skills",
-        description: "Work on realistic copywriting exercises designed to improve your skills in a practical way.",
-    },
-    {
-        title: "Get Smart Feedback",
-        description: "Receive detailed feedback on your copy, with specific suggestions for improvement and personalized tips.",
-    },
-    {
-        title: "Level Up Fast",
-        description: "Track your progress and continuously improve your copywriting skills with each exercise.",
-    }
-]
 
 const LandingPage: React.FC = () => {
     const [selectedOption, setSelectedOption] = useState<1 | 2 | 3>(1);
@@ -150,8 +123,8 @@ const LandingPage: React.FC = () => {
                         </h1>
 
                         <h2 className="-mt-4 md:-mt-0 text-base sm:text-lg md:text-xl lg:text-2xl text-center text-black/50 font-semibold relative">
-                            Master copywriting by exercising with real-world scenarios.<br className="hidden sm:block" />
-                            Improve with custom AI feedback.
+                            Practice with real-world scenarios.<br className="hidden sm:block" />
+                            Get personalized AI feedback to improve faster.
                         </h2>
 
                         <Link href="/signup">
@@ -198,9 +171,9 @@ const LandingPage: React.FC = () => {
                 {/* Section - Problem agitation without vs with */}
                 <section className="flex flex-col items-center justify-center mt-24 px-6">
                     <h2 className={`${BricolageGrotesque.className} text-2xl sm:text-4xl md:text-5xl font-black text-center`}>
-                        Theory alone is not enough.
+                        Tired of endless tutorials?
                         <br />
-                        You need <span className='text-[#007FFF]'>real practice</span> too.
+                        It's time to <span className='text-[#007FFF]'>take action</span>
                     </h2>
                     {/* 2 cards side by side */}
                     <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-6 w-full">
@@ -258,37 +231,12 @@ const LandingPage: React.FC = () => {
                     </Link>
                 </section>
 
-                {/* Section - How it works */}
-                <section className="flex flex-col items-center justify-center mt-[6rem] sm:mt-[10rem] mx-auto px-4 sm:px-6">
-                    <h2 className={`${BricolageGrotesque.className} text-center text-2xl sm:text-4xl md:text-5xl font-black leading-tight`}>
-                        Get started in just three simple steps
-                    </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12 sm:mt-16 w-full">
-                        {howItWorks.map((item, index) => (
-                            <div key={index} className="flex flex-col items-left text-left justify-start bg-white rounded-xl w-full h-[250px] p-6 sm:p-8">
-                                <div className="flex items-left font-black text-[#007FFF] text-4xl sm:text-5xl mb-3 sm:mb-4">
-                                    {index + 1}
-                                </div>
-                                <h3 className="text-base sm:text-xl font-bold">{item.title}</h3>
-                                <p className="mt-2 text-sm sm:text-base text-black/50">{item.description}</p>
-                            </div>
-                        ))}
-                    </div>
-                    <Link href="/signup" className="mt-16">
-                        <Button
-                            className={`${BricolageGrotesque.className} bg-[#007FFF] hover:bg-[#007FFF] hover:scale-105 transition-all duration-200 text-xl md:text-2xl font-bold h-[3.5rem] md:h-[4rem] rounded-xl px-8 md:px-10`}
-                        >
-                            Start now
-                        </Button>
-                    </Link>
-                </section>
-
                 {/* Section - Features */}
                 <section className="flex flex-col items-center justify-center mt-[10rem]">
                     <h2 className={`${BricolageGrotesque.className} text-center text-3xl sm:text-4xl md:text-5xl font-black`}>
-                        Automate boring problems.
+                        Focus on what matters:
                         <br />
-                        Focus on what really matters.
+                        Writing better copy.
                     </h2>
                     <div className="grid grid-cols-1 items-stretch gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-20 mt-16 max-w-7xl mx-auto px-4">
                         <ul className="w-full">
@@ -387,12 +335,14 @@ const LandingPage: React.FC = () => {
                     <div className="flex flex-col items-left justify-between">
                         <h2 className={`${BricolageGrotesque.className} text-left text-3xl sm:text-4xl md:text-5xl font-black text-white max-w-[500px]`}>
                             <Gem className="w-4 h-4 sm:w-5 sm:h-5 md:w-8 md:h-8 mb-4" />
-                            Ready to grow your copywriting skills?
+                            Your first step to mastery
+                            <br />
+                            is one exercise away.
                         </h2>
                     </div>
                     <Link href="/signup" className="mt-16">
                         <Button className={`${BricolageGrotesque.className} hover:scale-105 bg-white text-[#007FFF] hover:bg-white hover:text-[#007FFF] font-bold text-lg sm:text-xl md:text-2xl py-4 sm:py-5 md:py-7 px-6 sm:px-8 md:px-10 rounded-lg shadow-lg transform transition-all duration-200`}>
-                            Start now
+                            Start your journey
                             <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 ml-3" />
                         </Button>
                     </Link>
