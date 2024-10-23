@@ -161,13 +161,13 @@ const LandingPage: React.FC = () => {
                     </div>
                 </section>
                 {/* Video demo */}
-                <div className="w-full max-w-5xl mx-auto relative aspect-video">
+                {/* <div className="w-full max-w-5xl mx-auto relative aspect-video">
                     <iframe
                         className="absolute px-6 top-0 left-0 w-full h-full"
                         src="https://www.tella.tv/video/clyfhffbb023g09jnae7uhx4z/embed?b=0&amp;title=0&amp;a=1&amp;loop=0&amp;t=0&amp;muted=0&amp;wt=1"
                         allowFullScreen={true}
                     ></iframe>
-                </div>
+                </div> */}
 
                 {/* Section - Problem agitation without vs with */}
                 <section className="flex flex-col items-center justify-center mt-24 px-6">
