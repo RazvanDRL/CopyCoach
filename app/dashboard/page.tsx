@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useState, useEffect } from "react"
-import { ArrowDown, ArrowRight, Check, ChevronsUpDown, Dices, CircleHelp, Star, History } from "lucide-react"
+import { ArrowDown, ArrowRight, Check, ChevronsUpDown, Dices, CircleHelp, Star, History, Redo2 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -27,7 +27,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-import { niches, tasks } from "@/constants"
+import { niches, Task, tasks } from "@/constants"
 import { useRouter } from "next/navigation"
 
 import { supabase } from "@/lib/supabaseClient"
@@ -38,6 +38,7 @@ import Loading from "@/components/loading"
 import Footer from "@/components/footer"
 import { bricolage } from "@/fonts/font"
 import { sleep } from "openai/core.mjs"
+import { toast, Toaster } from 'sonner'
 interface ComboboxProps {
   placeholder: string
   value: string
@@ -165,40 +166,63 @@ export default function Dashboard() {
     if (niche) {
       const selectedNiche = niches.find(n => n.value === niche);
       if (selectedNiche) {
-        setAvailableTasks(tasks.filter(t => selectedNiche.tasks.includes(t.value)));
+        const availableTasks = tasks.filter(t => selectedNiche.tasks.includes(t.value));
+        setAvailableTasks(availableTasks);
+        // Only set task when changing niches and task is not empty
+        if (task && !selectedNiche.tasks.includes(task as Task)) {
+          setTask(availableTasks[0]?.value || "");
+        }
       }
     } else {
       setAvailableTasks([]);
+      setTask(""); // Reset task when niche is cleared
     }
-  }, [niche]);
+  }, [niche, task]);
 
   const handleSubmit = async () => {
     if (!user) return;
 
+    // First fetch user's completed exercises
+    const { data: profileData, error: profileError } = await supabase
+      .from('profiles')
+      .select('completed_exercises')
+      .eq('id', user.id)
+      .single();
+
+    if (profileError) {
+      console.error('Error fetching profile:', profileError);
+      return;
+    }
+
+    const completedExercises = profileData?.completed_exercises || [];
+
+    // Fetch exercises excluding completed ones
     const { data: exerciseData, error: exerciseError } = await supabase
       .from('exercise')
       .select('id,title')
       .eq('niche', niche)
       .eq('task', task)
-
+      .not('id', 'in', `(${completedExercises.join(',')})`)
 
     if (exerciseError) {
       console.error('Error fetching exercise:', exerciseError);
       return;
     }
-    let exData;
-    if (exerciseData.length > 0) {
-      const randomId = Math.floor(Math.random() * exerciseData.length);
-      exData = exerciseData[randomId];
+
+    if (!exerciseData || exerciseData.length === 0) {
+      toast.info("You've completed all exercises in this category! Try another one.");
+      return;
     }
+
+    let exData = exerciseData[Math.floor(Math.random() * exerciseData.length)];
 
     const { data, error } = await supabase
       .from('history')
       .insert([
         {
           user_id: user.id,
-          exercise_id: exData!.id,
-          title: exData!.title,
+          exercise_id: exData.id,
+          title: exData.title,
         }
       ])
       .select();
@@ -206,8 +230,19 @@ export default function Dashboard() {
     if (error) {
       console.error('Error creating exercise history:', error);
     } else {
-      const url = `/chat/${data[0].id}`;
-      router.push(url);
+      // add to completed exercises
+      const updatedExercises = [...completedExercises, exData.id];
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ completed_exercises: updatedExercises })
+        .eq('id', user.id);
+
+      if (updateError) {
+        toast.error('Failed to update completed exercises. Please try again.');
+      } else {
+        const url = `/chat/${data[0].id}`;
+        router.push(url);
+      }
     }
   };
 
@@ -218,6 +253,7 @@ export default function Dashboard() {
   return (
     <>
       <Navbar />
+      <Toaster position="top-center" richColors />
       <main className="flex flex-col items-center min-h-screen px-8">
         <h1 className={`${bricolage.className} mt-24 sm:mt-48 text-3xl sm:text-4xl font-bold mb-3 text-center`}>👋 Welcome, {user.email?.split('@')[0]}</h1>
         <p className="text-base sm:text-lg text-gray-600 mb-10 text-center">
@@ -284,7 +320,7 @@ export default function Dashboard() {
               value={task}
               onChange={setTask}
               options={availableTasks}
-              className={cn("w-full sm:w-[200px]", task ? "border-green-500" : "animate-pulse")}
+              className={cn("w-full sm:w-[200px]", task ? "border-green-500" : "")}
               disabled={!niche}
             />
             <TooltipProvider>
@@ -340,7 +376,7 @@ export default function Dashboard() {
                 {exerciseHistory
                   .slice(0, showAllExercises ? exerciseHistory.length : 12)
                   .map((exercise) => (
-                    <Link href={exercise.grade ? `/feedback/${exercise.id}` : `/chat/${exercise.id}`} key={exercise.id}>
+                    <div key={exercise.id}>
                       <Card className="transform hover:scale-105 transition-transform duration-300 shadow-lg rounded-xl overflow-hidden h-full flex flex-col">
                         <CardHeader className={cn(
                           "p-4 flex-shrink-0",
@@ -352,20 +388,40 @@ export default function Dashboard() {
                           {exercise.grade ? (
                             <div className="flex items-center space-x-2">
                               <Star className="text-yellow-500 w-5 h-5 sm:w-6 sm:h-6" />
-                              <p className={`${bricolage.className} text-xl font-semibold text-gray-800`}>{exercise.grade}/10</p>
+                              <p className={`${bricolage.className} text-xl font-semibold text-gray-800`}>{exercise.grade.toFixed(1)}/10</p>
                             </div>
                           ) : (
                             <div className="flex items-center space-x-2">
                               <p className="text-gray-500 font-medium">Incomplete</p>
                             </div>
                           )}
-                          <Button variant="ghost" className="mt-4">
-                            {exercise.grade ? "View Details" : "Continue"}
-                            <ArrowRight className="ml-2 h-4 w-4" />
-                          </Button>
+                          {exercise.grade ? (
+                            <div className="flex flex-row gap-2 w-full items-center justify-center">
+                              <Button variant="ghost" className="mt-4" onClick={() => {
+                                toast.info("Reach level 20 to redo an exercise!");
+                              }}>
+                                <Redo2 className="mr-2 h-4 w-4" />
+                                Redo
+                              </Button>
+                              <Link href={`/feedback/${exercise.id}`}>
+                                <Button variant="ghost" className="mt-4">
+                                  View Details
+                                  <ArrowRight className="ml-2 h-4 w-4" />
+                                </Button>
+                              </Link>
+                            </div>
+                          ) :
+                            (
+                              <Link href={`/chat/${exercise.id}`}>
+                                <Button variant="ghost" className="mt-4">
+                                  Continue
+                                  <ArrowRight className="ml-2 h-4 w-4" />
+                                </Button>
+                              </Link>
+                            )}
                         </CardContent>
                       </Card>
-                    </Link>
+                    </div>
                   ))}
               </div>
               <div>

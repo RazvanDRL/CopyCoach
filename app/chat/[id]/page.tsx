@@ -80,6 +80,7 @@ export default function Chat() {
             }
             return user;
         };
+
         fetchUser();
     }, []);
 
@@ -118,7 +119,6 @@ export default function Chat() {
 
         getTask();
 
-        // Load response from localStorage if it exists
         const savedResponse = localStorage.getItem(`exerciseResponse_${params.id}`);
         if (savedResponse) {
             editor?.commands.setContent(savedResponse);
@@ -168,32 +168,6 @@ export default function Chat() {
                     title: exercise?.title
                 })
                 .eq('id', params.id);
-
-            const { data: profileData, error: profileError } = await supabase
-                .from('profiles')
-                .select('completed_exercises')
-                .eq('id', user.id)
-                .single();
-
-            if (profileError) {
-                console.error('Error fetching profile:', profileError);
-            } else {
-                const updatedExercises = profileData?.completed_exercises || [];
-                if (exercise?.id && !updatedExercises.includes(exercise.id)) {
-                    updatedExercises.push(exercise.id);
-
-                    const { data: updateData, error: updateError } = await supabase
-                        .from('profiles')
-                        .update({
-                            completed_exercises: updatedExercises
-                        })
-                        .eq('id', user.id);
-
-                    if (updateError) {
-                        console.error('Error updating profile:', updateError);
-                    }
-                }
-            }
 
             if (error) {
                 console.error('Error uploading response:', error);

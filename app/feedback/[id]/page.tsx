@@ -442,8 +442,8 @@ function GeneratingAnalysis() {
                     </Link>
                 </div>
             )}
-            <h1 className="text-4xl font-bold mb-8 text-center">It is going to be <Cover className="cursor-pointer">faaast</Cover></h1>
-            <p className="text-center opacity-60 mb-48">Don&apos;t worry, we&apos;re generating your feedback as fast as possible :)</p>
+            <h1 className="text-4xl font-bold mb-8 text-center">Generating your feedback...</h1>
+            <p className="text-center opacity-60 mb-48">Don&apos;t worry, we&apos;re working as fast as possible :)</p>
             <div className="tetrominos mt-36">
                 <div className="tetromino box1"></div>
                 <div className="tetromino box2"></div>
