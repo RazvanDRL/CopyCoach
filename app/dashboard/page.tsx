@@ -1,8 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { useState, useEffect } from "react"
-import { ArrowDown, ArrowRight, Check, ChevronsUpDown, Dices, CircleHelp, Star, History, Redo2 } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
+import { ArrowDown, ArrowRight, Check, ChevronsUpDown, Dices, CircleHelp, Star, History, Redo2, Loader2 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -39,6 +39,7 @@ import Footer from "@/components/footer"
 import { bricolage } from "@/fonts/font"
 import { sleep } from "openai/core.mjs"
 import { toast, Toaster } from 'sonner'
+
 interface ComboboxProps {
   placeholder: string
   value: string
@@ -113,6 +114,7 @@ export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
   const [availableTasks, setAvailableTasks] = useState<typeof tasks>([]);
   const [showAllExercises, setShowAllExercises] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetchUser().then(user => {
@@ -182,6 +184,8 @@ export default function Dashboard() {
   const handleSubmit = async () => {
     if (!user) return;
 
+    setSubmitting(true);
+
     // First fetch user's completed exercises
     const { data: profileData, error: profileError } = await supabase
       .from('profiles')
@@ -244,6 +248,7 @@ export default function Dashboard() {
         router.push(url);
       }
     }
+    setSubmitting(false);
   };
 
   if (!user) {
@@ -358,11 +363,20 @@ export default function Dashboard() {
           </Button>
           <Button
             className="w-full sm:w-auto bg-[#007FFF] hover:bg-[#007FFF] text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition duration-200 hover:scale-105 flex items-center justify-center"
-            disabled={!niche || !task}
+            disabled={!niche || !task || submitting}
             onClick={handleSubmit}
           >
-            <Star className="mr-2 h-4 w-4" />
-            <span>Ready to Start!</span>
+            {submitting ?
+              <div className="flex items-center justify-center">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Loading...
+              </div>
+              :
+              <div className="flex items-center justify-center">
+                <Star className="mr-2 h-4 w-4" />
+                Ready to Start!
+              </div>
+            }
           </Button>
         </div>
         <div className="mt-16 w-full max-w-5xl mx-auto">

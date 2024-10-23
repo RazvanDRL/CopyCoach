@@ -10,12 +10,12 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Pen, Book, Sparkles, Star, Frown, Smile, Mail, FileText, ArrowRight, Gem, MessageSquare, LineChart } from 'lucide-react';
+import { Pen, Book, Sparkles, Star, Frown, Smile, Mail, FileText, ArrowRight, Gem, MessageSquare, LineChart, Plus } from 'lucide-react';
 import localFont from 'next/font/local';
 import Image from 'next/image';
-import CeciuAvatar from '@/public/avatars/ceciu.jpg';
 import Pricing from '@/components/pricing';
 import Head from 'next/head';
+import CeciuAvatar from '@/public/avatars/ceciu.jpg';
 
 const BricolageGrotesque = localFont({
     src: './fonts/BricolageGrotesque.ttf',
@@ -27,18 +27,18 @@ const examples = [
     {
         title: "Practice with real-world scenarios",
         description: "Transform theory into skill through hands-on practice. You'll get a fictive client alongside a brief of their business, experiencing what it's like to write for real businesses, and learning exactly what works, building valuable experience with every exercise!",
-        image: CeciuAvatar,
+        video: "/steps/step1.mp4",
     },
 
     {
         title: "Get feedback that matters",
         description: "No more guessing if your copy is good enough. Our AI analyzes your work and provides specific, actionable feedback. With each exercise, you'll receive a professionally revised version of your work, showing you exactly how, why and what to improve.",
-        image: CeciuAvatar,
+        video: "/steps/step2.mp4",
     },
     {
         title: "Watch your skills grow",
         description: "Complete exercises, level up, and build confidence in your writing abilities! Each level unlocks new benefits, making your learning journey exciting at every step. Plus, you're never alone - you will be part of a community of dedicated writers helping each other achieve their goals!",
-        image: CeciuAvatar,
+        video: "/steps/step3.mp4",
     },
 ]
 
@@ -232,79 +232,84 @@ const LandingPage: React.FC = () => {
                 </section>
 
                 {/* Section - Features */}
-                <section className="flex flex-col items-center justify-center mt-[10rem]">
+                <section className="flex flex-col items-center justify-center mt-[10rem] px-4 sm:px-6 lg:px-8">
                     <h2 className={`${BricolageGrotesque.className} text-center text-3xl sm:text-4xl md:text-5xl font-black`}>
                         Focus on what matters:
                         <br />
                         Writing better copy.
                     </h2>
-                    <div className="grid grid-cols-1 items-stretch gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-20 mt-16 max-w-7xl mx-auto px-4">
-                        <ul className="w-full">
+                    <div className="grid grid-cols-1 items-stretch gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-20 mt-16 w-full max-w-7xl mx-auto">
+                        <ul className="w-full space-y-2 px-8">
                             <li>
                                 <button
-                                    className="group relative flex gap-5 items-center w-full py-5 text-base font-medium text-left md:text-lg"
+                                    className={`group relative flex gap-3 sm:gap-5 items-center w-full py-4 sm:py-5 text-sm sm:text-base md:text-lg font-medium text-left ${selectedOption === 1 ? 'text-[#007FFF]' : ''}`}
                                     onClick={() => setSelectedOption(1)}
                                     aria-expanded={selectedOption === 1}
                                 >
-                                    <span className="scale-150 duration-100 text-[#007FFF]">
+                                    <span className={`scale-125 sm:scale-150 duration-100 ${selectedOption === 1 ? 'text-[#007FFF]' : ''}`}>
                                         <Pen className="w-4 h-4 sm:w-6 sm:h-6" />
                                     </span>
-                                    <span className="group-hover:translate-x-1 duration-150 flex-1 text-base-content text-[#007FFF] font-semibold">
+                                    <span className={`flex items-center justify-between group-hover:translate-x-1 duration-150 flex-1 text-base-content font-semibold ${selectedOption === 1 ? 'text-[#007FFF]' : ''}`}>
                                         <h3 className="inline">{examples[0].title}</h3>
+                                        {selectedOption !== 1 && <Plus className="w-4 h-4 ml-2" />}
                                     </span>
                                 </button>
-                                <div className={`transition-all duration-300 ease-in-out overflow-hidden ${selectedOption === 1 ? 'opacity-100' : 'opacity-0 max-h-0'}`}>
-                                    <div className="pb-5 leading-relaxed text-black/50">
+                                <div className={`transition-all duration-300 ease-in-out overflow-hidden ${selectedOption === 1 ? 'opacity-100' : 'max-h-0 opacity-0'}`}>
+                                    <div className="pb-4 sm:pb-5 px-4 sm:px-6 leading-relaxed text-sm sm:text-base text-black/50">
                                         {examples[0].description}
                                     </div>
                                 </div>
                             </li>
                             <li>
                                 <button
-                                    className="group relative flex gap-5 items-center w-full py-5 text-base font-medium text-left md:text-lg"
+                                    className={`group relative flex gap-3 sm:gap-5 items-center w-full py-4 sm:py-5 text-sm sm:text-base md:text-lg font-medium text-left ${selectedOption === 2 ? 'text-[#007FFF]' : ''}`}
                                     onClick={() => setSelectedOption(2)}
                                     aria-expanded={selectedOption === 2}
                                 >
-                                    <span className="scale-150 duration-100">
+                                    <span className={`scale-125 sm:scale-150 duration-100 ${selectedOption === 2 ? 'text-[#007FFF]' : ''}`}>
                                         <Book className="w-4 h-4 sm:w-6 sm:h-6" />
                                     </span>
-                                    <span className="group-hover:translate-x-1 duration-150 flex-1 text-base-content">
+                                    <span className={`flex items-center justify-between group-hover:translate-x-1 duration-150 flex-1 text-base-content font-semibold ${selectedOption === 2 ? 'text-[#007FFF]' : ''}`}>
                                         <h3 className="inline">{examples[1].title}</h3>
+                                        {selectedOption !== 2 && <Plus className="w-4 h-4 ml-2" />}
                                     </span>
                                 </button>
-                                <div className={`transition-all duration-300 ease-in-out overflow-hidden ${selectedOption === 2 ? 'opacity-100' : 'opacity-0 max-h-0'}`}>
-                                    <div className="pb-5 leading-relaxed text-black/50">
+                                <div className={`transition-all duration-300 ease-in-out overflow-hidden ${selectedOption === 2 ? 'opacity-100' : 'max-h-0 opacity-0'}`}>
+                                    <div className="pb-4 sm:pb-5 px-4 sm:px-6 leading-relaxed text-sm sm:text-base text-black/50">
                                         {examples[1].description}
                                     </div>
                                 </div>
                             </li>
                             <li>
                                 <button
-                                    className="group relative flex gap-5 items-center w-full py-5 text-base font-medium text-left md:text-lg"
+                                    className={`group relative flex gap-3 sm:gap-5 items-center w-full py-4 sm:py-5 text-sm sm:text-base md:text-lg font-medium text-left ${selectedOption === 3 ? 'text-[#007FFF]' : ''}`}
                                     onClick={() => setSelectedOption(3)}
                                     aria-expanded={selectedOption === 3}
                                 >
-                                    <span className="scale-150 duration-100">
+                                    <span className={`scale-125 sm:scale-150 duration-100 ${selectedOption === 3 ? 'text-[#007FFF]' : ''}`}>
                                         <Mail className="w-4 h-4 sm:w-6 sm:h-6" />
                                     </span>
-                                    <span className="group-hover:translate-x-1 duration-150 flex-1 text-base-content">
+                                    <span className={`flex items-center justify-between group-hover:translate-x-1 duration-150 flex-1 text-base-content font-semibold ${selectedOption === 3 ? 'text-[#007FFF]' : ''}`}>
                                         <h3 className="inline">{examples[2].title}</h3>
+                                        {selectedOption !== 3 && <Plus className="w-4 h-4 ml-2" />}
                                     </span>
                                 </button>
-                                <div className={`transition-all duration-300 ease-in-out overflow-hidden ${selectedOption === 3 ? 'opacity-100' : 'opacity-0 max-h-0'}`}>
-                                    <div className="pb-5 leading-relaxed text-black/50">
+                                <div className={`transition-all duration-300 ease-in-out overflow-hidden ${selectedOption === 3 ? 'opacity-100' : 'max-h-0 opacity-0'}`}>
+                                    <div className="pb-4 sm:pb-5 px-4 sm:px-6 leading-relaxed text-sm sm:text-base text-black/50">
                                         {examples[2].description}
                                     </div>
                                 </div>
                             </li>
                         </ul>
-                        <div className="rounded-box aspect-square w-full sm:w-[26rem] sm:-m-2 sm:p-2 border-2 border-[#007FFF]/10 bg-base-200">
-                            <Image
-                                src={examples[selectedOption - 1].image}
-                                alt={examples[selectedOption - 1].title}
+                        <div className="rounded-lg aspect-square w-full max-w-[26rem] mx-auto lg:mx-0 border-2 border-[#007FFF]/10">
+                            <video
+                                src={examples[selectedOption - 1].video}
+                                autoPlay
+                                muted
                                 width={500}
                                 height={500}
-                                className="rounded-lg w-full h-full object-cover"
+                                loop
+                                className="rounded-lg w-full h-full object-cover opacity-100"
                             />
                         </div>
                     </div>

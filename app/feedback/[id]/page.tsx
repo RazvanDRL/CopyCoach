@@ -245,14 +245,14 @@ export default function Analyze() {
                                     <div className="w-full md:w-1/2 pr-2">
                                         <h3 className="text-base md:text-lg font-semibold mb-2">Original Response</h3>
                                         <div
-                                            className="text-sm md:text-base whitespace-pre-wrap bg-gray-100 p-4 rounded"
+                                            className="text-sm md:text-base bg-gray-100 p-4 rounded"
                                             dangerouslySetInnerHTML={{ __html: htmlToStructuredText(DOMPurify.sanitize(response)) }}
                                         />
                                     </div>
                                     <div className="w-full md:w-1/2 mt-4 md:mt-0">
                                         <h3 className="text-base md:text-lg font-semibold mb-2">Improved Version</h3>
                                         <div
-                                            className="text-sm md:text-base whitespace-pre-wrap bg-gray-100 p-4 rounded"
+                                            className="text-sm md:text-base bg-gray-100 p-4 rounded"
                                             dangerouslySetInnerHTML={{ __html: htmlToStructuredText(DOMPurify.sanitize(analysisResult.improvement.improvedVersion)) }}
                                         />
                                     </div>
@@ -353,7 +353,7 @@ export default function Analyze() {
                                 Improved Version
                             </h3>
                             <div
-                                className="bg-gray-100 p-4 rounded-md whitespace-pre-wrap"
+                                className="bg-gray-100 p-4 rounded-md"
                                 dangerouslySetInnerHTML={{ __html: htmlToStructuredText(DOMPurify.sanitize(analysisResult.improvement.improvedVersion)) }}
                             />
                         </CardContent>
