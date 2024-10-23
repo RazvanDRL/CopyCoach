@@ -101,7 +101,7 @@ function Combobox({ placeholder, value, onChange, options, className, disabled }
 interface ExerciseHistoryItem {
   id: string;
   title: string;
-  grade: string;
+  grade: number;
 }
 
 export default function Dashboard() {
@@ -177,7 +177,7 @@ export default function Dashboard() {
 
     const { data: exerciseData, error: exerciseError } = await supabase
       .from('exercise')
-      .select('id')
+      .select('id,title')
       .eq('niche', niche)
       .eq('task', task)
 
@@ -198,6 +198,7 @@ export default function Dashboard() {
         {
           user_id: user.id,
           exercise_id: exData!.id,
+          title: exData!.title,
         }
       ])
       .select();
@@ -333,31 +334,42 @@ export default function Dashboard() {
             <History className="mr-2 h-6 w-6" />
             Exercise History
           </h2>
-          {exerciseHistory.length > 0 && exerciseHistory.filter(exercise => exercise.grade).length > 0 ? (
+          {exerciseHistory.length > 0 ? (
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-                {exerciseHistory.filter(exercise => exercise.grade).slice(0, showAllExercises ? exerciseHistory.length : 12).map((exercise) => (
-                  <Link href={`/feedback/${exercise.id}`} key={exercise.id}>
-                    <Card className="transform hover:scale-105 transition-transform duration-300 shadow-lg rounded-xl overflow-hidden h-full flex flex-col">
-                      <CardHeader className="bg-[#007FFF]/10 text-gray-800 p-4 flex-shrink-0">
-                        <CardTitle className="text-lg font-bold line-clamp-1">{exercise.title}</CardTitle>
-                      </CardHeader>
-                      <CardContent className="bg-white p-6 flex flex-col items-center justify-between flex-grow">
-                        <div className="flex items-center space-x-2">
-                          <Star className="text-yellow-500 w-5 h-5 sm:w-6 sm:h-6" />
-                          <p className={`${bricolage.className} text-xl font-semibold text-gray-800`}>{exercise.grade}/10</p>
-                        </div>
-                        <Button variant="ghost" className="mt-4">
-                          View Details
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                ))}
+                {exerciseHistory
+                  .slice(0, showAllExercises ? exerciseHistory.length : 12)
+                  .map((exercise) => (
+                    <Link href={exercise.grade ? `/feedback/${exercise.id}` : `/chat/${exercise.id}`} key={exercise.id}>
+                      <Card className="transform hover:scale-105 transition-transform duration-300 shadow-lg rounded-xl overflow-hidden h-full flex flex-col">
+                        <CardHeader className={cn(
+                          "p-4 flex-shrink-0",
+                          exercise.grade ? "bg-[#007FFF]/10" : "bg-gray-100"
+                        )}>
+                          <CardTitle className="text-lg font-bold line-clamp-1">{exercise.title}</CardTitle>
+                        </CardHeader>
+                        <CardContent className="bg-white p-6 flex flex-col items-center justify-between flex-grow">
+                          {exercise.grade ? (
+                            <div className="flex items-center space-x-2">
+                              <Star className="text-yellow-500 w-5 h-5 sm:w-6 sm:h-6" />
+                              <p className={`${bricolage.className} text-xl font-semibold text-gray-800`}>{exercise.grade}/10</p>
+                            </div>
+                          ) : (
+                            <div className="flex items-center space-x-2">
+                              <p className="text-gray-500 font-medium">Incomplete</p>
+                            </div>
+                          )}
+                          <Button variant="ghost" className="mt-4">
+                            {exercise.grade ? "View Details" : "Continue"}
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  ))}
               </div>
               <div>
-                {exerciseHistory.filter(exercise => exercise.grade).length > 12 && (
+                {exerciseHistory.length > 12 && (
                   <div className="text-center mb-12 md:mb-32">
                     <Button
                       variant="outline"

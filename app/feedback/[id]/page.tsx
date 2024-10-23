@@ -131,7 +131,7 @@ export default function Analyze() {
                     // Update the grade in the history table
                     const { error: updateError } = await supabase
                         .from('history')
-                        .update({ grade: parseInt(jsonResult.scores.overallScore) })
+                        .update({ grade: jsonResult.scores.overallScore })
                         .eq('id', params.id);
 
                     if (updateError) {
@@ -163,7 +163,7 @@ export default function Analyze() {
                     // Update the grade in the history table
                     const { error: updateError } = await supabase
                         .from('history')
-                        .update({ grade: parseInt(analysisData.scores.overallScore) })
+                        .update({ grade: analysisData.scores.overallScore })
                         .eq('id', params.id);
 
                     if (updateError) {
@@ -273,7 +273,7 @@ export default function Analyze() {
                         <div className="mb-8 text-center">
                             <span className={`${bricolage.className} text-lg font-medium opacity-60`}>Overall Score</span>
                             <div className={`${bricolage.className} text-4xl font-bold`}>
-                                {analysisResult?.scores?.overallScore ? `${analysisResult.scores.overallScore}/10 ` : 'N/A'}
+                                {analysisResult?.scores?.overallScore ? `${analysisResult.scores.overallScore.toFixed(1)}/10 ` : 'N/A'}
                             </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -173,7 +173,7 @@ const LandingPage: React.FC = () => {
                     <h2 className={`${BricolageGrotesque.className} text-2xl sm:text-4xl md:text-5xl font-black text-center`}>
                         Tired of endless tutorials?
                         <br />
-                        It's time to <span className='text-[#007FFF]'>take action</span>
+                        It&apos;s time to <span className='text-[#007FFF]'>take action</span>
                     </h2>
                     {/* 2 cards side by side */}
                     <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-6 w-full">

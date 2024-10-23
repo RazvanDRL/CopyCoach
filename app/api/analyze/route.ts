@@ -33,6 +33,7 @@ const AnalysisResultSchema = z.object({
         consistency: z.number(),
         emotionalAppeal: z.number(),
         ctaEffectiveness: z.number(),
+        overallScore: z.number(),
     }),
     improvement: z.object({
         tips: z.array(z.object({
@@ -88,7 +89,7 @@ async function addXP(userId: string, xp: number) {
         xp = 10;
     }
 
-    const totalXp = xpData.total_xp + xp;
+    const totalXp = xpData.total_xp + Math.round(xp);
     let newLevel = xpData.level;
 
     // Check if user should level up
@@ -306,7 +307,7 @@ Return a structured analysis following the AnalysisResultSchema format, ensuring
                 { role: "user", content: userPrompt(exercise, response) }
             ],
             response_format: zodResponseFormat(AnalysisResultSchema, "analysis_result"),
-            temperature: 0.5,
+            temperature: 0.1,
         });
         const input_token_price = 0.00000015;
         const output_token_price = 0.0000006;
@@ -318,11 +319,12 @@ Return a structured analysis following the AnalysisResultSchema format, ensuring
         if (!parsedResult) {
             throw new Error('Failed to parse OpenAI response');
         }
+
+        const overallScore = Object.values(parsedResult.scores).reduce((acc, curr) => acc + curr, 0) / Object.values(parsedResult.scores).length;
+        console.log('Overall score:', overallScore);
+        parsedResult.scores.overallScore = overallScore;
         const result: AnalysisResult = parsedResult;
 
-
-        const overallScore = Object.values(result.scores).reduce((acc, curr) => acc + curr, 0) / Object.values(result.scores).length;
-        console.log('Overall score:', overallScore);
         await addXP(userId, overallScore);
 
         const { error: insertError } = await supabaseAdmin
@@ -331,6 +333,7 @@ Return a structured analysis following the AnalysisResultSchema format, ensuring
                 {
                     history_id: id,
                     result: result,
+                    user_id: userId,
                 }
             ]);
 
