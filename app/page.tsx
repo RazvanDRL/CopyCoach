@@ -322,7 +322,6 @@ const LandingPage: React.FC = () => {
                         </ul>
                         <div className="rounded-lg aspect-square w-full max-w-[26rem] mx-auto lg:mx-0 border-2 border-[#007FFF]/10">
                             <video
-                                src={examples[selectedOption - 1].video}
                                 autoPlay
                                 controls={true}
                                 muted
@@ -331,12 +330,17 @@ const LandingPage: React.FC = () => {
                                 loop
                                 playsInline
                                 preload="auto"
+                                webkit-playsinline="true"
                                 className="rounded-lg w-full h-full object-cover opacity-100"
                                 onLoadedData={(e) => {
                                     const video = e.target as HTMLVideoElement;
-                                    video.play().catch(err => console.log("Video autoplay failed:", err));
+                                    video.play().catch(err => {
+                                        console.log("Video autoplay failed:", err);
+                                    });
                                 }}
-                            />
+                            >
+                                <source src={examples[selectedOption - 1].video} type="video/mp4" />
+                            </video>
                         </div>
                     </div>
                 </section>
