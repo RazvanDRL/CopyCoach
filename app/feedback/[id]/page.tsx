@@ -33,7 +33,10 @@ type AnalysisResult = {
         overallScore: number;
     };
     improvement: {
-        tips: string;
+        tips: {
+            title: string;
+            description: string;
+        }[];
         improvedVersion: string;
     };
 };
@@ -303,7 +306,14 @@ export default function Analyze() {
                     <CardContent className="p-6">
                         <div className="prose prose-sm max-w-none">
                             {analysisResult?.improvement?.tips ? (
-                                <div dangerouslySetInnerHTML={{ __html: htmlToStructuredText(DOMPurify.sanitize(analysisResult.improvement.tips)) }} />
+                                <div>
+                                    {analysisResult.improvement.tips.map((tip, index) => (
+                                        <div key={index} className="mb-4">
+                                            <h4 className="font-medium">{tip.title}</h4>
+                                            <p className="text-gray-600">{tip.description}</p>
+                                        </div>
+                                    ))}
+                                </div>
                             ) : (
                                 <p className="text-gray-600">No improvement tips available</p>
                             )}
@@ -329,10 +339,15 @@ export default function Analyze() {
                             <h3 className="text-lg font-semibold mb-2 mt-8 flex items-center justify-between">
                                 Improvement Tips
                             </h3>
-                            <div
-                                className="bg-gray-100 p-4 rounded-md whitespace-pre-wrap"
-                                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(analysisResult.improvement.tips) }}
-                            />
+
+                            <div>
+                                {analysisResult.improvement.tips.map((tip, index) => (
+                                    <div key={index} className="mb-4">
+                                        <h4 className="font-medium">{tip.title}</h4>
+                                        <p className="text-gray-600">{tip.description}</p>
+                                    </div>
+                                ))}
+                            </div>
 
                             <h3 className="text-lg font-semibold mb-2 mt-8 flex items-center justify-between">
                                 Improved Version

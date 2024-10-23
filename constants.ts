@@ -1,4 +1,4 @@
-export type Task = "blog_post" | "captions" | "email_marketing" | "flyer" | "social_media" | "story_scripts" | "product_description" | "story_scripts";
+export type Task = "blog_post" | "captions" | "email_marketing" | "flyer" | "social_media" | "story_scripts" | "product_description";
 
 export const niches = [
     {

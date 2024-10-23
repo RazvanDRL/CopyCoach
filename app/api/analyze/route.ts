@@ -19,7 +19,6 @@ type Exercise = {
     created_at: string;
     niche: string;
     task: string;
-
 };
 
 const AnalysisResultSchema = z.object({
@@ -34,10 +33,12 @@ const AnalysisResultSchema = z.object({
         consistency: z.number(),
         emotionalAppeal: z.number(),
         ctaEffectiveness: z.number(),
-        overallScore: z.number(),
     }),
     improvement: z.object({
-        tips: z.string(),
+        tips: z.array(z.object({
+            title: z.string(),
+            description: z.string()
+        })),
         improvedVersion: z.string(),
     }),
 });
@@ -215,37 +216,86 @@ export async function POST(req: Request) {
         const exercise = exerciseData as Exercise;
         const response = chatData.response;
 
+        const systemPrompt = `ALWAYS USE Chain-of-Thought (CoT) reasoning in your analysis. You are CopyCoach's Master Copywriting Mentor, a world-class expert with decades of experience crafting high-converting copy across all industries. Your expertise combines proven psychological principles, marketing fundamentals, and modern conversion optimization techniques.
+
+Your analysis must be:
+1. Precise and data-driven, using specific examples from the text
+2. Constructive yet direct, maintaining a mentor's authority
+3. Educational, explaining the "why" behind each suggestion
+4. Focused on measurable improvement in conversion potential
+
+When analyzing copy, evaluate these elements with scientific precision:
+
+CORE METRICS (Score 0-10):
+- Clarity: Message comprehension within 5 seconds
+- Audience Relevance: Alignment with target audience pain points and desires
+- Persuasiveness: Use of proven persuasion principles (scarcity, social proof, etc.)
+- Structure: Logical flow and proper format-specific structure
+- Grammar: Technical accuracy and professional polish
+- Tone: Brand voice consistency and audience appropriateness
+- Attention Grabbing: Hook strength and pattern interruption
+- Consistency: Message coherence throughout
+- Emotional Appeal: Psychological trigger effectiveness
+- CTA Effectiveness: Action motivation and friction reduction
+
+Scoring Guide:
+0-2: Requires complete overhaul
+3-4: Major improvements needed
+5-6: Meets basic standards
+7-8: Professional quality
+9-10: Industry-leading excellence
+
+Your feedback must transform the writer's understanding of effective copy while maintaining their unique voice.`;
+
         const userPrompt = (exercise: Exercise, response: string) => `
-You are an expert copywriting evaluator and coach. Your task is to evaluate the following copywriting response, providing clear, balanced feedback in JSON format. The evaluation must include:
+ANALYSIS CONTEXT
+Task: ${exercise.task}
+Niche: ${exercise.niche}
 
-1. Scores (0-10) for: clarity, audience relevance, persuasiveness, structure, grammar, tone, attention-grabbing, consistency, emotional appeal, CTA effectiveness, and overall score (calculated as the accurate median of the 10 scores).
+ORIGINAL BRIEF
+${exercise.title}
+${exercise.description}
 
-   - The median score should be the middle value when the scores are arranged in numerical order. If there are two middle numbers, the median is the average of those two numbers.
+KEY REQUIREMENTS
+${exercise.needs}
 
-2. Improvement Tips:
-    - Include positive feedback for any category where the score is 8 or above, and explain why the copy performed well in that category.
-    - For scores below 8, provide constructive tips on how to improve.
-    - Congratulate the user on areas where they scored well, and clearly explain the strengths of the copy.
-    - For categories that scored below 8, provide clear and actionable advice for improvement.
-    - Structure the feedback clearly: start with Strengths first, followed by Improvement Tips.
+ADDITIONAL CONTEXT
+${exercise.details}
+${exercise.notes}
 
-    Improvement Tips format:
-    Strengths: 
-      - <strong>Clarity (Score: 9)</strong>: Your copy is clear and easy to understand, which is essential for keeping your audience engaged. The simplicity of your language ensures the message is conveyed effectively. <br>
-    <br>
-    Improvement Tips:
-      - <strong>Persuasiveness (Score: 6)</strong>: While your points are strong, adding a more emotional appeal could make the copy more persuasive. Consider using phrases like “imagine how much time you could save” to create a connection with the reader.
+SUBMISSION FOR ANALYSIS:
+${response}
 
-3. Revised version:
-    - Rewrite the response using your own expert-level copywriting skills.
-    - Ensure that the revised version reflects the specific tips provided in the expert feedback, especially addressing any areas of improvement.
-    - If the original copy had strong points, preserve those strengths in the revised version and emphasize the improvements.
+FORMAT-SPECIFIC EVALUATION POINTS:
+${getFormatSpecificCriteria(exercise.task)}
 
-Exercise: ${exercise}
-Response: ${response}
-`;
-        const systemPrompt = `You are a highly skilled copywriting evaluator and coach. Use understandable language by a beginner and be realistic. Always provide scores and feedback for copywriting exercises. When a score is 8 or higher, you must congratulate the user and provide specific reasons why the copy is strong in that category. For lower scores, provide detailed improvement suggestions. Ensure all feedback is constructive, balanced, and actionable. Make sure to use HTML tags to format the tips and improvedVersion.`;
+Analyze this submission through the lens of a conversion-focused expert:
+1. Evaluate each core metric with specific examples
+2. Identify critical conversion barriers
+3. Highlight strongest elements to maintain
+4. Provide strategic improvements that could double conversion potential
+5. Format the improvedVersion with semantic HTML tags like <p>, <h1>-<h6>, <ul>, <li>, <strong>, <em> - no buttons, images or styling
 
+Return a structured analysis following the AnalysisResultSchema format, ensuring:
+- Scores are justified with specific examples
+- Tips focus on highest-impact changes first, must also include relevant examples
+- Improved version maintains core message while implementing all critical fixes, and is in HTML format`;
+
+        // Helper function to provide format-specific evaluation criteria
+        function getFormatSpecificCriteria(task: string): string {
+            // Let's analyze each task type and determine specific evaluation criteria
+            const criteria = {
+                'blog_post': 'SEO optimization, headline impact, content structure, internal linking strategy, readability score, content depth, keyword usage, meta description effectiveness',
+                'captions': 'Hook strength, brevity, emoji usage, personality match, hashtag relevance, call-to-action placement, engagement prompt effectiveness',
+                'email_marketing': 'Subject line open rate potential, preview text optimization, email flow, spam trigger avoidance, segmentation relevance, personalization elements',
+                'flyer': 'Visual hierarchy, headline impact, information organization, white space usage, contact information placement, call-to-action visibility',
+                'social_media': 'Platform tone alignment, character count optimization, hashtag strategy, engagement triggers, visual-text harmony, trend relevance',
+                'story_scripts': 'Narrative flow, character development, emotional resonance, pacing, dialogue authenticity, scene transitions, story arc completion',
+                'product_description': 'Feature-benefit balance, technical accuracy, SEO optimization, buying objection handling, specification clarity, comparative advantages'
+            };
+
+            return criteria[task as keyof typeof criteria] || 'Standard copywriting best practices including clarity, persuasion, and audience relevance';
+        }
 
         console.log('Sending request to OpenAI...', new Date().getTime());
 
@@ -256,6 +306,7 @@ Response: ${response}
                 { role: "user", content: userPrompt(exercise, response) }
             ],
             response_format: zodResponseFormat(AnalysisResultSchema, "analysis_result"),
+            temperature: 0.5,
         });
         const input_token_price = 0.00000015;
         const output_token_price = 0.0000006;
@@ -268,7 +319,11 @@ Response: ${response}
             throw new Error('Failed to parse OpenAI response');
         }
         const result: AnalysisResult = parsedResult;
-        await addXP(userId, result.scores.overallScore);
+
+
+        const overallScore = Object.values(result.scores).reduce((acc, curr) => acc + curr, 0) / Object.values(result.scores).length;
+        console.log('Overall score:', overallScore);
+        await addXP(userId, overallScore);
 
         const { error: insertError } = await supabaseAdmin
             .from('analysis_results')
