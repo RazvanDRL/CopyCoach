@@ -324,7 +324,7 @@ const LandingPage: React.FC = () => {
                             <video
                                 src={examples[selectedOption - 1].video}
                                 autoPlay
-                                controls={false}
+                                controls={true}
                                 muted
                                 width={500}
                                 height={500}
