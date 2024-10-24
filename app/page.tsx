@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/navbar';
@@ -17,6 +17,7 @@ import Pricing from '@/components/pricing';
 import Head from 'next/head';
 import VarameaAvatar from '@/public/avatars/varamea.jpg';
 import CeciuAvatar from '@/public/avatars/ceciu.jpg';
+import ReactPlayer from 'react-player'
 
 const BricolageGrotesque = localFont({
     src: './fonts/BricolageGrotesque.ttf',
@@ -99,17 +100,13 @@ const withCopyCoach = [{
 }]
 
 const LandingPage: React.FC = () => {
-    const [selectedOption, setSelectedOption] = useState<1 | 2 | 3>(1);
-    const videoRef = useRef<HTMLVideoElement>(null);
-
+    const [hasWindow, setHasWindow] = useState(false);
     useEffect(() => {
-        // Try to play video when component mounts and when selectedOption changes
-        if (videoRef.current) {
-            videoRef.current.play().catch(err => {
-                console.log("Video autoplay failed:", err);
-            });
+        if (typeof window !== "undefined") {
+            setHasWindow(true);
         }
-    }, [selectedOption]);
+    }, []);
+    const [selectedOption, setSelectedOption] = useState<1 | 2 | 3>(1);
 
     return (
         <>
@@ -117,24 +114,6 @@ const LandingPage: React.FC = () => {
                 <meta name="description" content="Learn copywriting by doing. Master copywriting by exercising with real-world scenarios. Improve with custom AI feedback." />
                 <link rel="canonical" href="https://copy-coach.com" />
             </Head>
-            <link
-                rel="preload"
-                href="/steps/step1.mp4"
-                as="video"
-                type="video/mp4"
-            />
-            <link
-                rel="preload"
-                href="/steps/step2.mp4"
-                as="video"
-                type="video/mp4"
-            />
-            <link
-                rel="preload"
-                href="/steps/step3.mp4"
-                as="video"
-                type="video/mp4"
-            />
             <Navbar />
             <main className="bg-white max-w-5xl mx-auto">
                 {/* Section - landing */}
@@ -331,26 +310,32 @@ const LandingPage: React.FC = () => {
                             </li>
                         </ul>
                         <div className="rounded-lg aspect-square w-full max-w-[26rem] mx-auto lg:mx-0 border-2 border-[#007FFF]/10">
-                            <video
-                                autoPlay
-                                controls={true}
-                                muted
-                                width={500}
-                                height={500}
-                                loop
-                                playsInline
-                                preload="auto"
-                                webkit-playsinline="true"
-                                className="rounded-lg w-full h-full object-cover opacity-100"
-                                onLoadedData={(e) => {
-                                    const video = e.target as HTMLVideoElement;
-                                    video.play().catch(err => {
-                                        console.log("Video autoplay failed:", err);
-                                    });
-                                }}
-                            >
-                                <source src={examples[selectedOption - 1].video} type="video/mp4" />
-                            </video>
+                            {hasWindow &&
+                                <ReactPlayer
+                                    url={examples[selectedOption - 1].video}
+                                    width="100%"
+                                    height="100%"
+                                    playing={true}
+                                    controls={true}
+                                    muted={true}
+                                    loop={true}
+                                    playsinline={true}
+                                    config={{
+                                        file: {
+                                            attributes: {
+                                                className: "rounded-lg w-full h-full object-cover opacity-100",
+                                                playsInline: true,
+                                                webkitplaysinline: "true"
+                                            }
+                                        }
+                                    }}
+                                    onReady={(player) => {
+                                        player.getInternalPlayer().play().catch((err: any) => {
+                                            console.log("Video autoplay failed:", err);
+                                        });
+                                    }}
+                                />
+                            }
                         </div>
                     </div>
                 </section>
