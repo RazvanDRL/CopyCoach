@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/navbar';
@@ -100,6 +100,16 @@ const withCopyCoach = [{
 
 const LandingPage: React.FC = () => {
     const [selectedOption, setSelectedOption] = useState<1 | 2 | 3>(1);
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    useEffect(() => {
+        // Try to play video when component mounts and when selectedOption changes
+        if (videoRef.current) {
+            videoRef.current.play().catch(err => {
+                console.log("Video autoplay failed:", err);
+            });
+        }
+    }, [selectedOption]);
 
     return (
         <>
@@ -107,7 +117,7 @@ const LandingPage: React.FC = () => {
                 <meta name="description" content="Learn copywriting by doing. Master copywriting by exercising with real-world scenarios. Improve with custom AI feedback." />
                 <link rel="canonical" href="https://copy-coach.com" />
             </Head>
-            {/* <link
+            <link
                 rel="preload"
                 href="/steps/step1.mp4"
                 as="video"
@@ -124,7 +134,7 @@ const LandingPage: React.FC = () => {
                 href="/steps/step3.mp4"
                 as="video"
                 type="video/mp4"
-            /> */}
+            />
             <Navbar />
             <main className="bg-white max-w-5xl mx-auto">
                 {/* Section - landing */}
