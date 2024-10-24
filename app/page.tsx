@@ -17,7 +17,6 @@ import Pricing from '@/components/pricing';
 import Head from 'next/head';
 import VarameaAvatar from '@/public/avatars/varamea.jpg';
 import CeciuAvatar from '@/public/avatars/ceciu.jpg';
-import ReactPlayer from 'react-player'
 
 const BricolageGrotesque = localFont({
     src: './fonts/BricolageGrotesque.ttf',
@@ -311,29 +310,14 @@ const LandingPage: React.FC = () => {
                         </ul>
                         <div className="rounded-lg aspect-square w-full max-w-[26rem] mx-auto lg:mx-0 border-2 border-[#007FFF]/10">
                             {hasWindow &&
-                                <ReactPlayer
-                                    url={examples[selectedOption - 1].video}
-                                    width="100%"
-                                    height="100%"
-                                    playing={true}
-                                    controls={true}
-                                    muted={true}
-                                    loop={true}
-                                    playsinline={true}
-                                    config={{
-                                        file: {
-                                            attributes: {
-                                                className: "rounded-lg w-full h-full object-cover opacity-100",
-                                                playsInline: true,
-                                                webkitplaysinline: "true"
-                                            }
-                                        }
-                                    }}
-                                    onReady={(player) => {
-                                        player.getInternalPlayer().play().catch((err: any) => {
-                                            console.log("Video autoplay failed:", err);
-                                        });
-                                    }}
+                                <video
+                                    src="/steps/output.mp4"
+                                    className="rounded-lg object-cover aspect-square relative"
+                                    autoPlay
+                                    muted
+                                    loop
+                                    playsInline
+                                    controls
                                 />
                             }
                         </div>
