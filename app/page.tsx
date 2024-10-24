@@ -28,18 +28,18 @@ const examples = [
     {
         title: "Practice with real-world scenarios",
         description: "You'll get a fictive client alongside a brief of their business, experiencing what it's like to write for real businesses, and learning exactly what works!",
-        video: "/steps/step1.mp4",
+        video: "/steps/step1.gif",
     },
 
     {
         title: "Get feedback that matters",
         description: "With each exercise, you'll receive a score, tips on where you can improve, and a revised version of your work, showing you exactly what, why and how to improve.",
-        video: "/steps/step2.mp4",
+        video: "/steps/step2.gif",
     },
     {
         title: "Watch your skills grow",
         description: "Complete exercises, level up, and build confidence in your writing abilities! Plus, you're never alone - you will be part of a community of dedicated writers helping each other!",
-        video: "/steps/step3.mp4",
+        video: "/steps/step3.gif",
     },
 ]
 
@@ -309,17 +309,15 @@ const LandingPage: React.FC = () => {
                             </li>
                         </ul>
                         <div className="rounded-lg aspect-square w-full max-w-[26rem] mx-auto lg:mx-0 border-2 border-[#007FFF]/10">
-                            {hasWindow &&
-                                <video
-                                    src="/steps/output.mp4"
-                                    className="rounded-lg object-cover aspect-square relative"
-                                    muted
-                                    loop
-                                    playsInline
-                                    controls
-                                    preload="auto"
-                                />
-                            }
+                            <Image
+                                src={examples[selectedOption - 1].video}
+                                alt="steps gif"
+                                width={500}
+                                height={500}
+                                className="rounded-lg object-cover aspect-square relative"
+                                unoptimized
+                                priority
+                            />
                         </div>
                     </div>
                 </section>
