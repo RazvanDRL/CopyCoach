@@ -313,11 +313,11 @@ const LandingPage: React.FC = () => {
                                 <video
                                     src="/steps/output.mp4"
                                     className="rounded-lg object-cover aspect-square relative"
-                                    autoPlay
                                     muted
                                     loop
                                     playsInline
                                     controls
+                                    preload="auto"
                                 />
                             }
                         </div>
