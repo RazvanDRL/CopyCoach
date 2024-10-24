@@ -107,7 +107,7 @@ const LandingPage: React.FC = () => {
                 <meta name="description" content="Learn copywriting by doing. Master copywriting by exercising with real-world scenarios. Improve with custom AI feedback." />
                 <link rel="canonical" href="https://copy-coach.com" />
             </Head>
-            <link
+            {/* <link
                 rel="preload"
                 href="/steps/step1.mp4"
                 as="video"
@@ -124,7 +124,7 @@ const LandingPage: React.FC = () => {
                 href="/steps/step3.mp4"
                 as="video"
                 type="video/mp4"
-            />
+            /> */}
             <Navbar />
             <main className="bg-white max-w-5xl mx-auto">
                 {/* Section - landing */}
