@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Check, ArrowRight, Lock } from 'lucide-react';
+import { Check, ArrowRight, Lock, Building2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import StripeLogo from '@/public/logos/stripe.svg';
 import Image from 'next/image';
@@ -137,7 +137,25 @@ const Pricing: React.FC<PricingProps> = ({ className, user }) => {
                     ))}
                 </div>
 
-                <Link href="https://stripe.com/" target="_blank" className="flex items-center justify-center mt-8 h-10">
+                <div className="mt-12 text-center">
+                    <div className="inline-flex items-center gap-2 mb-4">
+                        <Building2 className="h-6 w-6 text-[#007FFF]" />
+                        <h2 className={cn("text-2xl font-bold", bricolage.className)}>Enterprise</h2>
+                    </div>
+                    <p className="text-muted-foreground mb-6">
+                        Need a custom solution for your team? Let's talk.
+                    </p>
+
+                    <Link href="https://calendly.com/arthurluca/enterprise-plan-copycoach" target="_blank" >
+                        <Button variant="outline" className="">
+                            Schedule a call
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                    </Link>
+
+                </div>
+
+                <Link href="https://stripe.com/" target="_blank" className="flex items-center justify-center mt-4 h-10">
                     <Lock className="h-4 w-4 text-gray-400 mr-2" />
                     <span className="text-sm text-gray-500">Secured by</span>
                     <Image src={StripeLogo} alt="Stripe" width={37} height={10} className="ml-1" />
