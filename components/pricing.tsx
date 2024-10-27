@@ -143,7 +143,7 @@ const Pricing: React.FC<PricingProps> = ({ className, user }) => {
                         <h2 className={cn("text-2xl font-bold", bricolage.className)}>Enterprise</h2>
                     </div>
                     <p className="text-muted-foreground mb-6">
-                        Need a custom solution for your team? Let's talk.
+                        Need a custom solution for your team? Let&apos;s talk.
                     </p>
 
                     <Link href="https://calendly.com/arthurluca/enterprise-plan-copycoach" target="_blank" >
