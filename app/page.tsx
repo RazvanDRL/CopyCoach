@@ -14,7 +14,6 @@ import { Pen, Book, Sparkles, Star, Frown, Smile, Mail, FileText, ArrowRight, Ge
 import localFont from 'next/font/local';
 import Image from 'next/image';
 import Pricing from '@/components/pricing';
-import Head from 'next/head';
 import VarameaAvatar from '@/public/avatars/varamea.jpg';
 import CeciuAvatar from '@/public/avatars/ceciu.jpg';
 
@@ -103,79 +102,6 @@ const LandingPage: React.FC = () => {
 
     return (
         <>
-            <Head>
-                <title>CopyCoach - Learn copywriting by doing</title>
-                <meta
-                    name="description"
-                    content="Learn copywriting by doing. Master copywriting by exercising with real-world scenarios. Improve with custom AI feedback." />
-                <meta
-                    name="keywords"
-                    content="copycoach, copy coach, copywriting, copywriting exercises, copywriting practice, copywriting feedback, copywriting skills, copywriting improvement, copywriting learning, learn copywriting, learn copywriting ai, copywriting ai, ai copywriting, ai copywriting coach, ai copywriting practice, ai copywriting exercises, ai copywriting feedback, ai copywriting skills, ai copywriting improvement, ai copywriting learning"
-                />
-                <meta name="robots" content="index, follow" />
-                <meta name="googlebot" content="index, follow" />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                <meta charSet="utf-8" />
-                <meta property="og:site_name" content="CopyCoach | Learn copywriting by doing" />
-                <meta property="og:locale" content="en_US" />
-                <meta
-                    property="og:title"
-                    content="CopyCoach - Learn copywriting by doing" />
-                <meta
-                    property="og:description"
-                    content="Learn copywriting by doing. Master copywriting by exercising with real-world scenarios. Improve with custom AI feedback." />
-                <meta
-                    property="og:type"
-                    content="website" />
-                <meta
-                    property="og:url"
-                    content="https://copy-coach.com" />
-
-                <meta
-                    property="og:image"
-                    content="https://copy-coach.com/opengraph-image.png" />
-                <meta
-                    property="og:image:alt"
-                    content="CopyCoach - Learn copywriting by doing" />
-                <meta
-                    property="og:image:type"
-                    content="image/png" />
-                <meta
-                    property="og:image:width"
-                    content="1200" />
-                <meta
-                    property="og:image:height"
-                    content="630" />
-                <meta
-                    property="article:published_time"
-                    content="2024-11-02" />
-                <meta
-                    property="article:modified_time"
-                    content="2024-11-02" />
-                <meta
-                    property="article:author"
-                    content="https://www.linkedin.com/in/dirlea-stefan" />
-                <meta
-                    name="twitter:card"
-                    content="summary_large_image" />
-                <meta
-                    name="twitter:site"
-                    content="@arthurluca101" />
-                <meta
-                    name="twitter:creator"
-                    content="@arthurluca101" />
-                <meta
-                    name="twitter:title"
-                    content="CopyCoach - Learn copywriting by doing" />
-                <meta
-                    name="twitter:description"
-                    content="Learn copywriting by doing. Master copywriting by exercising with real-world scenarios. Improve with custom AI feedback." />
-                <meta
-                    name="twitter:image"
-                    content="https://copy-coach.com/opengraph-image.png" />
-
-                <link rel="canonical" href="https://copy-coach.com" />
-            </Head>
             <Navbar />
             <main className="bg-white max-w-5xl mx-auto">
                 {/* Section - landing */}

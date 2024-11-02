@@ -12,10 +12,22 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://copy-coach.com"),
+  title: "CopyCoach - Learn copywriting by doing",
+  description: "Learn copywriting by doing. Master copywriting by exercising with real-world scenarios. Improve with custom AI feedback.",
   openGraph: {
     siteName: "CopyCoach - Learn copywriting by doing",
     type: "website",
-    locale: "en_US"
+    locale: "en_US",
+    title: "CopyCoach - Learn copywriting by doing",
+    description: "Learn copywriting by doing. Master copywriting by exercising with real-world scenarios. Improve with custom AI feedback.",
+    images: [
+      {
+        url: "https://copy-coach.com/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "CopyCoach - Learn copywriting by doing"
+      }
+    ]
   },
   robots: {
     index: true,
@@ -121,19 +133,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <meta property="og:url" content="https://copy-coach.com" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="CopyCoach - Learn copywriting by doing" />
-        <meta property="og:description" content="Learn copywriting by doing. Master copywriting by exercising with real-world scenarios. Improve with custom AI feedback." />
-        <meta property="og:image" content="https://copy-coach.com/opengraph-image.png" />
-        <link rel="icon" type="image/png" href="/favicon-48x48.png" sizes="48x48" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <meta name="apple-mobile-web-app-title" content="CopyCoach" />
-        <link rel="manifest" href="/site.webmanifest" />
-      </head>
       <body className={inter.className}>
         <PlausibleProvider
           domain="copy-coach.com"
