@@ -13,7 +13,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://copy-coach.com"),
   title: "CopyCoach: AI-Powered Copywriting Training & Exercises",
-  description: "Transform your copywriting skills with AI-guided practice exercises and instant feedback. Write better headlines, emails, and ads through interactive training. Start free today.",
+  description: "Transform your copywriting skills with AI-guided practice exercises and instant feedback. Write better headlines, emails, and ads through interactive training.",
   alternates: {
     canonical: "https://copy-coach.com",
     languages: {
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     title: "CopyCoach: AI-Powered Copywriting Training & Exercises",
-    description: "Transform your copywriting skills with AI-guided practice exercises and instant feedback. Write better headlines, emails, and ads through interactive training. Start free today.",
+    description: "Transform your copywriting skills with AI-guided practice exercises and instant feedback. Write better headlines, emails, and ads through interactive training.",
     images: [
       {
         url: "https://copy-coach.com/opengraph-image.png",
