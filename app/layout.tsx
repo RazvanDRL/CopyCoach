@@ -12,14 +12,20 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://copy-coach.com"),
-  title: "CopyCoach - Learn copywriting by doing",
-  description: "Learn copywriting by doing. Master copywriting by exercising with real-world scenarios. Improve with custom AI feedback.",
+  title: "CopyCoach: AI-Powered Copywriting Training & Exercises",
+  description: "Transform your copywriting skills with AI-guided practice exercises and instant feedback. Write better headlines, emails, and ads through interactive training. Start free today.",
+  alternates: {
+    canonical: "https://copy-coach.com",
+    languages: {
+      "en-US": "https://copy-coach.com",
+    },
+  },
   openGraph: {
-    siteName: "CopyCoach - Learn copywriting by doing",
+    siteName: "CopyCoach",
     type: "website",
     locale: "en_US",
-    title: "CopyCoach - Learn copywriting by doing",
-    description: "Learn copywriting by doing. Master copywriting by exercising with real-world scenarios. Improve with custom AI feedback.",
+    title: "CopyCoach: AI-Powered Copywriting Training & Exercises",
+    description: "Transform your copywriting skills with AI-guided practice exercises and instant feedback. Write better headlines, emails, and ads through interactive training. Start free today.",
     images: [
       {
         url: "https://copy-coach.com/opengraph-image.png",
@@ -35,7 +41,7 @@ export const metadata: Metadata = {
     "max-image-preview": "large",
     "max-snippet": -1,
     "max-video-preview": -1,
-    googleBot: "index, follow"
+    googleBot: "index, follow",
   },
   applicationName: "CopyCoach - Learn copywriting by doing",
   appleWebApp: {
