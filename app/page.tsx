@@ -1,5 +1,5 @@
-"use client"
-import React, { useEffect, useState } from 'react';
+"use client";
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/navbar';
@@ -26,7 +26,7 @@ const BricolageGrotesque = localFont({
 
 const examples = [
     {
-        title: "Practice with real-world scenarios",
+        title: "Practice copywriting with real-world scenarios",
         description: "You'll get a fictive client alongside a brief of their business, experiencing what it's like to write for real businesses, and learning exactly what works!",
         video: "/steps/step1.gif",
     },
@@ -99,18 +99,81 @@ const withCopyCoach = [{
 }]
 
 const LandingPage: React.FC = () => {
-    const [hasWindow, setHasWindow] = useState(false);
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            setHasWindow(true);
-        }
-    }, []);
     const [selectedOption, setSelectedOption] = useState<1 | 2 | 3>(1);
 
     return (
         <>
             <Head>
-                <meta name="description" content="Learn copywriting by doing. Master copywriting by exercising with real-world scenarios. Improve with custom AI feedback." />
+                <title>CopyCoach - Learn copywriting by doing</title>
+                <meta
+                    name="description"
+                    content="Learn copywriting by doing. Master copywriting by exercising with real-world scenarios. Improve with custom AI feedback." />
+                <meta
+                    name="keywords"
+                    content="copycoach, copy coach, copywriting, copywriting exercises, copywriting practice, copywriting feedback, copywriting skills, copywriting improvement, copywriting learning, learn copywriting, learn copywriting ai, copywriting ai, ai copywriting, ai copywriting coach, ai copywriting practice, ai copywriting exercises, ai copywriting feedback, ai copywriting skills, ai copywriting improvement, ai copywriting learning"
+                />
+                <meta name="robots" content="index, follow" />
+                <meta name="googlebot" content="index, follow" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <meta charSet="utf-8" />
+                <meta property="og:site_name" content="CopyCoach | Learn copywriting by doing" />
+                <meta property="og:locale" content="en_US" />
+                <meta
+                    property="og:title"
+                    content="CopyCoach - Learn copywriting by doing" />
+                <meta
+                    property="og:description"
+                    content="Learn copywriting by doing. Master copywriting by exercising with real-world scenarios. Improve with custom AI feedback." />
+                <meta
+                    property="og:type"
+                    content="website" />
+                <meta
+                    property="og:url"
+                    content="https://copy-coach.com" />
+
+                <meta
+                    property="og:image"
+                    content="https://copy-coach.com/opengraph-image.png" />
+                <meta
+                    property="og:image:alt"
+                    content="CopyCoach - Learn copywriting by doing" />
+                <meta
+                    property="og:image:type"
+                    content="image/png" />
+                <meta
+                    property="og:image:width"
+                    content="1200" />
+                <meta
+                    property="og:image:height"
+                    content="630" />
+                <meta
+                    property="article:published_time"
+                    content="2024-11-02" />
+                <meta
+                    property="article:modified_time"
+                    content="2024-11-02" />
+                <meta
+                    property="article:author"
+                    content="https://www.linkedin.com/in/dirlea-stefan" />
+                <meta
+                    name="twitter:card"
+                    content="summary_large_image" />
+                <meta
+                    name="twitter:site"
+                    content="@arthurluca101" />
+                <meta
+                    name="twitter:creator"
+                    content="@arthurluca101" />
+                <meta
+                    name="twitter:title"
+                    content="CopyCoach - Learn copywriting by doing" />
+                <meta
+                    name="twitter:description"
+                    content="Learn copywriting by doing. Master copywriting by exercising with real-world scenarios. Improve with custom AI feedback." />
+                <meta
+                    name="twitter:image"
+                    content="https://copy-coach.com/opengraph-image.png" />
+
                 <link rel="canonical" href="https://copy-coach.com" />
             </Head>
             <Navbar />
@@ -130,7 +193,7 @@ const LandingPage: React.FC = () => {
                         </h1>
 
                         <h2 className="-mt-4 md:-mt-0 px-4 md:px-0 text-base sm:text-lg md:text-xl lg:text-2xl text-center text-black/50 font-semibold relative">
-                            Practice with real-world scenarios.<br className="hidden sm:block" />
+                            Practice copywriting with real-world scenarios.<br className="hidden sm:block" />
                             Get personalized AI feedback to improve faster.
                         </h2>
 

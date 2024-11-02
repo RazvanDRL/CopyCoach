@@ -22,7 +22,7 @@ export default function Footer() {
               CopyC<span className="text-[#007FFF]">o</span>ach
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Empowering writers with AI-driven insights and practical exercises to master the art of copywriting.
+              The only platform that allows you to learn copywriting using a hands-on approach.
             </p>
             <div className="flex space-x-4">
               <Button variant="outline" size="icon" className="hover:bg-[#007FFF]/10 transition-colors" asChild>

@@ -115,9 +115,9 @@ export default function Onboarding() {
                                     />
                                     <div className="mb-8">
                                         <label className="block text-lg font-semibold text-gray-800 mb-2">
-                                            What's your copywriting experience?
+                                            What&apos;s your copywriting experience?
                                         </label>
-                                        <p className="text-gray-600 mb-4">We'll adjust the difficulty of exercises accordingly</p>
+                                        <p className="text-gray-600 mb-4">We&apos;ll adjust the difficulty of exercises accordingly</p>
 
                                         <div className="space-y-4">
                                             {[
@@ -218,7 +218,7 @@ export default function Onboarding() {
 
                                     <h2 className={`${bricolage.className} text-lg font-semibold`}>Learning Style</h2>
                                     <p className="text-base text-gray-600 mb-3">
-                                        Choose how you'd like to approach the exercises:
+                                        Choose how you&apos;d like to approach the exercises:
                                     </p>
 
                                     <div className="space-y-4 mb-8">
