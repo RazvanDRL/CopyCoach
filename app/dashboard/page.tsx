@@ -39,66 +39,7 @@ import Footer from "@/components/footer"
 import { bricolage } from "@/fonts/font"
 import { sleep } from "openai/core.mjs"
 import { toast, Toaster } from 'sonner'
-
-interface ComboboxProps {
-  placeholder: string
-  value: string
-  onChange: (value: string) => void
-  options: { value: string; label: string }[]
-  className?: string
-  disabled?: boolean
-}
-
-function Combobox({ placeholder, value, onChange, options, className, disabled }: ComboboxProps) {
-  const [open, setOpen] = useState(false)
-
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className={cn("w-full sm:w-[200px] justify-between", className)}
-          disabled={disabled}
-        >
-          {value
-            ? options.find((option) => option.value === value)?.label
-            : placeholder}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-full sm:w-[200px] p-0">
-        <Command>
-          <CommandInput placeholder="Search option..." />
-          <CommandList>
-            <CommandEmpty>No option found.</CommandEmpty>
-            <CommandGroup>
-              {options.map((option) => (
-                <CommandItem
-                  key={option.value}
-                  value={option.value}
-                  onSelect={(currentValue) => {
-                    onChange(currentValue === value ? "" : currentValue)
-                    setOpen(false)
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === option.value ? "block" : "hidden"
-                    )}
-                  />
-                  {option.label}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover >
-  )
-}
+import Combobox from "@/components/combobox"
 
 interface ExerciseHistoryItem {
   id: string;
@@ -116,13 +57,13 @@ export default function Dashboard() {
   const [showAllExercises, setShowAllExercises] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    fetchUser().then(user => {
-      if (user) {
-        fetchExerciseHistory(user);
-      }
-    });
-  }, []);
+    useEffect(() => {
+        fetchUser().then(user => {
+            if (user) {
+                fetchExerciseHistory(user);
+            }
+        });
+    }, []);
 
   const fetchUser = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -255,215 +196,216 @@ export default function Dashboard() {
     return <Loading />
   }
 
-  return (
-    <>
-      <Navbar />
-      <Toaster position="top-center" richColors />
-      <main className="flex flex-col items-center min-h-screen px-8">
-        <h1 className={`${bricolage.className} mt-24 sm:mt-48 text-3xl sm:text-4xl font-bold mb-3 text-center`}>👋 Welcome, {user.email?.split('@')[0]}</h1>
-        <p className="text-base sm:text-lg text-gray-600 mb-10 text-center">
-          Customize your copywriting exercise or try a random one
-          <TooltipProvider>
-            <Tooltip delayDuration={0}>
-              <TooltipTrigger onClick={async (event) => {
-                event.preventDefault(); // Prevent default behavior
-                const target = event.currentTarget;
-                await sleep(0);
-                target.blur();
-                target.focus();
-              }}
-                className="focus:outline-none" // Remove default focus styles
-              >
-                <span>
-                  <CircleHelp className="text-[#0d0e0f] ml-2 h-4 w-4 opacity-50 hover:opacity-100 cursor-help" />
-                </span>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p className="max-w-sm text-le">
-                  You&apos;ll receive a practice client with details about their business and task. Complete the exercise to get evaluated and personalized tips for improvement!
+    return (
+        <>
+            <Navbar />
+            <Toaster position="top-center" richColors />
+            <main className="flex flex-col items-center min-h-screen px-8">
+                <h1 className={`${bricolage.className} mt-24 sm:mt-48 text-3xl sm:text-4xl font-bold mb-3 text-center`}>👋 Welcome, {user.email?.split('@')[0]}</h1>
+                <p className="text-base sm:text-lg text-gray-600 mb-10 text-center">
+                    Customize your copywriting exercise or try a random one
+                    <TooltipProvider>
+                        <Tooltip delayDuration={0}>
+                            <TooltipTrigger onClick={async (event) => {
+                                event.preventDefault(); // Prevent default behavior
+                                const target = event.currentTarget;
+                                await sleep(0);
+                                target.blur();
+                                target.focus();
+                            }}
+                                className="focus:outline-none" // Remove default focus styles
+                            >
+                                <span>
+                                    <CircleHelp className="text-[#0d0e0f] ml-2 h-4 w-4 opacity-50 hover:opacity-100 cursor-help" />
+                                </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p className="max-w-sm text-le">
+                                    You&apos;ll receive a practice client with details about their business and task. Complete the exercise to get evaluated and personalized tips for improvement!
+                                </p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </p>
-        <div className="py-8 items-center justify-center flex flex-col sm:flex-row gap-4 sm:gap-8 w-full max-w-xl">
-          <div className="flex flex-row items-center w-full sm:w-auto">
-            <Combobox
-              placeholder="1. Select a niche"
-              value={niche}
-              onChange={setNiche}
-              options={niches}
-              className={cn("w-full sm:w-[200px]", niche ? "border-green-500" : "")}
-            />
-            <TooltipProvider>
-              <Tooltip delayDuration={0}>
-                <TooltipTrigger onClick={async (event) => {
-                  event.preventDefault(); // Prevent default behavior
-                  const target = event.currentTarget;
-                  await sleep(0);
-                  target.blur();
-                  target.focus();
-                }}
-                  className="focus:outline-none" // Remove default focus styles
-                >
-                  <span>
-                    <CircleHelp className="ml-2 h-4 w-4 opacity-50 hover:opacity-100 cursor-help" />
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className="max-w-xs">
-                    The niche determines the industry your practice-client operates in.
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <ArrowRight className="hidden sm:block ml-4 sm:ml-8 h-4 w-4" />
-          </div>
-          <div className="flex flex-row items-center w-full sm:w-auto mt-4 sm:mt-0">
-            <Combobox
-              placeholder="2. Select a task"
-              value={task}
-              onChange={setTask}
-              options={availableTasks}
-              className={cn("w-full sm:w-[200px]", task ? "border-green-500" : "")}
-              disabled={!niche}
-            />
-            <TooltipProvider>
-              <Tooltip delayDuration={0}>
-                <TooltipTrigger onClick={async (event) => {
-                  event.preventDefault(); // Prevent default behavior
-                  const target = event.currentTarget;
-                  await sleep(0);
-                  target.blur();
-                  target.focus();
-                }}
-                  className="focus:outline-none" // Remove default focus styles
-                >
-                  <span>
-                    <CircleHelp className="ml-2 h-4 w-4 opacity-50 hover:opacity-100 cursor-help" />
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className="max-w-xs">
-                    The task determines the specific type of copywriting exercise you will complete.
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-        </div>
-        <div className="flex items-center justify-center flex-row gap-4 mt-8 w-full max-w-xl">
-          <Button
-            variant="outline"
-            onClick={randomSelect}
-            className="w-full sm:w-auto active:scale-95 transition-transform duration-100"
-          >
-            <Dices className="mr-2 h-4 w-4" />
-            Random
-          </Button>
-          <Button
-            className="w-full sm:w-auto bg-[#007FFF] hover:bg-[#007FFF] text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition duration-200 hover:scale-105 flex items-center justify-center"
-            disabled={!niche || !task || submitting}
-            onClick={handleSubmit}
-          >
-            {submitting ?
-              <div className="flex items-center justify-center">
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Loading...
-              </div>
-              :
-              <div className="flex items-center justify-center">
-                <Star className="mr-2 h-4 w-4" />
-                Ready to Start!
-              </div>
-            }
-          </Button>
-        </div>
-        <div className="mt-16 w-full max-w-5xl mx-auto">
-          <h2 className={`${bricolage.className} text-2xl md:text-3xl font-bold mb-4 text-left flex items-center`}>
-            <History className="mr-2 h-6 w-6" />
-            Exercise History
-          </h2>
-          {exerciseHistory.length > 0 ? (
-            <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-                {exerciseHistory
-                  .slice(0, showAllExercises ? exerciseHistory.length : 12)
-                  .map((exercise) => (
-                    <div key={exercise.id}>
-                      <Card className="transform hover:scale-105 transition-transform duration-300 shadow-lg rounded-xl overflow-hidden h-full flex flex-col">
-                        <CardHeader className={cn(
-                          "p-4 flex-shrink-0",
-                          exercise.grade ? "bg-[#007FFF]/10" : "bg-gray-100"
-                        )}>
-                          <CardTitle className="text-lg font-bold line-clamp-1">{exercise.title}</CardTitle>
-                        </CardHeader>
-                        <CardContent className="bg-white p-6 flex flex-col items-center justify-between flex-grow">
-                          {exercise.grade ? (
-                            <div className="flex items-center space-x-2">
-                              <Star className="text-yellow-500 w-5 h-5 sm:w-6 sm:h-6" />
-                              <p className={`${bricolage.className} text-xl font-semibold text-gray-800`}>{exercise.grade.toFixed(1)}/10</p>
-                            </div>
-                          ) : (
-                            <div className="flex items-center space-x-2">
-                              <p className="text-gray-500 font-medium">Incomplete</p>
-                            </div>
-                          )}
-                          {exercise.grade ? (
-                            <div className="flex flex-row gap-2 w-full items-center justify-center">
-                              <Button variant="ghost" className="mt-4" onClick={() => {
-                                toast.info("Reach level 20 to redo an exercise!");
-                              }}>
-                                <Redo2 className="mr-2 h-4 w-4" />
-                                Redo
-                              </Button>
-                              <Link href={`/feedback/${exercise.id}`}>
-                                <Button variant="ghost" className="mt-4">
-                                  View Details
-                                  <ArrowRight className="ml-2 h-4 w-4" />
-                                </Button>
-                              </Link>
-                            </div>
-                          ) :
-                            (
-                              <Link href={`/chat/${exercise.id}`}>
-                                <Button variant="ghost" className="mt-4">
-                                  Continue
-                                  <ArrowRight className="ml-2 h-4 w-4" />
-                                </Button>
-                              </Link>
-                            )}
-                        </CardContent>
-                      </Card>
+                <div className="py-8 items-center justify-center flex flex-col sm:flex-row gap-4 sm:gap-8 w-full max-w-xl">
+                    <div className="flex flex-row items-center w-full sm:w-auto">
+                        <Combobox
+                            placeholder="1. Select a niche"
+                            value={niche}
+                            onChange={setNiche}
+                            options={niches}
+                            className={cn("w-full sm:w-[200px]", niche ? "border-green-500" : "")}
+                            id="tour1-step1"
+                        />
+                        <TooltipProvider>
+                            <Tooltip delayDuration={0}>
+                                <TooltipTrigger onClick={async (event) => {
+                                    event.preventDefault(); // Prevent default behavior
+                                    const target = event.currentTarget;
+                                    await sleep(0);
+                                    target.blur();
+                                    target.focus();
+                                }}
+                                    className="focus:outline-none" // Remove default focus styles
+                                >
+                                    <span>
+                                        <CircleHelp className="ml-2 h-4 w-4 opacity-50 hover:opacity-100 cursor-help" />
+                                    </span>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p className="max-w-xs">
+                                        The niche determines the industry your practice-client operates in.
+                                    </p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                        <ArrowRight className="hidden sm:block ml-4 sm:ml-8 h-4 w-4" />
                     </div>
-                  ))}
-              </div>
-              <div>
-                {exerciseHistory.length > 12 && (
-                  <div className="text-center mb-12 md:mb-32">
+                    <div className="flex flex-row items-center w-full sm:w-auto mt-4 sm:mt-0">
+                        <Combobox
+                            placeholder="2. Select a task"
+                            value={task}
+                            onChange={setTask}
+                            options={availableTasks}
+                            className={cn("w-full sm:w-[200px]", task ? "border-green-500" : "")}
+                            disabled={!niche}
+                        />
+                        <TooltipProvider>
+                            <Tooltip delayDuration={0}>
+                                <TooltipTrigger onClick={async (event) => {
+                                    event.preventDefault(); // Prevent default behavior
+                                    const target = event.currentTarget;
+                                    await sleep(0);
+                                    target.blur();
+                                    target.focus();
+                                }}
+                                    className="focus:outline-none" // Remove default focus styles
+                                >
+                                    <span>
+                                        <CircleHelp className="ml-2 h-4 w-4 opacity-50 hover:opacity-100 cursor-help" />
+                                    </span>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p className="max-w-xs">
+                                        The task determines the specific type of copywriting exercise you will complete.
+                                    </p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </div>
+                </div>
+                <div className="flex items-center justify-center flex-row gap-4 mt-8 w-full max-w-xl">
                     <Button
-                      variant="outline"
-                      onClick={() => {
-                        setShowAllExercises(!showAllExercises);
-                      }}
+                        variant="outline"
+                        onClick={randomSelect}
+                        className="w-full sm:w-auto active:scale-95 transition-transform duration-100"
                     >
-                      {showAllExercises ? "View Less" : "View More"}
-                      <ArrowDown className={`ml-2 h-4 w-4 ${showAllExercises ? "rotate-180" : ""}`} />
+                        <Dices className="mr-2 h-4 w-4" />
+                        Random
                     </Button>
-                  </div>
-                )}
-              </div>
-            </>
-          ) : (
-            <Card>
-              <CardContent className="text-center py-8">
-                <p className="text-base sm:text-lg text-gray-600">You haven&apos;t completed any exercises yet. Start one now!</p>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-      </main >
-      <Footer />
-    </>
-  )
+                    <Button
+                        className="w-full sm:w-auto bg-[#007FFF] hover:bg-[#007FFF] text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition duration-200 hover:scale-105 flex items-center justify-center"
+                        disabled={!niche || !task || submitting}
+                        onClick={handleSubmit}
+                    >
+                        {submitting ?
+                            <div className="flex items-center justify-center">
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Loading...
+                            </div>
+                            :
+                            <div className="flex items-center justify-center">
+                                <Star className="mr-2 h-4 w-4" />
+                                Ready to Start!
+                            </div>
+                        }
+                    </Button>
+                </div>
+                <div className="mt-16 w-full max-w-5xl mx-auto">
+                    <h2 className={`${bricolage.className} text-2xl md:text-3xl font-bold mb-4 text-left flex items-center`}>
+                        <History className="mr-2 h-6 w-6" />
+                        Exercise History
+                    </h2>
+                    {exerciseHistory.length > 0 ? (
+                        <>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                                {exerciseHistory
+                                    .slice(0, showAllExercises ? exerciseHistory.length : 12)
+                                    .map((exercise) => (
+                                        <div key={exercise.id}>
+                                            <Card className="transform hover:scale-105 transition-transform duration-300 shadow-lg rounded-xl overflow-hidden h-full flex flex-col">
+                                                <CardHeader className={cn(
+                                                    "p-4 flex-shrink-0",
+                                                    exercise.grade ? "bg-[#007FFF]/10" : "bg-gray-100"
+                                                )}>
+                                                    <CardTitle className="text-lg font-bold line-clamp-1">{exercise.title}</CardTitle>
+                                                </CardHeader>
+                                                <CardContent className="bg-white p-6 flex flex-col items-center justify-between flex-grow">
+                                                    {exercise.grade ? (
+                                                        <div className="flex items-center space-x-2">
+                                                            <Star className="text-yellow-500 w-5 h-5 sm:w-6 sm:h-6" />
+                                                            <p className={`${bricolage.className} text-xl font-semibold text-gray-800`}>{exercise.grade.toFixed(1)}/10</p>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex items-center space-x-2">
+                                                            <p className="text-gray-500 font-medium">Incomplete</p>
+                                                        </div>
+                                                    )}
+                                                    {exercise.grade ? (
+                                                        <div className="flex flex-row gap-2 w-full items-center justify-center">
+                                                            <Button variant="ghost" className="mt-4" onClick={() => {
+                                                                toast.info("Reach level 20 to redo an exercise!");
+                                                            }}>
+                                                                <Redo2 className="mr-2 h-4 w-4" />
+                                                                Redo
+                                                            </Button>
+                                                            <Link href={`/feedback/${exercise.id}`}>
+                                                                <Button variant="ghost" className="mt-4">
+                                                                    View Details
+                                                                    <ArrowRight className="ml-2 h-4 w-4" />
+                                                                </Button>
+                                                            </Link>
+                                                        </div>
+                                                    ) :
+                                                        (
+                                                            <Link href={`/chat/${exercise.id}`}>
+                                                                <Button variant="ghost" className="mt-4">
+                                                                    Continue
+                                                                    <ArrowRight className="ml-2 h-4 w-4" />
+                                                                </Button>
+                                                            </Link>
+                                                        )}
+                                                </CardContent>
+                                            </Card>
+                                        </div>
+                                    ))}
+                            </div>
+                            <div>
+                                {exerciseHistory.length > 12 && (
+                                    <div className="text-center mb-12 md:mb-32">
+                                        <Button
+                                            variant="outline"
+                                            onClick={() => {
+                                                setShowAllExercises(!showAllExercises);
+                                            }}
+                                        >
+                                            {showAllExercises ? "View Less" : "View More"}
+                                            <ArrowDown className={`ml-2 h-4 w-4 ${showAllExercises ? "rotate-180" : ""}`} />
+                                        </Button>
+                                    </div>
+                                )}
+                            </div>
+                        </>
+                    ) : (
+                        <Card>
+                            <CardContent className="text-center py-8">
+                                <p className="text-base sm:text-lg text-gray-600">You haven&apos;t completed any exercises yet. Start one now!</p>
+                            </CardContent>
+                        </Card>
+                    )}
+                </div>
+            </main >
+            <Footer />
+        </>
+    )
 }
