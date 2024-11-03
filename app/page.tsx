@@ -103,6 +103,15 @@ const LandingPage: React.FC = () => {
     return (
         <>
             <Navbar />
+            {examples.map((example, index) => (
+                <link
+                    key={index}
+                    rel="preload"
+                    as="image"
+                    href={example.video}
+                    type="image/gif"
+                />
+            ))}
             <main className="bg-white max-w-5xl mx-auto">
                 {/* Section - landing */}
                 <section className="flex flex-col items-center justify-center min-h-[85dvh] relative overflow-hidden">
@@ -305,6 +314,7 @@ const LandingPage: React.FC = () => {
                                 height={500}
                                 className="rounded-lg object-cover aspect-square relative"
                                 unoptimized
+                                loading="eager"
                                 priority
                             />
                         </div>
