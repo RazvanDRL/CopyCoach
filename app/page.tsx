@@ -16,6 +16,7 @@ import Image from 'next/image';
 import Pricing from '@/components/pricing';
 import VarameaAvatar from '@/public/avatars/varamea.jpg';
 import CeciuAvatar from '@/public/avatars/ceciu.jpg';
+import Openreplay from '@/components/openReplay';
 
 const BricolageGrotesque = localFont({
     src: './fonts/BricolageGrotesque.ttf',
@@ -102,6 +103,7 @@ const LandingPage: React.FC = () => {
 
     return (
         <>
+            <Openreplay />
             <Navbar />
             <main className="bg-white max-w-5xl mx-auto">
                 {/* Section - landing */}

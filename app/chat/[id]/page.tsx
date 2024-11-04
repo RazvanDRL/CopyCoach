@@ -21,6 +21,7 @@ import { toast, Toaster } from 'sonner';
 import Footer from '@/components/footer';
 import Link from 'next/link';
 import { useParams } from 'next/navigation'
+import Openreplay from '@/components/openReplay';
 
 type Exercise = {
     id: string;
@@ -196,6 +197,7 @@ export default function Chat() {
     return (
         <>
             <Navbar />
+            <Openreplay />
             <Toaster richColors position="top-center" />
             <div className="mt-16 container mx-auto px-8 lg:px-0 py-8 max-w-4xl">
                 <Link href="/dashboard">

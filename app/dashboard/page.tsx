@@ -40,6 +40,7 @@ import { bricolage } from "@/fonts/font"
 import { sleep } from "openai/core.mjs"
 import { toast, Toaster } from 'sonner'
 import Combobox from "@/components/combobox"
+import Openreplay from '@/components/openReplay';
 
 interface ExerciseHistoryItem {
     id: string;
@@ -199,6 +200,7 @@ export default function Dashboard() {
     return (
         <>
             <Navbar />
+            <Openreplay />
             <Toaster position="top-center" richColors />
             <main className="flex flex-col items-center min-h-screen px-8">
                 <h1 className={`${bricolage.className} mt-24 sm:mt-48 text-3xl sm:text-4xl font-bold mb-3 text-center`}>👋 Welcome, {user.email?.split('@')[0]}</h1>
