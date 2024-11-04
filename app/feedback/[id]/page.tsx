@@ -16,7 +16,11 @@ import { Cover } from '@/components/ui/cover';
 import DOMPurify from 'dompurify';
 import { bricolage } from '@/fonts/font';
 import Link from 'next/link';
-import Openreplay from '@/components/openReplay';
+import dynamic from 'next/dynamic'
+
+const Openreplay = dynamic(() => import('@/components/openReplay'), {
+    ssr: false
+})
 
 
 type AnalysisResult = {

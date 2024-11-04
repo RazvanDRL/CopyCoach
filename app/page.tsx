@@ -16,7 +16,11 @@ import Image from 'next/image';
 import Pricing from '@/components/pricing';
 import VarameaAvatar from '@/public/avatars/varamea.jpg';
 import CeciuAvatar from '@/public/avatars/ceciu.jpg';
-import Openreplay from '@/components/openReplay';
+import dynamic from 'next/dynamic'
+
+const Openreplay = dynamic(() => import('@/components/openReplay'), {
+    ssr: false
+})
 
 const BricolageGrotesque = localFont({
     src: './fonts/BricolageGrotesque.ttf',

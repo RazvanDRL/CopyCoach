@@ -2,7 +2,7 @@ export const onboardingSteps: any = [
   {
     icon: <>🎯</>,
     title: "Choose Your Niche",
-    content: <>Start by selecting an industry you'd like to write for. This helps create relevant practice scenarios.</>,
+    content: <>Start by selecting an industry you&apos;d like to write for. This helps create relevant practice scenarios.</>,
     selector: "#niche-select",
     side: "bottom",
     showControls: true,
@@ -26,7 +26,7 @@ export const onboardingSteps: any = [
   {
     icon: <>⭐</>,
     title: "Start Your Exercise",
-    content: <>Once you've made your selections, click 'Ready to Start' to begin your practice session.</>,
+    content: <>Once you&apos;ve made your selections, click &apos;Ready to Start&apos; to begin your practice session.</>,
     selector: "#start-button",
     side: "bottom",
     showControls: true,

@@ -40,7 +40,11 @@ import { bricolage } from "@/fonts/font"
 import { sleep } from "openai/core.mjs"
 import { toast, Toaster } from 'sonner'
 import Combobox from "@/components/combobox"
-import Openreplay from '@/components/openReplay';
+import dynamic from 'next/dynamic'
+
+const Openreplay = dynamic(() => import('@/components/openReplay'), {
+    ssr: false
+})
 
 interface ExerciseHistoryItem {
     id: string;

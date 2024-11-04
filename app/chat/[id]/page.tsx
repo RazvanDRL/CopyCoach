@@ -21,7 +21,11 @@ import { toast, Toaster } from 'sonner';
 import Footer from '@/components/footer';
 import Link from 'next/link';
 import { useParams } from 'next/navigation'
-import Openreplay from '@/components/openReplay';
+import dynamic from 'next/dynamic'
+
+const Openreplay = dynamic(() => import('@/components/openReplay'), {
+    ssr: false
+})
 
 type Exercise = {
     id: string;
