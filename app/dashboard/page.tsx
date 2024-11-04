@@ -7,24 +7,24 @@ import { ArrowDown, ArrowRight, Check, ChevronsUpDown, Dices, CircleHelp, Star, 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
 } from "@/components/ui/command"
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
 } from "@/components/ui/popover"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
 } from "@/components/ui/tooltip"
 
 import { niches, Task, tasks } from "@/constants"
@@ -42,20 +42,20 @@ import { toast, Toaster } from 'sonner'
 import Combobox from "@/components/combobox"
 
 interface ExerciseHistoryItem {
-  id: string;
-  title: string;
-  grade: number;
+    id: string;
+    title: string;
+    grade: number;
 }
 
 export default function Dashboard() {
-  const router = useRouter();
-  const [niche, setNiche] = useState("");
-  const [task, setTask] = useState("");
-  const [exerciseHistory, setExerciseHistory] = useState<ExerciseHistoryItem[]>([]);
-  const [user, setUser] = useState<User | null>(null);
-  const [availableTasks, setAvailableTasks] = useState<typeof tasks>([]);
-  const [showAllExercises, setShowAllExercises] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+    const router = useRouter();
+    const [niche, setNiche] = useState("");
+    const [task, setTask] = useState("");
+    const [exerciseHistory, setExerciseHistory] = useState<ExerciseHistoryItem[]>([]);
+    const [user, setUser] = useState<User | null>(null);
+    const [availableTasks, setAvailableTasks] = useState<typeof tasks>([]);
+    const [showAllExercises, setShowAllExercises] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
         fetchUser().then(user => {
@@ -65,136 +65,136 @@ export default function Dashboard() {
         });
     }, []);
 
-  const fetchUser = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    setUser(user);
+    const fetchUser = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        setUser(user);
+        if (!user) {
+            router.replace('/login');
+        }
+        return user;
+    };
+
+    const fetchExerciseHistory = async (user: User) => {
+        if (!user) return;
+
+        const { data, error } = await supabase
+            .from('history')
+            .select("id, title, grade")
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+
+        if (error) {
+            console.error('Error fetching exercise history:', error);
+        } else {
+            console.log(data)
+            setExerciseHistory(data)
+        }
+    };
+
+    const randomSelect = () => {
+        const randomNiche = niches[Math.floor(Math.random() * niches.length)];
+        const randomTask = randomNiche.tasks[Math.floor(Math.random() * randomNiche.tasks.length)];
+
+        setNiche(randomNiche.value);
+
+        const selectedTask = tasks.find(t => t.value === randomTask);
+        if (selectedTask) {
+            setTask(selectedTask.value);
+        } else {
+            setTask(tasks.find(t => randomNiche.tasks.includes(t.value))?.value || "");
+        }
+    };
+
+    useEffect(() => {
+        if (niche) {
+            const selectedNiche = niches.find(n => n.value === niche);
+            if (selectedNiche) {
+                const availableTasks = tasks.filter(t => selectedNiche.tasks.includes(t.value));
+                setAvailableTasks(availableTasks);
+                // Only set task when changing niches and task is not empty
+                if (task && !selectedNiche.tasks.includes(task as Task)) {
+                    setTask(availableTasks[0]?.value || "");
+                }
+            }
+        } else {
+            setAvailableTasks([]);
+            setTask(""); // Reset task when niche is cleared
+        }
+    }, [niche, task]);
+
+    const handleSubmit = async () => {
+        if (!user) return;
+
+        setSubmitting(true);
+
+        // First fetch user's completed exercises
+        const { data: profileData, error: profileError } = await supabase
+            .from('profiles')
+            .select('completed_exercises')
+            .eq('id', user.id)
+            .single();
+
+        if (profileError) {
+            console.error('Error fetching profile:', profileError);
+            return;
+        }
+
+        const completedExercises = profileData?.completed_exercises || [];
+
+        // Fetch exercises excluding completed ones
+        const { data: exerciseData, error: exerciseError } = await supabase
+            .from('exercise')
+            .select('id,title')
+            .eq('niche', niche)
+            .eq('task', task)
+            .not('id', 'in', `(${completedExercises.join(',')})`)
+
+        if (exerciseError) {
+            console.error('Error fetching exercise:', exerciseError);
+            return;
+        }
+
+        if (!exerciseData || exerciseData.length === 0) {
+            toast.info("You've completed all exercises in this category! Try another one.");
+            return;
+        }
+
+        let exData = exerciseData[Math.floor(Math.random() * exerciseData.length)];
+
+        const { data, error } = await supabase
+            .from('history')
+            .insert([
+                {
+                    user_id: user.id,
+                    exercise_id: exData.id,
+                    title: exData.title,
+                }
+            ])
+            .select();
+
+        if (error) {
+            console.error('Error creating exercise history:', error);
+        } else {
+            // add to completed exercises
+            const updatedExercises = [...completedExercises, exData.id];
+            const { error: updateError } = await supabase
+                .from('profiles')
+                .update({ completed_exercises: updatedExercises })
+                .eq('id', user.id);
+
+            if (updateError) {
+                toast.error('Failed to update completed exercises. Please try again.');
+            } else {
+                const url = `/chat/${data[0].id}`;
+                router.push(url);
+            }
+        }
+        setSubmitting(false);
+    };
+
     if (!user) {
-      router.replace('/login');
+        return <Loading />
     }
-    return user;
-  };
-
-  const fetchExerciseHistory = async (user: User) => {
-    if (!user) return;
-
-    const { data, error } = await supabase
-      .from('history')
-      .select("id, title, grade")
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-
-    if (error) {
-      console.error('Error fetching exercise history:', error);
-    } else {
-      console.log(data)
-      setExerciseHistory(data)
-    }
-  };
-
-  const randomSelect = () => {
-    const randomNiche = niches[Math.floor(Math.random() * niches.length)];
-    const randomTask = randomNiche.tasks[Math.floor(Math.random() * randomNiche.tasks.length)];
-
-    setNiche(randomNiche.value);
-
-    const selectedTask = tasks.find(t => t.value === randomTask);
-    if (selectedTask) {
-      setTask(selectedTask.value);
-    } else {
-      setTask(tasks.find(t => randomNiche.tasks.includes(t.value))?.value || "");
-    }
-  };
-
-  useEffect(() => {
-    if (niche) {
-      const selectedNiche = niches.find(n => n.value === niche);
-      if (selectedNiche) {
-        const availableTasks = tasks.filter(t => selectedNiche.tasks.includes(t.value));
-        setAvailableTasks(availableTasks);
-        // Only set task when changing niches and task is not empty
-        if (task && !selectedNiche.tasks.includes(task as Task)) {
-          setTask(availableTasks[0]?.value || "");
-        }
-      }
-    } else {
-      setAvailableTasks([]);
-      setTask(""); // Reset task when niche is cleared
-    }
-  }, [niche, task]);
-
-  const handleSubmit = async () => {
-    if (!user) return;
-
-    setSubmitting(true);
-
-    // First fetch user's completed exercises
-    const { data: profileData, error: profileError } = await supabase
-      .from('profiles')
-      .select('completed_exercises')
-      .eq('id', user.id)
-      .single();
-
-    if (profileError) {
-      console.error('Error fetching profile:', profileError);
-      return;
-    }
-
-    const completedExercises = profileData?.completed_exercises || [];
-
-    // Fetch exercises excluding completed ones
-    const { data: exerciseData, error: exerciseError } = await supabase
-      .from('exercise')
-      .select('id,title')
-      .eq('niche', niche)
-      .eq('task', task)
-      .not('id', 'in', `(${completedExercises.join(',')})`)
-
-    if (exerciseError) {
-      console.error('Error fetching exercise:', exerciseError);
-      return;
-    }
-
-    if (!exerciseData || exerciseData.length === 0) {
-      toast.info("You've completed all exercises in this category! Try another one.");
-      return;
-    }
-
-    let exData = exerciseData[Math.floor(Math.random() * exerciseData.length)];
-
-    const { data, error } = await supabase
-      .from('history')
-      .insert([
-        {
-          user_id: user.id,
-          exercise_id: exData.id,
-          title: exData.title,
-        }
-      ])
-      .select();
-
-    if (error) {
-      console.error('Error creating exercise history:', error);
-    } else {
-      // add to completed exercises
-      const updatedExercises = [...completedExercises, exData.id];
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({ completed_exercises: updatedExercises })
-        .eq('id', user.id);
-
-      if (updateError) {
-        toast.error('Failed to update completed exercises. Please try again.');
-      } else {
-        const url = `/chat/${data[0].id}`;
-        router.push(url);
-      }
-    }
-    setSubmitting(false);
-  };
-
-  if (!user) {
-    return <Loading />
-  }
 
     return (
         <>
@@ -235,7 +235,6 @@ export default function Dashboard() {
                             onChange={setNiche}
                             options={niches}
                             className={cn("w-full sm:w-[200px]", niche ? "border-green-500" : "")}
-                            id="tour1-step1"
                         />
                         <TooltipProvider>
                             <Tooltip delayDuration={0}>

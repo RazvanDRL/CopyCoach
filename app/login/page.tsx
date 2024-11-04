@@ -32,7 +32,9 @@ const LoginPage = () => {
             if (user) {
                 router.replace('/dashboard');
             }
-            setLoadingUser(false);
+            setTimeout(() => {
+                setLoadingUser(false);
+            }, 2000);
         };
         checkUser();
     }, [router]);

@@ -15,38 +15,115 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { niches, tasks } from "@/constants";
 import { useRouter } from 'next/navigation'
+import { useOnborda } from "onborda";
+
+// Add proper type definitions
+type ExperienceLevel = "Beginner" | "Intermediate" | "Advanced" | "";
+type GoalType = "Freelancing" | "Job Skills" | "Personal Projects" | "";
+type LearningStyle = "Structured" | "Open-ended" | "";
+type OnboardingStep = 1 | 2 | 3;
+
+interface UserProfile {
+    name: string;
+    experience: ExperienceLevel;
+    goal: GoalType;
+    type: LearningStyle;
+}
 
 export default function Onboarding() {
     const router = useRouter()
+    const { startOnborda } = useOnborda();
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [user, setUser] = useState<User | null>(null);
-    const [name, setName] = useState<string>("");
+    const [profile, setProfile] = useState<UserProfile>({
+        name: "",
+        experience: "",
+        goal: "",
+        type: ""
+    });
+    const [step, setStep] = useState<OnboardingStep>(1);
     const [niche, setNiche] = useState<string>("");
     const [task, setTask] = useState<string>("");
-    const [step, setStep] = useState<1 | 2 | 3>(1);
-    const [experience, setExperience] = useState<"Beginner" | "Intermediate" | "Advanced" | "">("");
-    const [selectedGoal, setSelectedGoal] = useState<"Freelancing" | "Job Skills" | "Personal Projects" | "">("");
-    const [selectedType, setSelectedType] = useState<"Structured" | "Open-ended" | "">("");
 
+    // Improve user fetching logic
     useEffect(() => {
-        const getUser = async () => {
-            const { data: { user }, error } = await supabase.auth.getUser();
+        const fetchUserAndProfile = async () => {
+            try {
+                setLoading(true);
+                const { data: { user }, error: userError } = await supabase.auth.getUser();
 
-            if (error) {
-                console.error("Error fetching user:", error);
-                return;
+                if (userError) throw new Error(userError.message);
+                if (!user) throw new Error("User not found");
+
+                const { data: profileData, error: profileError } = await supabase
+                    .from("profiles")
+                    .select("*")
+                    .eq("id", user.id)
+                    .single();
+
+                if (profileError) throw new Error(profileError.message);
+
+                setUser(user);
+                setProfile({
+                    name: user?.user_metadata?.full_name || "",
+                    experience: profileData.experience || "",
+                    goal: profileData.goal || "",
+                    type: profileData.type || ""
+                });
+
+                // Auto-advance if profile is complete
+                if (profileData.experience && profileData.goal && profileData.type) {
+                    setStep(3);
+                }
+            } catch (err) {
+                setError(err instanceof Error ? err.message : "An error occurred");
+                router.push("/signup");
+            } finally {
+                setLoading(false);
             }
-
-            setUser(user);
-            setName(user?.user_metadata?.full_name || "");
         };
-        getUser();
-    }, []);
 
+        fetchUserAndProfile();
+    }, [router]);
+
+    // Improve profile update logic
+    const updateProfile = async () => {
+        try {
+            if (!user?.id) throw new Error("User ID not found");
+
+            const { error } = await supabase
+                .from("profiles")
+                .update({
+                    name: profile.name,
+                    experience: profile.experience,
+                    goal: profile.goal,
+                    type: profile.type
+                })
+                .eq("id", user.id);
+
+            if (error) throw new Error(error.message);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Failed to update profile");
+        }
+    };
+
+    // Optimize step change handling
     useEffect(() => {
         if (step === 3) {
             window.scrollTo(0, 0);
+            updateProfile();
+            setTimeout(handleOnborda, 300);
         }
     }, [step]);
+
+    // Add form validation
+    const canProceedStep1 = profile.name.trim() && profile.experience;
+    const canProceedStep2 = profile.goal && profile.type;
+
+    const handleOnborda = () => {
+        startOnborda();
+    }
 
     const randomSelect = () => {
         setNiche(niches[Math.floor(Math.random() * niches.length)].value);
@@ -54,25 +131,25 @@ export default function Onboarding() {
     };
 
     const ProfileCard = () => (
-        <Card className="fixed right-[14rem] top-[16rem] w-72 hidden lg:block">
+        <Card className="fixed right-[14rem] top-[16rem] w-72 hidden lg:block" id="profile-card">
             <CardContent className="pt-6">
                 <div className="flex flex-col items-center">
                     <div className="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                        <span className="text-2xl">{name ? name[0]?.toUpperCase() : '?'}</span>
+                        <span className="text-2xl">{profile.name ? profile.name[0]?.toUpperCase() : '?'}</span>
                     </div>
-                    <h3 className="font-semibold text-lg mb-4">{name || 'Your Name'}</h3>
+                    <h3 className="font-semibold text-lg mb-4">{profile.name || 'Your Name'}</h3>
                     <div className="w-full space-y-2">
                         <div className="flex justify-between">
                             <span className="text-gray-600">Experience:</span>
-                            <span className="font-medium">{experience || 'Not set'}</span>
+                            <span className="font-medium">{profile.experience || 'Not set'}</span>
                         </div>
                         <div className="flex justify-between">
                             <span className="text-gray-600">Goal:</span>
-                            <span className="font-medium">{selectedGoal || 'Not set'}</span>
+                            <span className="font-medium">{profile.goal || 'Not set'}</span>
                         </div>
                         <div className="flex justify-between">
                             <span className="text-gray-600">Exercise Type:</span>
-                            <span className="font-medium">{selectedType || 'Not set'}</span>
+                            <span className="font-medium">{profile.type || 'Not set'}</span>
                         </div>
                     </div>
                 </div>
@@ -80,8 +157,12 @@ export default function Onboarding() {
         </Card>
     );
 
-    if (!user) {
+    if (loading) {
         return <Loading />;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
     }
 
     return (
@@ -109,8 +190,8 @@ export default function Onboarding() {
                                     <input
                                         type="text"
                                         placeholder="Your full name"
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
+                                        value={profile.name}
+                                        onChange={(e) => setProfile({ ...profile, name: e.target.value })}
                                         className="w-full p-3 rounded-lg border border-gray-300 mb-8 focus:outline-none focus:ring-2 focus:ring-[#007FFF]"
                                     />
                                     <div className="mb-8">
@@ -119,7 +200,7 @@ export default function Onboarding() {
                                         </label>
                                         <p className="text-gray-600 mb-4">We&apos;ll adjust the difficulty of exercises accordingly</p>
 
-                                        <div className="space-y-4">
+                                        <div className="space-y-4" id="experience-select">
                                             {[
                                                 {
                                                     level: 'Beginner',
@@ -139,11 +220,11 @@ export default function Onboarding() {
                                             ].map(({ level, description, icon }) => (
                                                 <button
                                                     key={level}
-                                                    className={`w-full px-6 py-4 text-left border-2 rounded-lg hover:bg-gray-50 transition-all duration-200 ${experience === level
+                                                    className={`w-full px-6 py-4 text-left border-2 rounded-lg hover:bg-gray-50 transition-all duration-200 ${profile.experience === level
                                                         ? 'border-[#007FFF] bg-blue-50 shadow-md'
                                                         : 'border-gray-200 hover:border-gray-300'
                                                         }`}
-                                                    onClick={() => setExperience(level as "Beginner" | "Intermediate" | "Advanced")}
+                                                    onClick={() => setProfile({ ...profile, experience: level as ExperienceLevel })}
                                                 >
                                                     <div className="flex items-center gap-3">
                                                         <span className="text-2xl">{icon}</span>
@@ -151,7 +232,7 @@ export default function Onboarding() {
                                                             <div className="font-semibold text-gray-800">{level}</div>
                                                             <div className="text-sm text-gray-600">{description}</div>
                                                         </div>
-                                                        {experience === level && (
+                                                        {profile.experience === level && (
                                                             <Check className="text-[#007FFF] h-5 w-5" />
                                                         )}
                                                     </div>
@@ -162,7 +243,7 @@ export default function Onboarding() {
                                     <Button
                                         className="w-full"
                                         onClick={() => setStep(2)}
-                                        disabled={!name.trim() || !experience}
+                                        disabled={!canProceedStep1}
                                     >
                                         Continue <ArrowRight className="ml-2 h-4 w-4" />
                                     </Button>
@@ -176,7 +257,7 @@ export default function Onboarding() {
                             <Card className="w-full max-w-xl">
                                 <CardContent className="pt-6">
                                     <h2 className={`${bricolage.className} text-lg font-semibold mb-3`}>What are your goals?</h2>
-                                    <div className="space-y-4 mb-8">
+                                    <div className="space-y-4 mb-8" id="goals-section">
                                         {[
                                             {
                                                 goal: 'Freelancing',
@@ -196,11 +277,11 @@ export default function Onboarding() {
                                         ].map(({ goal, description, icon }) => (
                                             <button
                                                 key={goal}
-                                                className={`w-full px-6 py-4 text-left border-2 rounded-lg hover:bg-gray-50 transition-colors duration-200 ${goal === selectedGoal
+                                                className={`w-full px-6 py-4 text-left border-2 rounded-lg hover:bg-gray-50 transition-colors duration-200 ${goal === profile.goal
                                                     ? 'border-[#007FFF] bg-blue-50 shadow-sm'
                                                     : 'border-gray-200 hover:border-gray-300'
                                                     }`}
-                                                onClick={() => setSelectedGoal(goal as "Freelancing" | "Job Skills" | "Personal Projects")}
+                                                onClick={() => setProfile({ ...profile, goal: goal as GoalType })}
                                             >
                                                 <div className="flex items-center gap-3">
                                                     <span className="text-2xl">{icon}</span>
@@ -208,7 +289,7 @@ export default function Onboarding() {
                                                         <div className="font-semibold text-gray-800">{goal}</div>
                                                         <div className="text-sm text-gray-600">{description}</div>
                                                     </div>
-                                                    {selectedGoal === goal && (
+                                                    {profile.goal === goal && (
                                                         <Check className="text-[#007FFF] h-5 w-5" />
                                                     )}
                                                 </div>
@@ -221,7 +302,7 @@ export default function Onboarding() {
                                         Choose how you&apos;d like to approach the exercises:
                                     </p>
 
-                                    <div className="space-y-4 mb-8">
+                                    <div className="space-y-4 mb-8" id="learning-style">
                                         {[
                                             {
                                                 type: 'Structured',
@@ -236,11 +317,11 @@ export default function Onboarding() {
                                         ].map(({ type, description, icon }) => (
                                             <button
                                                 key={type}
-                                                className={`w-full px-6 py-4 text-left border-2 rounded-lg hover:bg-gray-50 transition-colors duration-200 ${type === selectedType
+                                                className={`w-full px-6 py-4 text-left border-2 rounded-lg hover:bg-gray-50 transition-colors duration-200 ${type === profile.type
                                                     ? 'border-[#007FFF] bg-blue-50 shadow-sm'
                                                     : 'border-gray-200 hover:border-gray-300'
                                                     }`}
-                                                onClick={() => setSelectedType(type as "Structured" | "Open-ended")}
+                                                onClick={() => setProfile({ ...profile, type: type as LearningStyle })}
                                             >
                                                 <div className="flex items-center gap-3">
                                                     <span className="text-2xl">{icon}</span>
@@ -248,7 +329,7 @@ export default function Onboarding() {
                                                         <div className="font-semibold text-gray-800">{type}</div>
                                                         <div className="text-sm text-gray-600">{description}</div>
                                                     </div>
-                                                    {selectedType === type && (
+                                                    {profile.type === type && (
                                                         <Check className="text-[#007FFF] h-5 w-5" />
                                                     )}
                                                 </div>
@@ -270,7 +351,7 @@ export default function Onboarding() {
                                                 setStep(3)
                                                 router.refresh()
                                             }}
-                                            disabled={!selectedGoal || !selectedType}
+                                            disabled={!canProceedStep2}
                                         >
                                             Continue <ArrowRight className="ml-2 h-4 w-4" />
                                         </Button>
@@ -283,7 +364,7 @@ export default function Onboarding() {
             )}
             {step === 3 && (
                 <main className="flex flex-col items-center min-h-screen px-8">
-                    <h1 className={`${bricolage.className} mt-24 sm:mt-48 text-3xl sm:text-4xl font-bold mb-3 text-center line-clamp-1`}>👋 Welcome, {name}</h1>
+                    <h1 className={`${bricolage.className} mt-24 sm:mt-48 text-3xl sm:text-4xl font-bold mb-3 text-center line-clamp-1`}>👋 Welcome, {profile.name}</h1>
                     <p className="text-base sm:text-lg text-gray-600 mb-10 text-center">
                         Customize your copywriting exercise or try a random one
                         <TooltipProvider>
@@ -317,7 +398,7 @@ export default function Onboarding() {
                                 onChange={setNiche}
                                 options={niches}
                                 className={cn("w-full sm:w-[200px]", niche ? "border-green-500" : "")}
-                                id="tour1-step1"
+                                id="niche-select"
                             />
                             <TooltipProvider>
                                 <Tooltip delayDuration={0}>
@@ -351,6 +432,7 @@ export default function Onboarding() {
                                 options={tasks}
                                 className={cn("w-full sm:w-[200px]", task ? "border-green-500" : "")}
                                 disabled={!niche}
+                                id="task-select"
                             />
                             <TooltipProvider>
                                 <Tooltip delayDuration={0}>
@@ -381,6 +463,7 @@ export default function Onboarding() {
                             variant="outline"
                             onClick={randomSelect}
                             className="w-full sm:w-auto active:scale-95 transition-transform duration-100"
+                            id="random-button"
                         >
                             <Dices className="mr-2 h-4 w-4" />
                             Random
@@ -388,6 +471,7 @@ export default function Onboarding() {
                         <Button
                             className="w-full sm:w-auto bg-[#007FFF] hover:bg-[#007FFF] text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition duration-200 hover:scale-105 flex items-center justify-center"
                             disabled={!niche || !task}
+                            id="start-button"
                         >
                             <div className="flex items-center justify-center">
                                 <Star className="mr-2 h-4 w-4" />
@@ -395,7 +479,7 @@ export default function Onboarding() {
                             </div>
                         </Button>
                     </div>
-                    <div className="mt-16 w-full max-w-5xl mx-auto">
+                    <div id="exercise-history" className="mt-16 w-full max-w-5xl mx-auto">
                         <h2 className={`${bricolage.className} text-2xl md:text-3xl font-bold mb-4 text-left flex items-center`}>
                             <History className="mr-2 h-6 w-6" />
                             Exercise History
@@ -409,5 +493,6 @@ export default function Onboarding() {
                 </main >
             )}
             <Footer />
-        </>);
+        </>
+    );
 }
