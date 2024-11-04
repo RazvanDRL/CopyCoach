@@ -229,13 +229,13 @@ export default function Analyze() {
                     <DialogTrigger asChild>
                         <Button
                             variant="outline"
-                            className="w-fit font-semibold shadow-sm"
+                            className="w-fit text-white hover:text-white/90 bg-[#007FFF] hover:bg-[#007FFF]/90 font-semibold shadow-lg"
                         >
                             <Eye className="mr-2 h-5 w-5" />
                             Compare Original and Improved Responses
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-full max-h-[100vh]">
+                    <DialogContent className="max-w-[100vw] md:max-w-[90vw] max-h-[100vh]">
                         <DialogHeader>
                             <DialogTitle>Response Comparison</DialogTitle>
                         </DialogHeader>
