@@ -16,11 +16,6 @@ import { Cover } from '@/components/ui/cover';
 import DOMPurify from 'dompurify';
 import { bricolage } from '@/fonts/font';
 import Link from 'next/link';
-import dynamic from 'next/dynamic'
-
-const Openreplay = dynamic(() => import('@/components/openReplay'), {
-    ssr: false
-})
 
 
 type AnalysisResult = {
@@ -223,7 +218,6 @@ export default function Analyze() {
     return (
         <>
             <Navbar />
-            <Openreplay />
             <main className="container min-h-screen mx-auto px-4 py-8 max-w-4xl">
                 <Button variant="outline" className="mb-6 mt-16" onClick={() => router.push('/dashboard')}>
                     <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard

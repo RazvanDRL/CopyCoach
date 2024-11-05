@@ -35,6 +35,7 @@
     "@tsparticles/engine": "^3.5.0",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.5.0",
+    "@types/canvas-confetti": "^1.6.4",
     "@types/dompurify": "^3.0.5",
     "@upstash/ratelimit": "^2.0.4",
     "@upstash/redis": "^1.34.3",
