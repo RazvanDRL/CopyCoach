@@ -3,11 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import PlausibleProvider from 'next-plausible'
 const inter = Inter({ subsets: ["latin"] });
-import dynamic from "next/dynamic";
-
-const OpenReplayNoSSR = dynamic(() => import('@/components/openReplay'), {
-  ssr: false, //disables Server-side pre-rendering so window won't be undefined
-})
+import OpenReplayWrapper from '@/components/OpenReplayWrapper'
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -173,7 +169,7 @@ export default function RootLayout({
           enabled={true}
         >
           {children}
-          <OpenReplayNoSSR />
+          <OpenReplayWrapper />
         </PlausibleProvider>
       </body>
     </html>
