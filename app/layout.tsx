@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import PlausibleProvider from 'next-plausible'
 const inter = Inter({ subsets: ["latin"] });
-import OpenReplayWrapper from '@/components/OpenReplayWrapper'
+// import OpenReplayWrapper from '@/components/OpenReplayWrapper'
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -56,6 +56,13 @@ export const metadata: Metadata = {
         alt: "CopyCoach - Learn copywriting by doing"
       }
     ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CopyCoach: AI-Powered Copywriting Training & Exercises",
+    description: "Transform your copywriting skills with AI-guided practice exercises and instant feedback.",
+    creator: "@trycopycoach",
+    images: ["https://copy-coach.com/opengraph-image.png"],
   },
   robots: {
     index: true,
@@ -169,7 +176,7 @@ export default function RootLayout({
           enabled={true}
         >
           {children}
-          <OpenReplayWrapper />
+          {/* <OpenReplayWrapper /> */}
         </PlausibleProvider>
       </body>
     </html>

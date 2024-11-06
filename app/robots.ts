@@ -4,19 +4,23 @@ const BASE_URL = "https://copy-coach.com"
 
 export default function robots(): MetadataRoute.Robots {
     return {
-        rules: {
+        rules: [{
             userAgent: '*',
             allow: '/',
             disallow: [
                 '/api',
-                '/login',
-                '/signup',
                 '/feedback',
                 '/chat',
                 '/dashboard',
-                '/pricing',
+                '/*?*',
             ],
         },
+        {
+            userAgent: 'GPTBot',
+            disallow: [
+                '/',
+            ],
+        }],
         sitemap: `${BASE_URL}/sitemap.xml`,
     }
 }
