@@ -64,6 +64,11 @@ const LoginPage = () => {
             provider,
             options: {
                 redirectTo: `${BASE_URL}/dashboard`,
+                queryParams: {
+                    prompt: 'select_account',
+                    access_type: 'offline',
+                },
+                skipBrowserRedirect: true
             },
         });
         if (error) {

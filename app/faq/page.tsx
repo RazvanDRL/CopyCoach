@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { Card, CardContent } from "@/components/ui/card";
 import {
     Accordion,
@@ -9,7 +9,7 @@ import {
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { bricolage } from "@/fonts/font";
-import { Metadata } from "next";
+// import { Metadata } from "next";
 
 // Reuse FAQ data from landing page
 const faq = [
@@ -47,18 +47,18 @@ const faq = [
     }
 ];
 
-export const metadata: Metadata = {
-    title: "FAQ - CopyCoach: Common Questions About Our AI Copywriting Platform",
-    description: "Find answers to frequently asked questions about CopyCoach's AI-powered copywriting training platform. Learn about our practice system, feedback process, and more.",
-    openGraph: {
-        title: "FAQ - CopyCoach: Common Questions About Our AI Copywriting Platform",
-        description: "Find answers to frequently asked questions about CopyCoach's AI-powered copywriting training platform. Learn about our practice system, feedback process, and more.",
-    },
-    twitter: {
-        title: "FAQ - CopyCoach: Common Questions About Our AI Copywriting Platform",
-        description: "Find answers to frequently asked questions about CopyCoach's AI-powered copywriting training platform. Learn about our practice system, feedback process, and more.",
-    }
-};
+// export const metadata: Metadata = {
+//     title: "FAQ - CopyCoach: Common Questions About Our AI Copywriting Platform",
+//     description: "Find answers to frequently asked questions about CopyCoach's AI-powered copywriting training platform. Learn about our practice system, feedback process, and more.",
+//     openGraph: {
+//         title: "FAQ - CopyCoach: Common Questions About Our AI Copywriting Platform",
+//         description: "Find answers to frequently asked questions about CopyCoach's AI-powered copywriting training platform. Learn about our practice system, feedback process, and more.",
+//     },
+//     twitter: {
+//         title: "FAQ - CopyCoach: Common Questions About Our AI Copywriting Platform",
+//         description: "Find answers to frequently asked questions about CopyCoach's AI-powered copywriting training platform. Learn about our practice system, feedback process, and more.",
+//     }
+// };
 
 export default function FAQPage() {
     return (
